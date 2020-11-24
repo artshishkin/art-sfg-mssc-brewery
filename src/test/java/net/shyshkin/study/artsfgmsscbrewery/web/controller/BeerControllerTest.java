@@ -101,4 +101,20 @@ class BeerControllerTest {
         //then
         then(beerService).should().updateBeer(eq(beerId), eq(stubBeerDto));
     }
+
+    @Test
+    void deleteBeer() throws Exception {
+        //given
+        UUID beerId = UUID.randomUUID();
+
+        //when
+        mockMvc
+                .perform(
+                        delete(BASE_URL + "/{beerId}", beerId)
+                                .accept(APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+        //then
+        then(beerService).should().deleteById(eq(beerId));
+    }
 }

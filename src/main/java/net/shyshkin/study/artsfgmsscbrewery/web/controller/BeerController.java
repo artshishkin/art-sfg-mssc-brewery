@@ -45,4 +45,10 @@ public class BeerController {
     public void updateBeer(@PathVariable UUID beerId, @RequestBody BeerDto beerDto) {
         beerService.updateBeer(beerId, beerDto);
     }
+
+    @DeleteMapping("{beerId}")
+    @ResponseStatus(NO_CONTENT)
+    public void deleteBeer(@PathVariable("beerId") UUID beerId){
+        beerService.deleteById(beerId);
+    }
 }
