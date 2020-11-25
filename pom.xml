@@ -6,6 +6,7 @@
     <modules>
         <module>beer-service</module>
         <module>brewery</module>
+        <module>brewery-client</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
