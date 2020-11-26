@@ -15,10 +15,12 @@ import java.util.UUID;
 import static net.shyshkin.study.breweryclient.web.client.BreweryClient.BEER_PATH_V1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.PUT;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withCreatedEntity;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.*;
 
 @RestClientTest(BreweryClient.class)
 class BreweryClientTest {
@@ -61,6 +63,8 @@ class BreweryClientTest {
         String beerJson = objectMapper.writeValueAsString(beerDto);
         server
                 .expect(requestTo(apihost + BEER_PATH_V1))
+                .andExpect(method(POST))
+                .andExpect(content().json(beerJson))
                 .andRespond(withCreatedEntity(URI.create(apihost + BEER_PATH_V1 + beerId)));
 
         //when
@@ -69,5 +73,25 @@ class BreweryClientTest {
         //then
         assertNotNull(location);
         assertThat(location.toString()).contains(BEER_PATH_V1);
+        server.verify();
+    }
+
+    @Test
+    void updateBeer() throws JsonProcessingException {
+        //given
+        UUID beerId = UUID.randomUUID();
+        BeerDto beerDto = BeerDto.builder().beerName("Name").beerStyle("Beer Style").upc(123L).build();
+        String beerJson = objectMapper.writeValueAsString(beerDto);
+        server
+                .expect(requestTo(apihost + BEER_PATH_V1 + beerId))
+                .andExpect(method(PUT))
+                .andExpect(content().json(beerJson))
+                .andRespond(withStatus(NO_CONTENT));
+
+        //when
+        breweryClient.updateBeer(beerId, beerDto);
+
+        //then
+        server.verify();
     }
 }

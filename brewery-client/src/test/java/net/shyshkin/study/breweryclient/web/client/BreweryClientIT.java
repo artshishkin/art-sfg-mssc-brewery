@@ -13,12 +13,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
+@Disabled("NOT TO RUN IN CI yet")
 class BreweryClientIT {
 
     @Autowired
     BreweryClient breweryClient;
 
-    @Disabled("NOT TO RUN IN CI yet")
     @Test
     void getBeerById() {
         //given
@@ -31,7 +31,6 @@ class BreweryClientIT {
         assertNotNull(retrievedBeer);
     }
 
-    @Disabled("NOT TO RUN IN CI yet")
     @Test
     void saveNewBeer() {
         //given
@@ -43,5 +42,18 @@ class BreweryClientIT {
         //then
         assertNotNull(location);
         assertThat(location.toString()).contains(BreweryClient.BEER_PATH_V1);
+    }
+
+    @Test
+    void updateBeer() {
+        //given
+        UUID beerId = UUID.randomUUID();
+        BeerDto beerDto = BeerDto.builder().beerName("Name").beerStyle("Beer Style").upc(123L).build();
+
+        //when
+        breweryClient.updateBeer(beerId, beerDto);
+
+        //then
+        //should not be exception
     }
 }
