@@ -12,7 +12,7 @@ import java.net.URI;
 import java.util.UUID;
 
 @Component
-@ConfigurationProperties(value = "net.shyshkin", ignoreUnknownFields = false)
+@ConfigurationProperties(value = "net.shyshkin.client", ignoreUnknownFields = false)
 public class BreweryClient {
 
     public static final String BEER_PATH_V1 = "/api/v1/beer/";

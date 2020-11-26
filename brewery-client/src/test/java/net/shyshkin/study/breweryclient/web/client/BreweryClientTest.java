@@ -37,7 +37,7 @@ class BreweryClientTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    @Value("${net.shyshkin.apihost}")
+    @Value("${net.shyshkin.client.apihost}")
     String apihost;
 
     @Nested
