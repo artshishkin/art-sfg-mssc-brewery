@@ -15,8 +15,7 @@ import java.util.UUID;
 import static net.shyshkin.study.breweryclient.web.client.BreweryClient.BEER_PATH_V1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.http.HttpMethod.PUT;
+import static org.springframework.http.HttpMethod.*;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
@@ -90,6 +89,22 @@ class BreweryClientTest {
 
         //when
         breweryClient.updateBeer(beerId, beerDto);
+
+        //then
+        server.verify();
+    }
+
+    @Test
+    void deleteBeer() {
+        //given
+        UUID beerId = UUID.randomUUID();
+        server
+                .expect(requestTo(apihost + BEER_PATH_V1 + beerId))
+                .andExpect(method(DELETE))
+                .andRespond(withStatus(NO_CONTENT));
+
+        //when
+        breweryClient.deleteBeer(beerId);
 
         //then
         server.verify();

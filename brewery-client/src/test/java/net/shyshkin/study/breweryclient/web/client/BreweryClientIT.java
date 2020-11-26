@@ -56,4 +56,16 @@ class BreweryClientIT {
         //then
         //should not be exception
     }
+
+    @Test
+    void deleteBeer() {
+        //given
+        UUID beerId = UUID.randomUUID();
+
+        //when
+        breweryClient.deleteBeer(beerId);
+
+        //then
+        //should not be exception
+    }
 }
