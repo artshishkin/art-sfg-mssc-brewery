@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.UUID;
 
@@ -30,7 +31,7 @@ public class BeerController {
     }
 
     @PostMapping
-    public ResponseEntity<BeerDto> handlePost(@RequestBody BeerDto beerDto, HttpServletRequest request) {
+    public ResponseEntity<BeerDto> handlePost(@Valid @RequestBody BeerDto beerDto, HttpServletRequest request) {
         BeerDto saveNewBeer = beerService.saveNewBeer(beerDto);
         String url = request
                 .getRequestURL()
@@ -43,13 +44,13 @@ public class BeerController {
 
     @PutMapping("{beerId}")
     @ResponseStatus(NO_CONTENT)
-    public void updateBeer(@PathVariable UUID beerId, @RequestBody BeerDto beerDto) {
+    public void updateBeer(@PathVariable UUID beerId, @Valid @RequestBody BeerDto beerDto) {
         beerService.updateBeer(beerId, beerDto);
     }
 
     @DeleteMapping("{beerId}")
     @ResponseStatus(NO_CONTENT)
-    public void deleteBeer(@PathVariable("beerId") UUID beerId){
+    public void deleteBeer(@PathVariable("beerId") UUID beerId) {
         beerService.deleteById(beerId);
     }
 }

@@ -60,9 +60,10 @@ class BeerControllerTest {
     void handlePost() throws Exception {
         //given
         UUID beerId = UUID.randomUUID();
-        BeerDto stubBeerDto = BeerDto.builder().id(beerId).beerName("BName").beerStyle("BStyle").build();
+        BeerDto stubBeerDto = BeerDto.builder().id(beerId).beerName("BName").beerStyle("BStyle").upc(123L).build();
+        BeerDto beerToSave = BeerDto.builder().beerName("BName").beerStyle("BStyle").upc(123L).build();
         given(beerService.saveNewBeer(ArgumentMatchers.any(BeerDto.class))).willReturn(stubBeerDto);
-        String beerJsonString = objectMapper.writeValueAsString(stubBeerDto);
+        String beerJsonString = objectMapper.writeValueAsString(beerToSave);
 
         //when
         mockMvc
@@ -79,14 +80,14 @@ class BeerControllerTest {
                 .andExpect(header().string("Location", containsString(BASE_URL)));
 
         //then
-        then(beerService).should().saveNewBeer(eq(stubBeerDto));
+        then(beerService).should().saveNewBeer(eq(beerToSave));
     }
 
     @Test
     void updateBeer() throws Exception {
         //given
         UUID beerId = UUID.randomUUID();
-        BeerDto stubBeerDto = BeerDto.builder().beerName("BName").beerStyle("BStyle").build();
+        BeerDto stubBeerDto = BeerDto.builder().beerName("BName").beerStyle("BStyle").upc(123L).build();
         String beerJsonString = objectMapper.writeValueAsString(stubBeerDto);
 
         //when
