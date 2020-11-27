@@ -58,6 +58,24 @@ class BeerControllerV2Test {
     }
 
     @Test
+    void getFakeBeer_withValidationError() throws Exception {
+        //given
+        String beerName = "fu";
+
+        //when
+        mockMvc
+                .perform(
+                        get(BASE_URL + "/fake/{beerName}", beerName)
+                                .accept(APPLICATION_JSON))
+                .andExpect(status().is4xxClientError())
+                .andExpect(content().contentType(APPLICATION_JSON))
+                .andExpect(content().string(containsString("getBeerFakeExample.beerName : length must be between 3 and 10")))
+        ;
+        //then
+        then(beerService).shouldHaveNoInteractions();
+    }
+
+    @Test
     void handlePost() throws Exception {
         //given
         UUID beerId = UUID.randomUUID();
