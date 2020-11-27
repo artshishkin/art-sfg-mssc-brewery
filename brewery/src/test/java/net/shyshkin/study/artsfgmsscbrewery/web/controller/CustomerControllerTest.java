@@ -81,6 +81,28 @@ class CustomerControllerTest {
     }
 
     @Test
+    void newCustomer_withValidationErrors() throws Exception {
+        //given
+        UUID customerId = UUID.randomUUID();
+        CustomerDto stubCustomerDto = CustomerDto.builder().id(customerId).name("FU").build();
+        String customerJsonString = objectMapper.writeValueAsString(stubCustomerDto);
+
+        //when
+        mockMvc
+                .perform(
+                        post(BASE_URL)
+                                .contentType(APPLICATION_JSON)
+                                .content(customerJsonString)
+                                .accept(APPLICATION_JSON))
+                .andExpect(status().is4xxClientError())
+                .andExpect(content().contentType(APPLICATION_JSON))
+                .andExpect(content().string(containsString("name : length must be between 3 and 100")))
+        ;
+        //then
+        then(customerService).shouldHaveNoInteractions();
+    }
+
+    @Test
     void updateCustomer() throws Exception {
         //given
         UUID customerId = UUID.randomUUID();
