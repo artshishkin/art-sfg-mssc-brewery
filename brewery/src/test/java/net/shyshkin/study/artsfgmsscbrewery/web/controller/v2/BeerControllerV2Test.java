@@ -14,8 +14,7 @@ import java.util.UUID;
 
 import static net.shyshkin.study.artsfgmsscbrewery.web.controller.v2.BeerControllerV2.BASE_URL;
 import static net.shyshkin.study.artsfgmsscbrewery.web.model.v2.BeerStyle.*;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -62,9 +61,10 @@ class BeerControllerV2Test {
     void handlePost() throws Exception {
         //given
         UUID beerId = UUID.randomUUID();
-        BeerDtoV2 stubBeerDtoV2 = BeerDtoV2.builder().id(beerId).beerName("BName").beerStyle(ALE).build();
+        BeerDtoV2 stubBeerDtoV2 = BeerDtoV2.builder().id(beerId).beerName("BName").beerStyle(ALE).upc(123L).build();
+        BeerDtoV2 beerToSave = BeerDtoV2.builder().beerName("BName").beerStyle(ALE).upc(123L).build();
         given(beerService.saveNewBeer(ArgumentMatchers.any(BeerDtoV2.class))).willReturn(stubBeerDtoV2);
-        String beerJsonString = objectMapper.writeValueAsString(stubBeerDtoV2);
+        String beerJsonString = objectMapper.writeValueAsString(beerToSave);
 
         //when
         mockMvc
@@ -81,14 +81,14 @@ class BeerControllerV2Test {
                 .andExpect(header().string("Location", containsString(BASE_URL)));
 
         //then
-        then(beerService).should().saveNewBeer(eq(stubBeerDtoV2));
+        then(beerService).should().saveNewBeer(eq(beerToSave));
     }
 
     @Test
     void updateBeer() throws Exception {
         //given
         UUID beerId = UUID.randomUUID();
-        BeerDtoV2 stubBeerDtoV2 = BeerDtoV2.builder().beerName("BName").beerStyle(PILSNER).build();
+        BeerDtoV2 stubBeerDtoV2 = BeerDtoV2.builder().beerName("BName").upc(123L).beerStyle(PILSNER).build();
         String beerJsonString = objectMapper.writeValueAsString(stubBeerDtoV2);
 
         //when
@@ -102,6 +102,27 @@ class BeerControllerV2Test {
 
         //then
         then(beerService).should().updateBeer(eq(beerId), eq(stubBeerDtoV2));
+    }
+
+    @Test
+    void updateBeer_withValidationErrors() throws Exception {
+        //given
+        UUID beerId = UUID.randomUUID();
+        BeerDtoV2 stubBeerDtoV2 = BeerDtoV2.builder().beerName(null).upc(null).beerStyle(PILSNER).build();
+        String beerJsonString = objectMapper.writeValueAsString(stubBeerDtoV2);
+
+        //when
+        mockMvc
+                .perform(
+                        put(BASE_URL + "/{beerId}", beerId)
+                                .contentType(APPLICATION_JSON)
+                                .content(beerJsonString)
+                                .accept(APPLICATION_JSON))
+                .andExpect(status().is4xxClientError())
+                .andExpect(content().string(allOf(containsString("upc must not be null"), containsString("beerName must not be blank"))));
+
+        //then
+        then(beerService).shouldHaveNoInteractions();
     }
 
     @Test
