@@ -20,10 +20,9 @@ class DateMapperTest {
 
         //when
         Timestamp timestamp = dateMapper.asTimestamp(now);
-        OffsetDateTime offsetDateTime = dateMapper.asOffsetDateTime(timestamp);
-        System.out.println(timestamp);
+        OffsetDateTime offsetDateTimeUTC = dateMapper.asOffsetDateTime(timestamp);
 
         //then
-        assertThat(offsetDateTime.toInstant()).isCloseTo(now.toInstant(), within(1, ChronoUnit.MILLIS));
+        assertThat(offsetDateTimeUTC.toInstant()).isCloseTo(now.toInstant(), within(1, ChronoUnit.MILLIS));
     }
 }
