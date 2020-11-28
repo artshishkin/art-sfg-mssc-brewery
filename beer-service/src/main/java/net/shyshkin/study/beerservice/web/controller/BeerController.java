@@ -3,6 +3,7 @@ package net.shyshkin.study.beerservice.web.controller;
 import net.shyshkin.study.beerservice.web.model.BeerDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -22,7 +23,7 @@ public class BeerController {
     }
 
     @PostMapping
-    public ResponseEntity createNewBeer(@RequestBody BeerDto beerDto) {
+    public ResponseEntity createNewBeer(@Validated @RequestBody BeerDto beerDto) {
         return ResponseEntity.created(URI.create(BASE_URL)).build();
     }
 
