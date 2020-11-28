@@ -137,7 +137,7 @@ class BeerControllerV2Test {
                                 .content(beerJsonString)
                                 .accept(APPLICATION_JSON))
                 .andExpect(status().is4xxClientError())
-                .andExpect(content().string(allOf(containsString("upc must not be null"), containsString("beerName must not be blank"))));
+                .andExpect(content().string(allOf(containsString("upc : must not be null"), containsString("beerName : must not be blank"))));
 
         //then
         then(beerService).shouldHaveNoInteractions();
