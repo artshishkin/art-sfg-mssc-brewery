@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.constraints.ConstraintDescriptions;
+import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -22,6 +25,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -86,6 +90,8 @@ class BeerControllerTest {
                 .build();
         String beerJson = objectMapper.writeValueAsString(beerDto);
 
+        ConstrainedFields field = new ConstrainedFields(BeerDto.class);
+
         //when
         mockMvc
                 .perform(
@@ -99,16 +105,16 @@ class BeerControllerTest {
                 .andDo(
                         document("v1/beer",
                                 requestFields(
-                                        fieldWithPath("id").ignored(),
-                                        fieldWithPath("version").ignored(),
-                                        fieldWithPath("createdDate").ignored(),
-                                        fieldWithPath("lastModifiedDate").ignored(),
+                                        field.withPath("id").ignored(),
+                                        field.withPath("version").ignored(),
+                                        field.withPath("createdDate").ignored(),
+                                        field.withPath("lastModifiedDate").ignored(),
 
-                                        fieldWithPath("beerName").description("Beer Name"),
-                                        fieldWithPath("beerStyle").description("Beer Style"),
-                                        fieldWithPath("upc").description("Upc of Beer"),
-                                        fieldWithPath("price").description("Price of Beer"),
-                                        fieldWithPath("quantityOnHand").ignored()
+                                        field.withPath("beerName").description("Beer Name"),
+                                        field.withPath("beerStyle").description("Beer Style"),
+                                        field.withPath("upc").description("Upc of Beer"),
+                                        field.withPath("price").description("Price of Beer"),
+                                        field.withPath("quantityOnHand").ignored()
                                 )));
     }
 
@@ -156,5 +162,21 @@ class BeerControllerTest {
 
                 //then
                 .andExpect(status().isNoContent());
+    }
+
+    //from docs https://github.com/spring-projects/spring-restdocs/blob/v2.0.5.RELEASE/samples/rest-notes-spring-hateoas/src/test/java/com/example/notes/ApiDocumentation.java
+    private static class ConstrainedFields {
+
+        private final ConstraintDescriptions constraintDescriptions;
+
+        ConstrainedFields(Class<?> input) {
+            this.constraintDescriptions = new ConstraintDescriptions(input);
+        }
+
+        private FieldDescriptor withPath(String path) {
+            return fieldWithPath(path).attributes(key("constraints").value(StringUtils
+                    .collectionToDelimitedString(this.constraintDescriptions
+                            .descriptionsForProperty(path), ". ")));
+        }
     }
 }
