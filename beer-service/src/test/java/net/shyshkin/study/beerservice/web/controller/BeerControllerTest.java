@@ -18,9 +18,14 @@ import static net.shyshkin.study.beerservice.web.controller.BeerController.BASE_
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @ExtendWith(RestDocumentationExtension.class)
 @AutoConfigureRestDocs
@@ -42,7 +47,10 @@ class BeerControllerTest {
         mockMvc.perform(get(BASE_URL + "/{beerId}", beerId))
 
                 //then
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+        .andDo(document("v1/beer",pathParameters(
+                parameterWithName("beerId").description("UUID of desired beer to get.")
+        )));
     }
 
     @Test
