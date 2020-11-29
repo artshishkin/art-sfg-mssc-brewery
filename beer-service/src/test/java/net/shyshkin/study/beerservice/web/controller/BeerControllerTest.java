@@ -20,8 +20,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -44,13 +43,23 @@ class BeerControllerTest {
         UUID beerId = UUID.randomUUID();
 
         //when
-        mockMvc.perform(get(BASE_URL + "/{beerId}", beerId))
+        mockMvc
+                .perform(
+                        get(BASE_URL + "/{beerId}", beerId)
+                                .param("iscold", "yes"))
 
                 //then
                 .andExpect(status().isOk())
-        .andDo(document("v1/beer",pathParameters(
-                parameterWithName("beerId").description("UUID of desired beer to get.")
-        )));
+                .andDo(document("v1/beer",
+                        pathParameters(
+                                parameterWithName("beerId").description("UUID of desired beer to get.")
+                        ),
+                        requestParameters(
+                                parameterWithName("iscold")
+                                        .description("Is Beer Cold Query Parameter")
+                                        .optional()
+                        )
+                ));
     }
 
     @Test
