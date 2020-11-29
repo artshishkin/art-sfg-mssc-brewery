@@ -22,3 +22,15 @@
     -  view logs
         -  requests
         -  responses    
+
+####  Section 8: Spring MVC REST Docs
+
+#####  95. Documenting Validation Constraints
+
+-  view
+-  `target/generated-snippets/v1/beer/request-fiels.snippet`
+
+#####  96. URI Customization
+
+-  view
+-  `target/generated-snippets/v1/beer/curl-request.snippet`
