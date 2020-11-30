@@ -72,7 +72,7 @@ class BeerControllerV2Test {
                 .andExpect(jsonPath("$.id", notNullValue()))
                 .andExpect(jsonPath("$.beerName", notNullValue()))
                 .andExpect(jsonPath("$.beerStyle", notNullValue()))
-                .andDo(document(BASE_URL + "-get",
+                .andDo(document(BASE_URL.substring(1) + "-get",
                         pathParameters(
                                 parameterWithName("beerId").description("UUID of Beer")
                         ),
@@ -131,7 +131,7 @@ class BeerControllerV2Test {
                 .andExpect(jsonPath("$.beerStyle", notNullValue()))
                 .andExpect(header().string("Location", containsString(BASE_URL)))
 
-                .andDo(document(BASE_URL + "-new",
+                .andDo(document(BASE_URL.substring(1) + "-new",
                         requestFields(
                                 field.withPath("id").ignored(),
                                 field.withPath("beerName").description("Name of Beer"),
@@ -166,7 +166,7 @@ class BeerControllerV2Test {
                                 .accept(APPLICATION_JSON))
                 .andExpect(status().isNoContent())
 
-                .andDo(document(BASE_URL + "-update",
+                .andDo(document(BASE_URL.substring(1) + "-update",
                         pathParameters(
                                 parameterWithName("beerId").description("UUID of Beer")
                         ),
@@ -215,7 +215,7 @@ class BeerControllerV2Test {
                                 .accept(APPLICATION_JSON))
                 .andExpect(status().isNoContent())
 
-                .andDo(document(BASE_URL + "-delete",
+                .andDo(document(BASE_URL.substring(1) + "-delete",
                         pathParameters(
                                 parameterWithName("beerId").description("UUID of Beer")
                         )
