@@ -34,3 +34,9 @@
 
 -  view
 -  `target/generated-snippets/v1/beer/curl-request.snippet`
+
+#####  98. Serving Docs with Spring Boot
+
+-  generate jar
+-  run it
+-  go to `http://localhost:8080/docs/index.html` to view docs
