@@ -1,0 +1,26 @@
+
+NEW BEER
+
+One showing how to make a request using cURL:
+
+include::{snippets}/api/v2/beer-new/curl-request.adoc[]
+
+One showing the HTTP request:
+
+include::{snippets}/api/v2/beer-new/http-request.adoc[]
+
+Request Fields:
+
+include::{snippets}/api/v2/beer-new/request-fields.adoc[]
+
+And one showing the HTTP response:
+
+include::{snippets}/api/v2/beer-new/http-response.adoc[]
+
+Response Body:
+
+include::{snippets}/api/v2/beer-new/response-body.adoc[]
+
+Response Headers:
+
+include::{snippets}/api/v2/beer-new/response-headers.adoc[]

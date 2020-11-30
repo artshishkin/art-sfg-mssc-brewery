@@ -1,0 +1,25 @@
+UPDATE BEER
+
+Path parameters:
+
+include::{snippets}/api/v2/beer-delete/path-parameters.adoc[]
+
+One showing how to make a request using cURL:
+
+include::{snippets}/api/v2/beer-update/curl-request.adoc[]
+
+One showing the HTTP request:
+
+include::{snippets}/api/v2/beer-update/http-request.adoc[]
+
+Request Fields:
+
+include::{snippets}/api/v2/beer-update/request-fields.adoc[]
+
+And one showing the HTTP response:
+
+include::{snippets}/api/v2/beer-update/http-response.adoc[]
+
+Response Body:
+
+include::{snippets}/api/v2/beer-update/response-body.adoc[]
