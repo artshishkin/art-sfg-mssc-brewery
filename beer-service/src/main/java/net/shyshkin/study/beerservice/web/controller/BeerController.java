@@ -1,12 +1,15 @@
 package net.shyshkin.study.beerservice.web.controller;
 
 import net.shyshkin.study.beerservice.web.model.BeerDto;
+import net.shyshkin.study.beerservice.web.model.BeerStyleEnum;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.net.URI;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import static net.shyshkin.study.beerservice.web.controller.BeerController.BASE_URL;
@@ -19,7 +22,17 @@ public class BeerController {
 
     @GetMapping("{beerId}")
     public BeerDto getBeerById(@PathVariable("beerId") UUID beerId) {
-        return BeerDto.builder().build();
+        return BeerDto.builder()
+                .id(beerId)
+                .beerName("Beer Name")
+                .beerStyle(BeerStyleEnum.PILSNER)
+                .upc(123L)
+                .price(BigDecimal.valueOf(321L))
+                .createdDate(OffsetDateTime.now())
+                .lastModifiedDate(OffsetDateTime.now())
+                .quantityOnHand(4)
+                .version(1)
+                .build();
     }
 
     @PostMapping

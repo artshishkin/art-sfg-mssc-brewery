@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.constraints.ConstraintDescriptions;
 import org.springframework.restdocs.payload.FieldDescriptor;
@@ -15,12 +16,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import static net.shyshkin.study.beerservice.web.controller.BeerController.BASE_URL;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -55,7 +59,7 @@ class BeerControllerTest {
 
                 //then
                 .andExpect(status().isOk())
-                .andDo(document("v1/beer",
+                .andDo(document("v1/beer-get",
                         pathParameters(
                                 parameterWithName("beerId").description("UUID of desired beer to get.")
                         ),
@@ -65,10 +69,10 @@ class BeerControllerTest {
                                         .optional()
                         ),
                         responseFields(
-                                fieldWithPath("id").description("Id of Beer"),
+                                fieldWithPath("id").description("Id of Beer").type("UUID"),
                                 fieldWithPath("version").description("Version number"),
-                                fieldWithPath("createdDate").description("Created Date"),
-                                fieldWithPath("lastModifiedDate").description("Last Modified Date"),
+                                fieldWithPath("createdDate").description("Created Date").type(OffsetDateTime.class.getSimpleName()),
+                                fieldWithPath("lastModifiedDate").description("Last Modified Date").type(OffsetDateTime.class.getName()),
                                 fieldWithPath("beerName").description("Beer Name"),
                                 fieldWithPath("beerStyle").description("Beer Style"),
                                 fieldWithPath("upc").description("Upc of Beer"),
@@ -103,7 +107,7 @@ class BeerControllerTest {
                 //then
                 .andExpect(status().isCreated())
                 .andDo(
-                        document("v1/beer",
+                        document("v1/beer-new",
                                 requestFields(
                                         field.withPath("id").ignored(),
                                         field.withPath("version").ignored(),
@@ -115,7 +119,10 @@ class BeerControllerTest {
                                         field.withPath("upc").description("Upc of Beer"),
                                         field.withPath("price").description("Price of Beer"),
                                         field.withPath("quantityOnHand").ignored()
-                                )));
+                                ),
+                                responseHeaders(
+                                        headerWithName(HttpHeaders.LOCATION).description("Location of Resource"))
+                        ));
     }
 
     @Test
