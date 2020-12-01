@@ -1,9 +1,7 @@
 package net.shyshkin.study.artsfgmsscbrewery.web.model.v3;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.test.context.TestPropertySource;
 
@@ -14,9 +12,6 @@ import static org.assertj.core.api.Assertions.assertThat;
         properties = {"spring.jackson.property-naming-strategy=KEBAB_CASE"}
 )
 class BeerDtoV3KebabTest extends BaseTest {
-
-    @Autowired
-    ObjectMapper objectMapper;
 
     @Test
     void testSerializeDto() throws JsonProcessingException {
