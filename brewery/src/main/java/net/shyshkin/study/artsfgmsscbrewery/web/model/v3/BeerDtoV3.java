@@ -1,6 +1,7 @@
 package net.shyshkin.study.artsfgmsscbrewery.web.model.v3;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,8 +32,10 @@ public class BeerDtoV3 {
     @Positive
     private Long upc;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal price;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     @Null
     private OffsetDateTime createdDate;
     @Null
