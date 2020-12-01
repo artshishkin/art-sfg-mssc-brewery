@@ -1,6 +1,7 @@
 package net.shyshkin.study.artsfgmsscbrewery.web.model.v3;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class BeerDtoV3 {
+    @JsonProperty("beerId")
     @Null
     private UUID id;
     @NotBlank
