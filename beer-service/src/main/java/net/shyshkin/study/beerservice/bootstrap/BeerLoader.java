@@ -17,6 +17,8 @@ public class BeerLoader implements CommandLineRunner {
 
     private final BeerRepository beerRepository;
 
+    private static final String BEER_UPC_PATTERN = "06312342003%02d";
+
     @Override
     public void run(String... args) throws Exception {
         if (beerRepository.count() == 0)
@@ -35,7 +37,7 @@ public class BeerLoader implements CommandLineRunner {
                 .beerName("BeerName" + index)
                 .beerStyle("BeerStyle" + index)
                 .price(BigDecimal.valueOf(111 * (index)))
-                .upc(1111L * index)
+                .upc(String.format(BEER_UPC_PATTERN, index))
                 .minOnHand(111 * index)
                 .quantityToBrew(123 * index)
                 .build();

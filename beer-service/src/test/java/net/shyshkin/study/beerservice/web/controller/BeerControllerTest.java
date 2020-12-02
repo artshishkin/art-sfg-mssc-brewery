@@ -66,7 +66,7 @@ class BeerControllerTest {
                 .id(beerId)
                 .beerName("Beer Name")
                 .beerStyle(BeerStyleEnum.PILSNER)
-                .upc(123L)
+                .upc("0631234200036")
                 .price(BigDecimal.valueOf(321L))
                 .createdDate(OffsetDateTime.now())
                 .lastModifiedDate(OffsetDateTime.now())
@@ -177,7 +177,7 @@ class BeerControllerTest {
                                 .string(allOf(
                                         containsString("beerStyle : must not be null"),
                                         containsString("beerName : must not be blank"),
-                                        containsString("upc : must not be null"),
+                                        containsString("upc : must not be blank"),
                                         containsString("price : must not be null")
                                 )));
         then(beerService).shouldHaveNoInteractions();
