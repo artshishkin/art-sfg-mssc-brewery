@@ -1,13 +1,16 @@
 package net.shyshkin.study.beerservice.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.shyshkin.study.beerservice.services.BeerService;
 import net.shyshkin.study.beerservice.web.model.BeerDto;
 import net.shyshkin.study.beerservice.web.model.BeerStyleEnum;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.constraints.ConstraintDescriptions;
@@ -22,6 +25,10 @@ import java.util.UUID;
 import static net.shyshkin.study.beerservice.web.controller.BeerController.BASE_URL;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
@@ -46,10 +53,32 @@ class BeerControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @MockBean
+    BeerService beerService;
+
+    private BeerDto stubBeer;
+    private UUID beerId;
+
+    @BeforeEach
+    void setUp() {
+        beerId = UUID.randomUUID();
+        stubBeer = BeerDto.builder()
+                .id(beerId)
+                .beerName("Beer Name")
+                .beerStyle(BeerStyleEnum.PILSNER)
+                .upc(123L)
+                .price(BigDecimal.valueOf(321L))
+                .createdDate(OffsetDateTime.now())
+                .lastModifiedDate(OffsetDateTime.now())
+                .quantityOnHand(4)
+                .version(1)
+                .build();
+    }
+
     @Test
     void getBeerById() throws Exception {
         //given
-        UUID beerId = UUID.randomUUID();
+        given(beerService.getBeerById(any(UUID.class))).willReturn(stubBeer);
 
         //when
         mockMvc
@@ -80,19 +109,20 @@ class BeerControllerTest {
                                 fieldWithPath("quantityOnHand").description("Quantity On Hand")
                         )
                 ));
+        then(beerService).should().getBeerById(eq(beerId));
     }
 
     @Test
     void createNewBeer() throws Exception {
         //given
-        UUID beerId = UUID.randomUUID();
         BeerDto beerDto = BeerDto.builder()
-                .beerName("Beer Name")
-                .beerStyle(BeerStyleEnum.PILSNER)
-                .upc(123L)
-                .price(BigDecimal.valueOf(321L))
+                .beerName(stubBeer.getBeerName())
+                .beerStyle(stubBeer.getBeerStyle())
+                .upc(stubBeer.getUpc())
+                .price(stubBeer.getPrice())
                 .build();
         String beerJson = objectMapper.writeValueAsString(beerDto);
+        given(beerService.saveNewBeer(any(BeerDto.class))).willReturn(stubBeer);
 
         ConstrainedFields field = new ConstrainedFields(BeerDto.class);
 
@@ -123,12 +153,12 @@ class BeerControllerTest {
                                 responseHeaders(
                                         headerWithName(HttpHeaders.LOCATION).description("Location of Resource"))
                         ));
+        then(beerService).should().saveNewBeer(any(BeerDto.class));
     }
 
     @Test
     void createNewBeer_withValidationErrors() throws Exception {
         //given
-        UUID beerId = UUID.randomUUID();
         BeerDto beerDto = BeerDto.builder().build();
         String beerJson = objectMapper.writeValueAsString(beerDto);
 
@@ -150,13 +180,18 @@ class BeerControllerTest {
                                         containsString("upc : must not be null"),
                                         containsString("price : must not be null")
                                 )));
+        then(beerService).shouldHaveNoInteractions();
     }
 
     @Test
     void updateBeerById() throws Exception {
         //given
-        UUID beerId = UUID.randomUUID();
-        BeerDto beerDto = BeerDto.builder().build();
+        BeerDto beerDto = BeerDto.builder()
+                .beerName(stubBeer.getBeerName())
+                .beerStyle(stubBeer.getBeerStyle())
+                .upc(stubBeer.getUpc())
+                .price(stubBeer.getPrice())
+                .build();
         String beerJson = objectMapper.writeValueAsString(beerDto);
 
         //when
@@ -169,6 +204,7 @@ class BeerControllerTest {
 
                 //then
                 .andExpect(status().isNoContent());
+        then(beerService).should().updateBeer(eq(beerId), any(BeerDto.class));
     }
 
     //from docs https://github.com/spring-projects/spring-restdocs/blob/v2.0.5.RELEASE/samples/rest-notes-spring-hateoas/src/test/java/com/example/notes/ApiDocumentation.java
