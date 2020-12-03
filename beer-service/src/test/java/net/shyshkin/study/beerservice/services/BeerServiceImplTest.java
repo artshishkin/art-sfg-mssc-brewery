@@ -10,7 +10,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.never;
 
 @DataJpaTest
 class BeerServiceImplTest {
@@ -32,14 +32,9 @@ class BeerServiceImplTest {
     @MockBean
     BeerMapper beerMapper;
 
-    @MockBean
-    @Qualifier("delegate")
-    BeerMapper delegate;
-
     @BeforeEach
     void setUp() {
         beerService = new BeerServiceImpl(beerRepository, beerMapper);
-        ((BeerServiceImpl) beerService).setDelegate(delegate);
     }
 
     @ParameterizedTest
@@ -52,11 +47,11 @@ class BeerServiceImplTest {
         assertNotNull(beerPagedList);
         assertThat(beerPagedList.getContent()).hasSize(3);
         if (showInventoryOnHand) {
-            then(delegate).shouldHaveNoInteractions();
-            then(beerMapper).should(atLeastOnce()).asBeerDto(any());
+            then(beerMapper).should(never()).asBeerDto(any());
+            then(beerMapper).should(atLeastOnce()).asBeerDtoWithInventory(any());
         } else {
-            then(beerMapper).shouldHaveNoInteractions();
-            then(delegate).should(atLeastOnce()).asBeerDto(any());
+            then(beerMapper).should(never()).asBeerDtoWithInventory(any());
+            then(beerMapper).should(atLeastOnce()).asBeerDto(any());
         }
     }
 
@@ -77,9 +72,9 @@ class BeerServiceImplTest {
         //then
         assertNotNull(beerPagedList);
         assertThat(beerPagedList.getContent()).hasSize(beerCount);
-        then(delegate).shouldHaveNoInteractions();
+        then(beerMapper).should(never()).asBeerDto(any());
         if (beerCount > 0)
-            then(beerMapper).should(atLeastOnce()).asBeerDto(any(Beer.class));
+            then(beerMapper).should(atLeastOnce()).asBeerDtoWithInventory(any(Beer.class));
     }
 
     @ParameterizedTest
@@ -99,9 +94,9 @@ class BeerServiceImplTest {
         //then
         assertNotNull(beerPagedList);
         assertThat(beerPagedList.getContent()).hasSize(beerCount);
-        then(beerMapper).shouldHaveNoInteractions();
+        then(beerMapper).should(never()).asBeerDtoWithInventory(any(Beer.class));
         if (beerCount > 0)
-            then(delegate).should(atLeastOnce()).asBeerDto(any(Beer.class));
+            then(beerMapper).should(atLeastOnce()).asBeerDto(any());
     }
 
 }

@@ -12,9 +12,9 @@ public interface BeerMapper {
 
     BeerMapper INSTANCE = Mappers.getMapper( BeerMapper.class );
 
-//    @Mapping(source = "minOnHand", target = "quantityOnHand")
     BeerDto asBeerDto(Beer beer);
 
-//    @Mapping(source = "quantityOnHand", target = "minOnHand")
+    BeerDto asBeerDtoWithInventory(Beer beer);
+
     Beer asBeer(BeerDto beerDto);
 }
