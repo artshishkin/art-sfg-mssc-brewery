@@ -3,14 +3,17 @@ package net.shyshkin.study.beerservice.web.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.shyshkin.study.beerservice.services.BeerService;
 import net.shyshkin.study.beerservice.web.model.BeerDto;
-import net.shyshkin.study.beerservice.web.model.BeerStyleEnum;
+import net.shyshkin.study.beerservice.web.model.BeerPagedList;
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.constraints.ConstraintDescriptions;
@@ -20,13 +23,17 @@ import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static net.shyshkin.study.beerservice.web.controller.BeerController.BASE_URL;
+import static net.shyshkin.study.beerservice.web.model.BeerStyleEnum.ALE;
+import static net.shyshkin.study.beerservice.web.model.BeerStyleEnum.PILSNER;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -37,8 +44,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.snippet.Attributes.key;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 //import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
@@ -65,7 +71,7 @@ class BeerControllerTest {
         stubBeer = BeerDto.builder()
                 .id(beerId)
                 .beerName("Beer Name")
-                .beerStyle(BeerStyleEnum.PILSNER)
+                .beerStyle(PILSNER)
                 .upc("0631234200036")
                 .price(BigDecimal.valueOf(321L))
                 .createdDate(OffsetDateTime.now())
@@ -73,6 +79,119 @@ class BeerControllerTest {
                 .quantityOnHand(4)
                 .version(1)
                 .build();
+    }
+
+    @Nested
+    class ListBeersTests {
+
+        @Test
+        void listBeers_Success() throws Exception {
+            //given
+            List<BeerDto> stubBeerList = stubBeerList(5);
+            PageRequest pageable = PageRequest.of(1, 5);
+            BeerPagedList beerPagedList = new BeerPagedList(stubBeerList, pageable, 10);
+            String jsonAnswer = objectMapper.writeValueAsString(beerPagedList);
+            given(beerService.listBeer(anyString(), any(), any())).willReturn(beerPagedList);
+
+            //when
+            mockMvc
+                    .perform(
+                            get(BASE_URL)
+                                    .param("pageNumber", "1")
+                                    .param("pageSize", "5")
+                                    .param("beerName", "ArtBeer")
+                                    .param("beerStyle", ALE.name())
+                    )
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(CoreMatchers.containsString("beerName")))
+                    .andExpect(jsonPath("$.number", CoreMatchers.equalTo(1)))
+                    .andExpect(jsonPath("$.pageable.pageNumber", CoreMatchers.equalTo(1)))
+                    .andExpect(jsonPath("$.size", CoreMatchers.equalTo(5)))
+                    .andExpect(jsonPath("$.pageable.pageSize", CoreMatchers.equalTo(5)))
+                    .andExpect(content().json(jsonAnswer))
+            ;
+
+            //then
+            then(beerService).should().listBeer(eq("ArtBeer"), eq(ALE), eq(pageable));
+
+        }
+
+        @Test
+        void listBeers_Success_withDefaults() throws Exception {
+            //given
+            List<BeerDto> stubBeerList = stubBeerList(25);
+            PageRequest pageable = PageRequest.of(0, 25);
+            BeerPagedList beerPagedList = new BeerPagedList(stubBeerList, pageable, 10);
+            String jsonAnswer = objectMapper.writeValueAsString(beerPagedList);
+            given(beerService.listBeer(anyString(), any(), any())).willReturn(beerPagedList);
+
+            //when
+            mockMvc
+                    .perform(
+                            get(BASE_URL)
+                                    .param("beerName", "ArtBeer")
+                                    .param("beerStyle", ALE.name())
+                    )
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(CoreMatchers.containsString("beerName")))
+                    .andExpect(jsonPath("$.number", CoreMatchers.equalTo(0)))
+                    .andExpect(jsonPath("$.pageable.pageNumber", CoreMatchers.equalTo(0)))
+                    .andExpect(jsonPath("$.size", CoreMatchers.equalTo(25)))
+                    .andExpect(jsonPath("$.pageable.pageSize", CoreMatchers.equalTo(25)))
+                    .andExpect(content().json(jsonAnswer))
+            ;
+
+            //then
+            then(beerService).should().listBeer(eq("ArtBeer"), eq(ALE), eq(pageable));
+
+        }
+
+        @Test
+        void listBeers_Success_ValidationError() throws Exception {
+            //when
+            mockMvc
+                    .perform(
+                            get(BASE_URL)
+                                    .param("pageNumber", "-1")
+                                    .param("pageSize", "-5")
+                                    .param("beerName", "ArtBeer")
+                                    .param("beerStyle", ALE.name())
+                    )
+                    .andExpect(status().is4xxClientError())
+                    .andExpect(content().string(
+                            CoreMatchers.allOf(
+                                    CoreMatchers.containsString("listBeers.pageNumber : must be greater than or equal to 0"),
+                                    CoreMatchers.containsString("listBeers.pageSize : must be greater than 0")
+                            )
+                    ));
+
+            //then
+            then(beerService).shouldHaveNoInteractions();
+
+        }
+
+        private static final String BEER_UPC_PATTERN = "06312342003%02d";
+
+        private List<BeerDto> stubBeerList(int size) {
+            return IntStream.rangeClosed(1, size)
+                    .mapToObj(this::stubBeer)
+                    .collect(Collectors.toList());
+        }
+
+        private BeerDto stubBeer(int index) {
+            return BeerDto.builder()
+                    .id(UUID.randomUUID())
+                    .version(1)
+                    .createdDate(OffsetDateTime.now())
+                    .lastModifiedDate(OffsetDateTime.now())
+                    .beerName("BeerName" + index)
+                    .beerStyle(ALE)
+                    .price(BigDecimal.valueOf(1.11 * (index)))
+                    .upc(String.format(BEER_UPC_PATTERN, index))
+                    .quantityOnHand(111 * index)
+                    .build();
+        }
+
     }
 
     @Test

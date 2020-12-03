@@ -25,10 +25,14 @@ public class BeerLoader implements CommandLineRunner {
     }
 
     private void bootstrapBeers() {
-        List<Beer> stubBeers = IntStream.rangeClosed(1, 9)
+        List<Beer> stubBeers = stubBeerList(9);
+        beerRepository.saveAll(stubBeers);
+    }
+
+    public List<Beer> stubBeerList(int size) {
+        return IntStream.rangeClosed(1, size)
                 .mapToObj(this::stubBeer)
                 .collect(Collectors.toList());
-        beerRepository.saveAll(stubBeers);
     }
 
     private Beer stubBeer(int index) {

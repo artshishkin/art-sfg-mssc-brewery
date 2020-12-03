@@ -5,10 +5,17 @@ import net.shyshkin.study.beerservice.domain.Beer;
 import net.shyshkin.study.beerservice.repositories.BeerRepository;
 import net.shyshkin.study.beerservice.web.mappers.BeerMapper;
 import net.shyshkin.study.beerservice.web.model.BeerDto;
+import net.shyshkin.study.beerservice.web.model.BeerPagedList;
+import net.shyshkin.study.beerservice.web.model.BeerStyleEnum;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,5 +45,25 @@ public class BeerServiceImpl implements BeerService {
         beerDto.setId(beerId);
         Beer saved = beerRepository.save(beerMapper.asBeer(beerDto));
         return beerMapper.asBeerDto(saved);
+    }
+
+    @Override
+    public BeerPagedList listBeer(String beerName, BeerStyleEnum beerStyle, Pageable pageable) {
+
+        Example<Beer> beerExample = Example.of(Beer.builder()
+                .beerName(beerName)
+                .beerStyle(beerStyle == null ? null : beerStyle.name()).build());
+
+        Page<Beer> beerPage = beerRepository.findAll(beerExample, pageable);
+
+        List<BeerDto> beerDtos = beerPage.get()
+                .map(beerMapper::asBeerDto)
+                .collect(Collectors.toList());
+
+        long totalElements = beerPage.getTotalElements();
+
+        Pageable resultPageable = beerPage.getPageable();
+
+        return new BeerPagedList(beerDtos, resultPageable, totalElements);
     }
 }
