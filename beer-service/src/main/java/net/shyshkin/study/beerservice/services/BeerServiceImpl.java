@@ -7,6 +7,8 @@ import net.shyshkin.study.beerservice.web.mappers.BeerMapper;
 import net.shyshkin.study.beerservice.web.model.BeerDto;
 import net.shyshkin.study.beerservice.web.model.BeerPagedList;
 import net.shyshkin.study.beerservice.web.model.BeerStyleEnum;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,10 +26,19 @@ public class BeerServiceImpl implements BeerService {
     private final BeerRepository beerRepository;
     private final BeerMapper beerMapper;
 
+    private BeerMapper delegate;
+
+    @Autowired
+    @Qualifier("delegate")
+    public void setDelegate(BeerMapper delegate) {
+        this.delegate = delegate;
+    }
+
     @Override
-    public BeerDto getBeerById(UUID beerId) {
+    public BeerDto getBeerById(UUID beerId, Boolean showInventoryOnHand) {
+        BeerMapper mapper = showInventoryOnHand ? beerMapper : delegate;
         return beerRepository.findById(beerId)
-                .map(beerMapper::asBeerDto)
+                .map(mapper::asBeerDto)
                 .orElseThrow(() -> new EntityNotFoundException("Beer with id: " + beerId + " not found"));
     }
 
@@ -48,7 +59,7 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public BeerPagedList listBeer(String beerName, BeerStyleEnum beerStyle, Pageable pageable) {
+    public BeerPagedList listBeer(String beerName, BeerStyleEnum beerStyle, Pageable pageable, Boolean showInventoryOnHand) {
 
         Example<Beer> beerExample = Example.of(Beer.builder()
                 .beerName(beerName)
@@ -56,8 +67,10 @@ public class BeerServiceImpl implements BeerService {
 
         Page<Beer> beerPage = beerRepository.findAll(beerExample, pageable);
 
+        BeerMapper mapper = showInventoryOnHand ? beerMapper : delegate;
+
         List<BeerDto> beerDtos = beerPage.get()
-                .map(beerMapper::asBeerDto)
+                .map(mapper::asBeerDto)
                 .collect(Collectors.toList());
 
         long totalElements = beerPage.getTotalElements();

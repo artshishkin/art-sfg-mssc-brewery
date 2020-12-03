@@ -87,11 +87,12 @@ class BeerControllerTest {
         @Test
         void listBeers_Success() throws Exception {
             //given
+            Boolean showInventoryOnHand = true;
             List<BeerDto> stubBeerList = stubBeerList(5);
             PageRequest pageable = PageRequest.of(1, 5);
             BeerPagedList beerPagedList = new BeerPagedList(stubBeerList, pageable, 10);
             String jsonAnswer = objectMapper.writeValueAsString(beerPagedList);
-            given(beerService.listBeer(anyString(), any(), any())).willReturn(beerPagedList);
+            given(beerService.listBeer(anyString(), any(), any(), anyBoolean())).willReturn(beerPagedList);
 
             //when
             mockMvc
@@ -101,6 +102,7 @@ class BeerControllerTest {
                                     .param("pageSize", "5")
                                     .param("beerName", "ArtBeer")
                                     .param("beerStyle", ALE.name())
+                                    .param("showInventoryOnHand", showInventoryOnHand.toString())
                     )
                     .andExpect(status().isOk())
                     .andExpect(content().string(CoreMatchers.containsString("beerName")))
@@ -112,18 +114,19 @@ class BeerControllerTest {
             ;
 
             //then
-            then(beerService).should().listBeer(eq("ArtBeer"), eq(ALE), eq(pageable));
+            then(beerService).should().listBeer(eq("ArtBeer"), eq(ALE), eq(pageable), eq(showInventoryOnHand));
 
         }
 
         @Test
         void listBeers_Success_withDefaults() throws Exception {
             //given
+            Boolean showInventoryOnHand = true;
             List<BeerDto> stubBeerList = stubBeerList(25);
             PageRequest pageable = PageRequest.of(0, 25);
             BeerPagedList beerPagedList = new BeerPagedList(stubBeerList, pageable, 10);
             String jsonAnswer = objectMapper.writeValueAsString(beerPagedList);
-            given(beerService.listBeer(anyString(), any(), any())).willReturn(beerPagedList);
+            given(beerService.listBeer(anyString(), any(), any(), anyBoolean())).willReturn(beerPagedList);
 
             //when
             mockMvc
@@ -131,6 +134,8 @@ class BeerControllerTest {
                             get(BASE_URL)
                                     .param("beerName", "ArtBeer")
                                     .param("beerStyle", ALE.name())
+                                    .param("showInventoryOnHand", showInventoryOnHand.toString())
+
                     )
                     .andExpect(status().isOk())
                     .andExpect(content().string(CoreMatchers.containsString("beerName")))
@@ -142,7 +147,7 @@ class BeerControllerTest {
             ;
 
             //then
-            then(beerService).should().listBeer(eq("ArtBeer"), eq(ALE), eq(pageable));
+            then(beerService).should().listBeer(eq("ArtBeer"), eq(ALE), eq(pageable), eq(showInventoryOnHand));
 
         }
 
@@ -197,13 +202,14 @@ class BeerControllerTest {
     @Test
     void getBeerById() throws Exception {
         //given
-        given(beerService.getBeerById(any(UUID.class))).willReturn(stubBeer);
+        Boolean showInventoryOnHand = true;
+        given(beerService.getBeerById(any(UUID.class), anyBoolean())).willReturn(stubBeer);
 
         //when
         mockMvc
                 .perform(
                         get(BASE_URL + "/{beerId}", beerId)
-                                .param("iscold", "yes"))
+                                .param("showInventoryOnHand", showInventoryOnHand.toString()))
 
                 //then
                 .andExpect(status().isOk())
@@ -212,8 +218,8 @@ class BeerControllerTest {
                                 parameterWithName("beerId").description("UUID of desired beer to get.")
                         ),
                         requestParameters(
-                                parameterWithName("iscold")
-                                        .description("Is Beer Cold Query Parameter")
+                                parameterWithName("showInventoryOnHand")
+                                        .description("Show Inventory On Hand")
                                         .optional()
                         ),
                         responseFields(
@@ -228,7 +234,7 @@ class BeerControllerTest {
                                 fieldWithPath("quantityOnHand").description("Quantity On Hand")
                         )
                 ));
-        then(beerService).should().getBeerById(eq(beerId));
+        then(beerService).should().getBeerById(eq(beerId), eq(showInventoryOnHand));
     }
 
     @Test
