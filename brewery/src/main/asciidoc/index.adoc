@@ -6,7 +6,7 @@ Art Shyshkin;
 
 Sample application demonstrating how to use Spring REST Docs with JUnit 5.
 
-`BeerControllerV2Test` makes a call to a very simple service and produces three documentation snippets.
+`BeerControllerV2Test` makes a call to a very simple guru.sfg.beer.inventory.service and produces three documentation snippets.
 
 include::beer-get.adoc[]
 

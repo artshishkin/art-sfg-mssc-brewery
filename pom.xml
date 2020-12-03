@@ -8,6 +8,7 @@
         <module>brewery</module>
         <module>brewery-client</module>
         <module>beer-order-service</module>
+        <module>beer-inventory-service</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
