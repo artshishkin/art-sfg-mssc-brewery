@@ -8,7 +8,8 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 @Component
 @Slf4j
@@ -16,6 +17,7 @@ import java.util.Objects;
 public class BeerServiceRestTemplateImpl implements BeerService {
 
     static final String BEER_UPC_PATH = "/api/v1/beerUpc/{upc}";
+    static final String BEER_PATH = "/api/v1/beer/{beerId}";
 
     @Setter
     private String beerServiceHost;
@@ -27,12 +29,22 @@ public class BeerServiceRestTemplateImpl implements BeerService {
     }
 
     @Override
-    public BeerDto getBeerByUpc(String upc) {
+    public Optional<BeerDto> getBeerById(UUID beerId) {
 
-        log.debug("Calling Beer service");
+        log.debug("Calling Beer service (getBeerById)");
+
+        BeerDto beerDto = restTemplate.getForObject(beerServiceHost + BEER_PATH, BeerDto.class, beerId);
+
+        return beerDto == null ? Optional.empty() : Optional.of(beerDto);
+    }
+
+    @Override
+    public Optional<BeerDto> getBeerByUpc(String upc) {
+
+        log.debug("Calling Beer service (getBeerByUpc)");
 
         BeerDto beerDto = restTemplate.getForObject(beerServiceHost + BEER_UPC_PATH, BeerDto.class, upc);
 
-        return Objects.requireNonNull(beerDto);
+        return beerDto == null ? Optional.empty() : Optional.of(beerDto);
     }
 }
