@@ -29,6 +29,8 @@ include::{snippets}/v1/beer-get/response-body.adoc[]
 Response Fields:
 include::{snippets}/v1/beer-get/response-fields.adoc[]
 
+include::beer-get-by-upc.adoc[]
+
 NEW BEER
 
 One showing how to make a request using cURL:

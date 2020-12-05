@@ -133,7 +133,7 @@ class BeerServiceImplTest {
             });
 
             //when
-            BeerDto beerByUpc = beerService.getBeerByUpc("0631234200036", false);
+            BeerDto beerByUpc = beerService.getBeerByUpc("0631234200036");
 
             //then
             assertNotNull(beerByUpc);
@@ -148,7 +148,7 @@ class BeerServiceImplTest {
 
             //then
             ThrowableAssert.ThrowingCallable getByAbsentUpc = () -> {
-                BeerDto beerByUpc = beerService.getBeerByUpc(absentUpc, false);
+                BeerDto beerByUpc = beerService.getBeerByUpc(absentUpc);
 
             };
             assertThatThrownBy(getByAbsentUpc)

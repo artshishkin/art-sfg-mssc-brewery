@@ -27,6 +27,7 @@ public class BeerController {
 
     public static final String BASE_URL = "/api/v1";
     public static final String BEER_URL = BASE_URL + "/beer";
+    public static final String BEER_UPC_URL = BASE_URL + "/beerUpc";
 
     private static final int DEFAULT_PAGE_NUMBER = 0;
     private static final int DEFAULT_PAGE_SIZE = 25;
@@ -64,9 +65,8 @@ public class BeerController {
         beerService.updateBeer(beerId, beerDto);
     }
 
-    @GetMapping("beerUpc/{beerUpc}")
-    public BeerDto getBeerByUpc(@PathVariable("beerUpc") String beerUpc,
-                               @RequestParam(value = "showInventoryOnHand", required = false, defaultValue = "false") Boolean showInventoryOnHand) {
-        return beerService.getBeerByUpc(beerUpc, showInventoryOnHand);
+    @GetMapping("beerUpc/{upc}")
+    public BeerDto getBeerByUpc(@PathVariable("upc") String upc) {
+        return beerService.getBeerByUpc(upc);
     }
 }

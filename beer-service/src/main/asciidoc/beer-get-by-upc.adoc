@@ -1,0 +1,19 @@
+GET BEER BY UPC
+
+One showing how to make a request using cURL:
+
+include::{snippets}/v1/beer-get-by-upc/curl-request.adoc[]
+
+One showing the HTTP request:
+
+include::{snippets}/v1/beer-get-by-upc/http-request.adoc[]
+
+And one showing the HTTP response:
+
+include::{snippets}/v1/beer-get-by-upc/http-response.adoc[]
+
+Response Body:
+include::{snippets}/v1/beer-get-by-upc/response-body.adoc[]
+
+Response Fields:
+include::{snippets}/v1/beer-get-by-upc/response-fields.adoc[]

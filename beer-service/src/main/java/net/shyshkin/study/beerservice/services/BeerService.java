@@ -17,5 +17,5 @@ public interface BeerService {
 
     BeerPagedList listBeer(String beerName, BeerStyleEnum beerStyle, Pageable pageable, Boolean showInventoryOnHand);
 
-    BeerDto getBeerByUpc(String beerUpc, Boolean showInventoryOnHand);
+    BeerDto getBeerByUpc(String upc);
 }

@@ -28,6 +28,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static net.shyshkin.study.beerservice.web.controller.BeerController.BEER_UPC_URL;
 import static net.shyshkin.study.beerservice.web.controller.BeerController.BEER_URL;
 import static net.shyshkin.study.beerservice.web.model.BeerStyleEnum.ALE;
 import static net.shyshkin.study.beerservice.web.model.BeerStyleEnum.PILSNER;
@@ -235,6 +236,38 @@ class BeerControllerTest {
                         )
                 ));
         then(beerService).should().getBeerById(eq(beerId), eq(showInventoryOnHand));
+    }
+
+    @Test
+    void getBeerByUpc() throws Exception {
+        //given
+        given(beerService.getBeerByUpc(anyString())).willReturn(stubBeer);
+        String upc= "0631234200036";
+
+        //when
+        mockMvc
+                .perform(
+                        get(BEER_UPC_URL + "/{upc}", upc)                                )
+
+                //then
+                .andExpect(status().isOk())
+                .andDo(document("v1/beer-get-by-upc",
+                        pathParameters(
+                                parameterWithName("upc").description("UPC of desired beer to get.")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("Id of Beer").type("UUID"),
+                                fieldWithPath("version").description("Version number"),
+                                fieldWithPath("createdDate").description("Created Date").type(OffsetDateTime.class.getSimpleName()),
+                                fieldWithPath("lastModifiedDate").description("Last Modified Date").type(OffsetDateTime.class.getName()),
+                                fieldWithPath("beerName").description("Beer Name"),
+                                fieldWithPath("beerStyle").description("Beer Style"),
+                                fieldWithPath("upc").description("Upc of Beer"),
+                                fieldWithPath("price").description("Price of Beer"),
+                                fieldWithPath("quantityOnHand").description("Quantity On Hand")
+                        )
+                ));
+        then(beerService).should().getBeerByUpc(eq(upc));
     }
 
     @Test
