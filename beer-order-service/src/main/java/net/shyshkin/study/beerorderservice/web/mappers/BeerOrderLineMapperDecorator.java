@@ -6,7 +6,7 @@ import net.shyshkin.study.beerorderservice.services.beerservice.model.BeerDto;
 import net.shyshkin.study.beerorderservice.web.model.BeerOrderLineDto;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.UUID;
+import java.util.Optional;
 
 public abstract class BeerOrderLineMapperDecorator implements BeerOrderLineMapper {
 
@@ -27,13 +27,19 @@ public abstract class BeerOrderLineMapperDecorator implements BeerOrderLineMappe
 
     @Override
     public BeerOrderLineDto beerOrderLineToDto(BeerOrderLine line) {
+
+        BeerOrderLineDto orderLineDto = delegate.beerOrderLineToDto(line);
+
         String upc = line.getUpc();
-        BeerDto beerDto = beerService.getBeerByUpc(upc);
-        String beerName = beerDto.getBeerName();
-        UUID beerId = beerDto.getId();
-        BeerOrderLineDto dto = delegate.beerOrderLineToDto(line);
-        dto.setBeerName(beerName);
-        dto.setBeerId(beerId);
-        return dto;
+        Optional<BeerDto> beerDtoOptional = beerService.getBeerByUpc(upc);
+
+        beerDtoOptional.ifPresent(beerDto -> {
+            orderLineDto.setBeerName(beerDto.getBeerName());
+            orderLineDto.setBeerStyle(beerDto.getBeerStyle().name());
+            orderLineDto.setPrice(beerDto.getPrice());
+            orderLineDto.setBeerId(beerDto.getId());
+        });
+
+        return orderLineDto;
     }
 }
