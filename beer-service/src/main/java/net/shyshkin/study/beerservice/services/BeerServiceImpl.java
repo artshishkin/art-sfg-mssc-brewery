@@ -1,12 +1,14 @@
 package net.shyshkin.study.beerservice.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.shyshkin.study.beerservice.domain.Beer;
 import net.shyshkin.study.beerservice.repositories.BeerRepository;
 import net.shyshkin.study.beerservice.web.mappers.BeerMapper;
 import net.shyshkin.study.beerservice.web.model.BeerDto;
 import net.shyshkin.study.beerservice.web.model.BeerPagedList;
 import net.shyshkin.study.beerservice.web.model.BeerStyleEnum;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +20,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BeerServiceImpl implements BeerService {
@@ -25,8 +28,11 @@ public class BeerServiceImpl implements BeerService {
     private final BeerRepository beerRepository;
     private final BeerMapper beerMapper;
 
+    @Cacheable(cacheNames = "beerCache", key = "#beerId", condition = "#showInventoryOnHand == false")
     @Override
     public BeerDto getBeerById(UUID beerId, Boolean showInventoryOnHand) {
+
+        log.debug("getBeerById() was called");
 
         Function<Beer, BeerDto> asBeerDto = showInventoryOnHand ?
                 beerMapper::asBeerDtoWithInventory :
@@ -53,8 +59,11 @@ public class BeerServiceImpl implements BeerService {
         return beerMapper.asBeerDto(saved);
     }
 
+    @Cacheable(cacheNames = "beerListCache", condition = "#showInventoryOnHand == false")
     @Override
     public BeerPagedList listBeer(String beerName, BeerStyleEnum beerStyle, Pageable pageable, Boolean showInventoryOnHand) {
+
+        log.debug("listBeer() was called");
 
         Example<Beer> beerExample = Example.of(Beer.builder()
                 .beerName(beerName)
