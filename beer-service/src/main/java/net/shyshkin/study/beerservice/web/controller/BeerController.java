@@ -25,14 +25,15 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Validated
 public class BeerController {
 
-    public static final String BASE_URL = "/api/v1/beer";
+    public static final String BASE_URL = "/api/v1";
+    public static final String BEER_URL = BASE_URL + "/beer";
 
     private static final int DEFAULT_PAGE_NUMBER = 0;
     private static final int DEFAULT_PAGE_SIZE = 25;
 
     private final BeerService beerService;
 
-    @GetMapping(produces = {APPLICATION_JSON_VALUE})
+    @GetMapping(path = "beer", produces = {APPLICATION_JSON_VALUE})
     public BeerPagedList listBeers(
             @PositiveOrZero @RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
             @Positive @RequestParam(value = "pageSize", required = false, defaultValue = "25") Integer pageSize,
@@ -44,24 +45,28 @@ public class BeerController {
     }
 
 
-    @GetMapping("{beerId}")
+    @GetMapping("beer/{beerId}")
     public BeerDto getBeerById(@PathVariable("beerId") UUID beerId,
                                @RequestParam(value = "showInventoryOnHand", required = false, defaultValue = "false") Boolean showInventoryOnHand) {
         return beerService.getBeerById(beerId, showInventoryOnHand);
     }
 
-    @PostMapping
+    @PostMapping("beer")
     public ResponseEntity<BeerDto> createNewBeer(@Validated @RequestBody BeerDto beerDto) {
         BeerDto savedBeer = beerService.saveNewBeer(beerDto);
         UUID id = savedBeer.getId();
-        return ResponseEntity.created(URI.create(BASE_URL).resolve(id.toString())).body(savedBeer);
+        return ResponseEntity.created(URI.create(BEER_URL).resolve(id.toString())).body(savedBeer);
     }
 
-    @PutMapping("{beerId}")
+    @PutMapping("beer/{beerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateBeerById(@PathVariable("beerId") UUID beerId, @Validated @RequestBody BeerDto beerDto) {
         beerService.updateBeer(beerId, beerDto);
     }
 
-
+    @GetMapping("beerUpc/{beerUpc}")
+    public BeerDto getBeerByUpc(@PathVariable("beerUpc") String beerUpc,
+                               @RequestParam(value = "showInventoryOnHand", required = false, defaultValue = "false") Boolean showInventoryOnHand) {
+        return beerService.getBeerByUpc(beerUpc, showInventoryOnHand);
+    }
 }

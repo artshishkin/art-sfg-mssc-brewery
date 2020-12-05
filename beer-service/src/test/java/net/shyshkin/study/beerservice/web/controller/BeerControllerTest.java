@@ -28,7 +28,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static net.shyshkin.study.beerservice.web.controller.BeerController.BASE_URL;
+import static net.shyshkin.study.beerservice.web.controller.BeerController.BEER_URL;
 import static net.shyshkin.study.beerservice.web.model.BeerStyleEnum.ALE;
 import static net.shyshkin.study.beerservice.web.model.BeerStyleEnum.PILSNER;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -97,7 +97,7 @@ class BeerControllerTest {
             //when
             mockMvc
                     .perform(
-                            get(BASE_URL)
+                            get(BEER_URL)
                                     .param("pageNumber", "1")
                                     .param("pageSize", "5")
                                     .param("beerName", "ArtBeer")
@@ -131,7 +131,7 @@ class BeerControllerTest {
             //when
             mockMvc
                     .perform(
-                            get(BASE_URL)
+                            get(BEER_URL)
                                     .param("beerName", "ArtBeer")
                                     .param("beerStyle", ALE.name())
                                     .param("showInventoryOnHand", showInventoryOnHand.toString())
@@ -156,7 +156,7 @@ class BeerControllerTest {
             //when
             mockMvc
                     .perform(
-                            get(BASE_URL)
+                            get(BEER_URL)
                                     .param("pageNumber", "-1")
                                     .param("pageSize", "-5")
                                     .param("beerName", "ArtBeer")
@@ -208,7 +208,7 @@ class BeerControllerTest {
         //when
         mockMvc
                 .perform(
-                        get(BASE_URL + "/{beerId}", beerId)
+                        get(BEER_URL + "/{beerId}", beerId)
                                 .param("showInventoryOnHand", showInventoryOnHand.toString()))
 
                 //then
@@ -254,7 +254,7 @@ class BeerControllerTest {
         //when
         mockMvc
                 .perform(
-                        post(BASE_URL)
+                        post(BEER_URL)
                                 .accept(APPLICATION_JSON)
                                 .contentType(APPLICATION_JSON)
                                 .content(beerJson))
@@ -290,7 +290,7 @@ class BeerControllerTest {
         //when
         mockMvc
                 .perform(
-                        post(BASE_URL)
+                        post(BEER_URL)
                                 .accept(APPLICATION_JSON)
                                 .contentType(APPLICATION_JSON)
                                 .content(beerJson))
@@ -322,7 +322,7 @@ class BeerControllerTest {
         //when
         mockMvc
                 .perform(
-                        put(BASE_URL + "/{beerId}", beerId)
+                        put(BEER_URL + "/{beerId}", beerId)
                                 .accept(APPLICATION_JSON)
                                 .contentType(APPLICATION_JSON)
                                 .content(beerJson))

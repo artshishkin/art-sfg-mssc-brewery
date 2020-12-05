@@ -85,4 +85,19 @@ public class BeerServiceImpl implements BeerService {
 
         return new BeerPagedList(beerDtos, resultPageable, totalElements);
     }
+
+    @Cacheable(cacheNames = "beerUpcCache", key = "#beerUpc", condition = "#showInventoryOnHand == false")
+    @Override
+    public BeerDto getBeerByUpc(String beerUpc, Boolean showInventoryOnHand) {
+
+        log.debug("getBeerByUpc() was called");
+
+        Function<Beer, BeerDto> asBeerDto = showInventoryOnHand ?
+                beerMapper::asBeerDtoWithInventory :
+                beerMapper::asBeerDto;
+
+        return beerRepository.findByUpc(beerUpc)
+                .map(asBeerDto)
+                .orElseThrow(() -> new EntityNotFoundException("Beer with UPC: " + beerUpc + " not found"));
+    }
 }
