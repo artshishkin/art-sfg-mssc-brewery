@@ -40,3 +40,9 @@
 -  generate jar
 -  run it
 -  go to `http://localhost:8080/docs/index.html` to view docs
+
+####  Section 11: Enterprise Dependency Management
+
+#####  142. Maven BOM Setting Common Properties
+
+-  `pom.xml` -> right mouse click -> Maven -> Show Effective POM

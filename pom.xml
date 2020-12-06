@@ -21,6 +21,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>art-sfg-mssc-brewery</name>
     <description>Tutorial on Microservices from SFG (Udemy)</description>
+    <url>http://dev.shyshkin.net</url>
 
     <licenses>
         <license>
@@ -31,6 +32,7 @@
 
     <organization>
         <name>Shyshkin</name>
+        <url>http://dev.shyshkin.net</url>
     </organization>
 
     <developers>
@@ -48,7 +50,24 @@
         <java.version>11</java.version>
         <mapstruct.version>1.4.1.Final</mapstruct.version>
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
+        <awaitility.version>4.0.2</awaitility.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.awaitility</groupId>
+                <artifactId>awaitility</artifactId>
+                <version>${awaitility.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -59,7 +78,6 @@
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>${mapstruct.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
