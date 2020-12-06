@@ -46,3 +46,9 @@
 #####  142. Maven BOM Setting Common Properties
 
 -  `pom.xml` -> right mouse click -> Maven -> Show Effective POM
+
+#####  147. Beer Service Parent POM Configuration
+
+-  SFG uses separate project as BOM (I am using multi-module Maven project)
+-  to use it as BOM we need to install it into local m2 repo
+    -  `mvn install`
