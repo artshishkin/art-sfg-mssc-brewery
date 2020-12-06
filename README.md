@@ -52,3 +52,8 @@
 -  SFG uses separate project as BOM (I am using multi-module Maven project)
 -  to use it as BOM we need to install it into local m2 repo
     -  `mvn install`
+    
+#####  Extracting Dependencies into separate BOM module
+
+-  `mvn clean install` module `art-sfg-mssc-brewery-bom` **first**
+-  then we can `mvn clean verify all the project`   
