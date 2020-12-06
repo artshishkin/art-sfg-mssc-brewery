@@ -25,9 +25,12 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: cd art-sfg-mssc-brewery-bom /
-          mvn install /
-          cd ..
+      - run:
+          name: Install BOM
+          command: |
+            cd art-sfg-mssc-brewery-bom
+            mvn install
+            cd ..
 
       - run: mvn install dependency:go-offline -Dmaven.test.skip=true
 
