@@ -56,4 +56,39 @@
 #####  Extracting Dependencies into separate BOM module
 
 -  `mvn clean install` module `art-sfg-mssc-brewery-bom` **first**
--  then we can `mvn clean verify all the project`   
+-  then we can `mvn clean verify all the project`
+
+#####  150. Using Released BOMs (deploy to PackageCloud)
+
+We want to upload our RELEASE into some repository to be online. This may be:
+-  Maven Central
+-  Nexus (in Maven Course we installed it locally)
+-  Package Cloud
+
+I choose `PackageCloud` - [Packagecloud Maven Wagon](https://github.com/computology/maven-packagecloud-wagon). Steps to deploy:
+1.  Follow tutorial [Password Encryption](https://maven.apache.org/guides/mini/guide-encryption.html)
+    -  create master password
+    -  copy PackageCloud `API Token` and encrypt it
+2.  Add `maven-packagecloud-wagon` extension into `pom.xml`
+3.  Add `distributionManagement` section into `pom.xml`
+4.  Modify `settings.xml` to have encrypted credentials
+5.  From project module `art-sfg-mssc-brewery-bom` run
+    -  `mvn clean deploy`
+6.  View `https://packagecloud.io/art_shishkin/snapshot`
+    -  `https://packagecloud.io/art_shishkin/snapshot/packages/java/net.shyshkin.study/art-sfg-mssc-brewery-bom-0.0.1-SNAPSHOT.pom`
+    -  was deployed            
+
+```xml
+<settings>
+  <servers>
+    <server>
+      <id>packagecloud.my_repo_releases</id>
+      <password>{yqWsgm3YOgEH/Ia+04m7ne6an0djxyGmDN1yxZmeD83du7bF2qJj6CUrtG1lTE4zEfbr9jgrXs4AFpVoC92ijL2rMhtUrhfRZvQmeqmA/S0=}</password>
+    </server>
+    <server>
+      <id>packagecloud.my_repo_snapshots</id>
+      <password>{yqWsgm3YOgEH/Ia+04m7ne6an0djxyGmDN1yxZmeD83du7bF2qJj6CUrtG1lTE4zEfbr9jgrXs4AFpVoC92ijL2rMhtUrhfRZvQmeqmA/S0=}</password>
+    </server>
+  </servers>
+</settings>
+```
