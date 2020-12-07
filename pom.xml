@@ -13,7 +13,7 @@
     <parent>
         <groupId>net.shyshkin.study</groupId>
         <artifactId>art-sfg-mssc-brewery-bom</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.1</version>
     </parent>
 
     <groupId>net.shyshkin.study</groupId>
@@ -43,5 +43,16 @@
         </developer>
     </developers>
 
-
+    <repositories>
+        <repository>
+            <id>art_shishkin-release</id>
+            <url>https://packagecloud.io/art_shishkin/release/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>
