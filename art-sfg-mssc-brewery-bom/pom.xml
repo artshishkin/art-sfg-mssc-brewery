@@ -15,7 +15,7 @@
 
     <groupId>net.shyshkin.study</groupId>
     <artifactId>art-sfg-mssc-brewery-bom</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
 
     <name>art-sfg-mssc-brewery-bom</name>
     <description>Tutorial on Microservices from SFG (Udemy) - Bill Of Materials</description>
