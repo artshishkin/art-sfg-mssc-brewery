@@ -92,3 +92,14 @@ I choose `PackageCloud` - [Packagecloud Maven Wagon](https://github.com/computol
   </servers>
 </settings>
 ```
+
+#####  153. IntelliJ Workspace Tips and Tricks
+
+SFG has every microservice project separate (I have multi-module maven project).
+For SFG goal is to use one IDEA workspace for all three projects.
+Steps:
+1.  Create directory `mssc-brewery-ws`
+2.  Create new **Empty** project  with the same name
+3.  Clone every project into that directory
+4.  Idea -> New -> Module from existing sources
+    -  repeat for all 3 projects
