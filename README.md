@@ -103,3 +103,9 @@ Steps:
 3.  Clone every project into that directory
 4.  Idea -> New -> Module from existing sources
     -  repeat for all 3 projects
+    
+####  Section 12: Local MySQL Configuration
+
+#####  159. MySQL Beer Service Configuration
+
+-  in MySQL Workbench run script [mysql-init.sql](https://github.com/artshishkin/art-sfg-mssc-brewery/blob/master/beer-service/src/main/scripts/mysql-init.sql)    
