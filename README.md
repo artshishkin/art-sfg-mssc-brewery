@@ -109,3 +109,7 @@ Steps:
 #####  159. MySQL Beer Service Configuration
 
 -  in MySQL Workbench run script [mysql-init.sql](https://github.com/artshishkin/art-sfg-mssc-brewery/blob/master/beer-service/src/main/scripts/mysql-init.sql)    
+
+#####  161. Correcting Hibernate Error with MySQL
+
+-  run with `localmysql` profile through setting it in Intellij Run Config (active profiles)
