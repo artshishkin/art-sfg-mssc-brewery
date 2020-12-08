@@ -8,13 +8,18 @@ import net.shyshkin.study.beerservice.web.model.BeerStyleEnum;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
+import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static net.shyshkin.study.beerservice.web.controller.BeerController.BASE_URL;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -68,5 +73,29 @@ public class BeerController {
     @GetMapping("beerUpc/{upc}")
     public BeerDto getBeerByUpc(@PathVariable("upc") String upc) {
         return beerService.getBeerByUpc(upc);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public List<String> handleValidationException(ConstraintViolationException exception) {
+        return exception.getConstraintViolations()
+                .stream()
+                .map(constraintViolation -> constraintViolation.getPropertyPath() + " : " + constraintViolation.getMessage())
+                .collect(Collectors.toList());
+    }
+
+    @ExceptionHandler(BindException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public List<String> handleValidationException(BindException exception) {
+        return exception.getFieldErrors()
+                .stream()
+                .map(fieldError -> fieldError.getField() + " : " + fieldError.getDefaultMessage())
+                .collect(Collectors.toList());
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleEntityNotFoundException(EntityNotFoundException exception) {
+        return exception.getMessage();
     }
 }
