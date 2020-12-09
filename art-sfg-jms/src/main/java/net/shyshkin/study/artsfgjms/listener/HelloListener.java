@@ -21,7 +21,7 @@ public class HelloListener {
     public void listen(@Payload HelloWorldMessage helloWorldMessage,
                        @Headers MessageHeaders headers,
                        Message message) {
-//        log.debug("I got a message {}", helloWorldMessage);
+        log.debug("I got a message {}", helloWorldMessage);
 //        log.debug("with headers {}", headers);
 
 //        throw new RuntimeException("Testing jms_redelivered and JMSXDeliveryCount -> 6");

@@ -122,3 +122,8 @@ Steps:
 -  `docker run -it --rm -p 8161:8161 -p 61616:61616 vromero/activemq-artemis`
 -  port 8161
 -  username/password: artemis / simetraehcapa
+
+#####  181. Using Local ActiveMQ Broker with Spring Boot
+
+-  after start login to Artemis Management Console and view Queues
+-  to view messages in console exclude listeners (comment out @Component)
