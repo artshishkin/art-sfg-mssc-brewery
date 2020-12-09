@@ -9,6 +9,7 @@
         <module>brewery-client</module>
         <module>beer-order-service</module>
         <module>beer-inventory-service</module>
+        <module>art-sfg-jms</module>
     </modules>
     <parent>
         <groupId>net.shyshkin.study</groupId>
