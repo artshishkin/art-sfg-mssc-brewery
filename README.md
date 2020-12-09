@@ -113,3 +113,12 @@ Steps:
 #####  161. Correcting Hibernate Error with MySQL
 
 -  run with `localmysql` profile through setting it in Intellij Run Config (active profiles)
+
+####  Section 13: JMS Messaging
+
+#####  180. Running Active MQ in Docker
+
+-  Use docker image [activemq-artemis-docker](https://github.com/vromero/activemq-artemis-docker)
+-  `docker run -it --rm -p 8161:8161 -p 61616:61616 vromero/activemq-artemis`
+-  port 8161
+-  username/password: artemis / simetraehcapa
