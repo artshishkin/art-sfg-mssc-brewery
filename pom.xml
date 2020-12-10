@@ -14,7 +14,7 @@
     <parent>
         <groupId>net.shyshkin.study</groupId>
         <artifactId>art-sfg-mssc-brewery-bom</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.3</version>
     </parent>
 
     <groupId>net.shyshkin.study</groupId>
