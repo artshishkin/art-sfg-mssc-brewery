@@ -20,7 +20,9 @@ public class HelloListener {
     @JmsListener(destination = JmsConfig.MY_QUEUE)
     public void listen(@Payload HelloWorldMessage helloWorldMessage,
                        @Headers MessageHeaders headers,
-                       Message message) {
+                       Message jmsMessage,
+                       org.springframework.messaging.Message springMessageForDebug) {
+
         log.debug("I got a message {}", helloWorldMessage);
 //        log.debug("with headers {}", headers);
 
