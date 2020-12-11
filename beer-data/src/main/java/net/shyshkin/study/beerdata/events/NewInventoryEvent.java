@@ -1,7 +1,7 @@
-package net.shyshkin.study.beerservice.events;
+package net.shyshkin.study.beerdata.events;
 
 import lombok.NoArgsConstructor;
-import net.shyshkin.study.beerservice.web.model.BeerDto;
+import net.shyshkin.study.beerdata.dto.BeerDto;
 
 @NoArgsConstructor
 public class NewInventoryEvent extends BeerEvent{

@@ -1,8 +1,8 @@
 package net.shyshkin.study.beerservice.web.mappers;
 
+import net.shyshkin.study.beerdata.dto.BeerDto;
 import net.shyshkin.study.beerservice.domain.Beer;
 import net.shyshkin.study.beerservice.services.inventory.BeerInventoryService;
-import net.shyshkin.study.beerservice.web.model.BeerDto;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class BeerMapperDecorator implements BeerMapper {

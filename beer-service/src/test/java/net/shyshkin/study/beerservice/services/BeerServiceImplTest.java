@@ -1,11 +1,11 @@
 package net.shyshkin.study.beerservice.services;
 
+import net.shyshkin.study.beerdata.dto.BeerDto;
+import net.shyshkin.study.beerdata.dto.BeerStyleEnum;
 import net.shyshkin.study.beerservice.domain.Beer;
 import net.shyshkin.study.beerservice.repositories.BeerRepository;
 import net.shyshkin.study.beerservice.web.mappers.BeerMapper;
-import net.shyshkin.study.beerservice.web.model.BeerDto;
 import net.shyshkin.study.beerservice.web.model.BeerPagedList;
-import net.shyshkin.study.beerservice.web.model.BeerStyleEnum;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;

@@ -1,10 +1,10 @@
 package net.shyshkin.study.beerservice.web.controller;
 
 import lombok.RequiredArgsConstructor;
+import net.shyshkin.study.beerdata.dto.BeerDto;
+import net.shyshkin.study.beerdata.dto.BeerStyleEnum;
 import net.shyshkin.study.beerservice.services.BeerService;
-import net.shyshkin.study.beerservice.web.model.BeerDto;
 import net.shyshkin.study.beerservice.web.model.BeerPagedList;
-import net.shyshkin.study.beerservice.web.model.BeerStyleEnum;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

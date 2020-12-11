@@ -1,7 +1,7 @@
 package net.shyshkin.study.beerservice.web.mappers;
 
+import net.shyshkin.study.beerdata.dto.BeerDto;
 import net.shyshkin.study.beerservice.domain.Beer;
-import net.shyshkin.study.beerservice.web.model.BeerDto;
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

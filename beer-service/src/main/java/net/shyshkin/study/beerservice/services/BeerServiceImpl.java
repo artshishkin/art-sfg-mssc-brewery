@@ -2,12 +2,12 @@ package net.shyshkin.study.beerservice.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.shyshkin.study.beerdata.dto.BeerDto;
+import net.shyshkin.study.beerdata.dto.BeerStyleEnum;
 import net.shyshkin.study.beerservice.domain.Beer;
 import net.shyshkin.study.beerservice.repositories.BeerRepository;
 import net.shyshkin.study.beerservice.web.mappers.BeerMapper;
-import net.shyshkin.study.beerservice.web.model.BeerDto;
 import net.shyshkin.study.beerservice.web.model.BeerPagedList;
-import net.shyshkin.study.beerservice.web.model.BeerStyleEnum;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;

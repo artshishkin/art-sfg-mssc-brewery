@@ -2,11 +2,11 @@ package net.shyshkin.study.beerservice.services.brewing;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.shyshkin.study.beerdata.dto.BeerDto;
+import net.shyshkin.study.beerdata.events.BrewBeerEvent;
+import net.shyshkin.study.beerdata.events.NewInventoryEvent;
 import net.shyshkin.study.beerservice.domain.Beer;
-import net.shyshkin.study.beerservice.events.BrewBeerEvent;
-import net.shyshkin.study.beerservice.events.NewInventoryEvent;
 import net.shyshkin.study.beerservice.repositories.BeerRepository;
-import net.shyshkin.study.beerservice.web.model.BeerDto;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Service;

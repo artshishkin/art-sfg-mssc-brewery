@@ -1,8 +1,8 @@
 package net.shyshkin.study.beerservice.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.shyshkin.study.beerdata.dto.BeerDto;
 import net.shyshkin.study.beerservice.services.BeerService;
-import net.shyshkin.study.beerservice.web.model.BeerDto;
 import net.shyshkin.study.beerservice.web.model.BeerPagedList;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,10 +28,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static net.shyshkin.study.beerdata.dto.BeerStyleEnum.ALE;
+import static net.shyshkin.study.beerdata.dto.BeerStyleEnum.PILSNER;
 import static net.shyshkin.study.beerservice.web.controller.BeerController.BEER_UPC_URL;
 import static net.shyshkin.study.beerservice.web.controller.BeerController.BEER_URL;
-import static net.shyshkin.study.beerservice.web.model.BeerStyleEnum.ALE;
-import static net.shyshkin.study.beerservice.web.model.BeerStyleEnum.PILSNER;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.ArgumentMatchers.*;

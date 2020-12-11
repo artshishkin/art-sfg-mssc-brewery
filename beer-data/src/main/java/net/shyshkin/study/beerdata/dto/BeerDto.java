@@ -1,4 +1,4 @@
-package net.shyshkin.study.beerservice.web.model;
+package net.shyshkin.study.beerdata.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

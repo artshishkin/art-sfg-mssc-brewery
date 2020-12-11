@@ -2,7 +2,7 @@ package net.shyshkin.study.beerservice.services.brewing;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.shyshkin.study.beerservice.events.BrewBeerEvent;
+import net.shyshkin.study.beerdata.events.BrewBeerEvent;
 import net.shyshkin.study.beerservice.repositories.BeerRepository;
 import net.shyshkin.study.beerservice.services.inventory.BeerInventoryService;
 import net.shyshkin.study.beerservice.web.mappers.BeerMapper;
