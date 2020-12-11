@@ -11,6 +11,7 @@
         <module>beer-inventory-service</module>
         <module>art-sfg-jms</module>
         <module>beer-data</module>
+        <module>mssc-state-machine</module>
     </modules>
     <parent>
         <groupId>net.shyshkin.study</groupId>
