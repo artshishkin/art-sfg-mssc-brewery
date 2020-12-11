@@ -10,6 +10,7 @@ import net.shyshkin.study.beerservice.web.model.BeerDto;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static net.shyshkin.study.beerservice.config.JmsConfig.BREWING_REQUEST_QUEUE;
 import static net.shyshkin.study.beerservice.config.JmsConfig.NEW_INVENTORY_QUEUE;
@@ -21,6 +22,7 @@ public class BrewBeerListener {
 
     private final BeerRepository beerRepository;
 
+    @Transactional
     @JmsListener(destination = BREWING_REQUEST_QUEUE)
     @SendTo(NEW_INVENTORY_QUEUE)
     public NewInventoryEvent listen(BrewBeerEvent brewBeerEvent) {
