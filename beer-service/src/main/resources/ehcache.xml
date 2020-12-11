@@ -22,4 +22,16 @@
             <offheap unit="MB">1</offheap>
         </resources>
     </cache-template>
+
+    <cache alias="beerInventoryCache" uses-template="config-inventory-cache"/>
+
+    <cache-template name="config-inventory-cache">
+        <expiry>
+            <ttl unit="seconds">1</ttl>
+        </expiry>
+        <resources>
+            <heap>1</heap>
+            <offheap unit="MB">1</offheap>
+        </resources>
+    </cache-template>
 </config>
