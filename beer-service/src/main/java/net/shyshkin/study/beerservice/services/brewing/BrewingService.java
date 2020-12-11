@@ -1,4 +1,4 @@
-package net.shyshkin.study.beerservice.services;
+package net.shyshkin.study.beerservice.services.brewing;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
