@@ -21,6 +21,8 @@ public class InventoryEventListener {
     @JmsListener(destination = NEW_INVENTORY_QUEUE)
     public void listen(NewInventoryEvent inventoryEvent) {
 
+        log.debug("NewInventoryEvent: {}", inventoryEvent);
+
         BeerDto beerDto = inventoryEvent.getBeerDto();
 
         BeerInventory beerInventory = BeerInventory.builder()
@@ -31,6 +33,6 @@ public class InventoryEventListener {
 
         BeerInventory savedInventory = repository.save(beerInventory);
 
-        log.debug("Saved new Inventory: {}", savedInventory);
+        log.debug("Saved new Inventory with id: {}", savedInventory.getId());
     }
 }
