@@ -85,7 +85,7 @@ class PaymentServiceImplTest {
                     .mapToInt(Integer::intValue)
                     .sum();
             assertAll(
-                    () -> assertThat(100 * repetitions.get(AUTH) / totalCount).isBetween(56, 72),              //theoretically 64
+                    () -> assertThat(100 * repetitions.get(AUTH) / totalCount).isBetween(55, 73),              //theoretically 64
                     () -> assertThat(100 * repetitions.get(PRE_AUTH_ERROR) / totalCount).isBetween(14, 26),    //theoretically 20
                     () -> assertThat(100 * repetitions.get(AUTH_ERROR) / totalCount).isBetween(10, 22)         //theoretically 16
             );
