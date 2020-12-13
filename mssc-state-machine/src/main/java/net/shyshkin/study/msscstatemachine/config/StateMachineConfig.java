@@ -26,6 +26,9 @@ import static net.shyshkin.study.msscstatemachine.services.PaymentService.PAYMEN
 @Configuration
 @EnableStateMachineFactory
 public class StateMachineConfig extends StateMachineConfigurerAdapter<PaymentState, PaymentEvent> {
+
+    private final Random random = new Random();
+
     @Override
     public void configure(StateMachineStateConfigurer<PaymentState, PaymentEvent> states) throws Exception {
         states.withStates()
@@ -45,7 +48,7 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<PaymentSta
                 .and()
                 .withExternal().source(NEW).target(PRE_AUTH_ERROR).event(PaymentEvent.PRE_AUTH_DECLINED)
                 .and()
-                .withExternal().source(PRE_AUTH).target(PRE_AUTH).event(PaymentEvent.AUTHORIZE)
+                .withExternal().source(PRE_AUTH).target(PRE_AUTH).event(PaymentEvent.AUTHORIZE).action(authAction())
                 .and()
                 .withExternal().source(PRE_AUTH).target(AUTH).event(PaymentEvent.AUTH_APPROVED)
                 .and()
@@ -57,10 +60,29 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<PaymentSta
         return context -> {
             log.debug("preAuthAction was called");
 
-            boolean isApproved = new Random().nextInt(10) < 8;
+            boolean isApproved = random.nextInt(10) < 8;
             log.debug("{}", isApproved ? "Approved" : "Declined! NO CREDIT!!!");
 
             PaymentEvent eventToSend = isApproved ? PaymentEvent.PRE_AUTH_APPROVED : PaymentEvent.PRE_AUTH_DECLINED;
+
+            Message<PaymentEvent> message = MessageBuilder
+                    .withPayload(eventToSend)
+                    .setHeader(PAYMENT_ID_HEADER, context.getMessageHeader(PAYMENT_ID_HEADER))
+                    .build();
+
+            context.getStateMachine().sendEvent(message);
+        };
+    }
+
+    private Action<PaymentState, PaymentEvent> authAction() {
+
+        return context -> {
+            log.debug("authAction was called");
+
+            boolean isApproved = random.nextInt(10) < 8;
+            log.debug("{}", isApproved ? "Approved" : "Declined! NO CREDIT!!!");
+
+            PaymentEvent eventToSend = isApproved ? PaymentEvent.AUTH_APPROVED : PaymentEvent.AUTH_DECLINED;
 
             Message<PaymentEvent> message = MessageBuilder
                     .withPayload(eventToSend)

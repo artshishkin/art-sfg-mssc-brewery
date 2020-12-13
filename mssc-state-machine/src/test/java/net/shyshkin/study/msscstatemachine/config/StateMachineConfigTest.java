@@ -25,7 +25,7 @@ class StateMachineConfigTest {
         sm.start();
         System.out.println(sm.getState().toString());
 
-        sm.sendEvent(PaymentEvent.PRE_AUTHORIZE);
+//        sm.sendEvent(PaymentEvent.PRE_AUTHORIZE);
         System.out.println(sm.getState().toString());
 
         sm.sendEvent(PaymentEvent.PRE_AUTH_APPROVED);
