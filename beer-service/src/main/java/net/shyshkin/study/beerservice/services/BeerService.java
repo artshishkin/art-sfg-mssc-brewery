@@ -1,8 +1,8 @@
 package net.shyshkin.study.beerservice.services;
 
 import net.shyshkin.study.beerdata.dto.BeerDto;
+import net.shyshkin.study.beerdata.dto.BeerPagedList;
 import net.shyshkin.study.beerdata.dto.BeerStyleEnum;
-import net.shyshkin.study.beerservice.web.model.BeerPagedList;
 import org.springframework.data.domain.Pageable;
 
 import java.util.UUID;

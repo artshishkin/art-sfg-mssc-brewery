@@ -1,4 +1,4 @@
-package net.shyshkin.study.beerinventoryservice.web.model;
+package net.shyshkin.study.beerdata.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

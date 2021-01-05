@@ -1,7 +1,7 @@
 package net.shyshkin.study.beerinventoryservice.web.mappers;
 
+import net.shyshkin.study.beerdata.dto.BeerInventoryDto;
 import net.shyshkin.study.beerinventoryservice.domain.BeerInventory;
-import net.shyshkin.study.beerinventoryservice.web.model.BeerInventoryDto;
 import org.mapstruct.Mapper;
 
 /**

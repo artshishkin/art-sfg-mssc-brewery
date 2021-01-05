@@ -17,8 +17,8 @@
 
 package net.shyshkin.study.beerorderservice.web.mappers;
 
+import net.shyshkin.study.beerdata.dto.BeerOrderDto;
 import net.shyshkin.study.beerorderservice.domain.BeerOrder;
-import net.shyshkin.study.beerorderservice.web.model.BeerOrderDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

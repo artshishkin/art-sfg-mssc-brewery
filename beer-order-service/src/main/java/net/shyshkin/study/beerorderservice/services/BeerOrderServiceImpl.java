@@ -18,14 +18,14 @@
 package net.shyshkin.study.beerorderservice.services;
 
 import lombok.extern.slf4j.Slf4j;
+import net.shyshkin.study.beerdata.dto.BeerOrderDto;
+import net.shyshkin.study.beerdata.dto.BeerOrderPagedList;
 import net.shyshkin.study.beerorderservice.domain.BeerOrder;
 import net.shyshkin.study.beerorderservice.domain.BeerOrderStatusEnum;
 import net.shyshkin.study.beerorderservice.domain.Customer;
 import net.shyshkin.study.beerorderservice.repositories.BeerOrderRepository;
 import net.shyshkin.study.beerorderservice.repositories.CustomerRepository;
 import net.shyshkin.study.beerorderservice.web.mappers.BeerOrderMapper;
-import net.shyshkin.study.beerorderservice.web.model.BeerOrderDto;
-import net.shyshkin.study.beerorderservice.web.model.BeerOrderPagedList;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

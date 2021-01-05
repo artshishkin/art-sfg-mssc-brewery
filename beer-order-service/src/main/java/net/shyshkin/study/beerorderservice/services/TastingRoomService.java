@@ -1,12 +1,12 @@
 package net.shyshkin.study.beerorderservice.services;
 
 import lombok.extern.slf4j.Slf4j;
+import net.shyshkin.study.beerdata.dto.BeerOrderDto;
+import net.shyshkin.study.beerdata.dto.BeerOrderLineDto;
 import net.shyshkin.study.beerorderservice.bootstrap.BeerOrderBootStrap;
 import net.shyshkin.study.beerorderservice.domain.Customer;
 import net.shyshkin.study.beerorderservice.repositories.BeerOrderRepository;
 import net.shyshkin.study.beerorderservice.repositories.CustomerRepository;
-import net.shyshkin.study.beerorderservice.web.model.BeerOrderDto;
-import net.shyshkin.study.beerorderservice.web.model.BeerOrderLineDto;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -17,9 +17,9 @@
 
 package net.shyshkin.study.beerorderservice.web.controllers;
 
+import net.shyshkin.study.beerdata.dto.BeerOrderDto;
+import net.shyshkin.study.beerdata.dto.BeerOrderPagedList;
 import net.shyshkin.study.beerorderservice.services.BeerOrderService;
-import net.shyshkin.study.beerorderservice.web.model.BeerOrderDto;
-import net.shyshkin.study.beerorderservice.web.model.BeerOrderPagedList;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

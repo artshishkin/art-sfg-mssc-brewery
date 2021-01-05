@@ -2,8 +2,8 @@ package net.shyshkin.study.beerservice.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.shyshkin.study.beerdata.dto.BeerDto;
+import net.shyshkin.study.beerdata.dto.BeerPagedList;
 import net.shyshkin.study.beerservice.services.BeerService;
-import net.shyshkin.study.beerservice.web.model.BeerPagedList;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;

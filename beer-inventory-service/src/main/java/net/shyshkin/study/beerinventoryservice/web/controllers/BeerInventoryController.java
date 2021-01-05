@@ -2,9 +2,9 @@ package net.shyshkin.study.beerinventoryservice.web.controllers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.shyshkin.study.beerdata.dto.BeerInventoryDto;
 import net.shyshkin.study.beerinventoryservice.repositories.BeerInventoryRepository;
 import net.shyshkin.study.beerinventoryservice.web.mappers.BeerInventoryMapper;
-import net.shyshkin.study.beerinventoryservice.web.model.BeerInventoryDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;

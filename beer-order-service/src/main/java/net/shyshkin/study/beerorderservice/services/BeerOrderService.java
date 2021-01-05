@@ -18,8 +18,8 @@
 package net.shyshkin.study.beerorderservice.services;
 
 
-import net.shyshkin.study.beerorderservice.web.model.BeerOrderDto;
-import net.shyshkin.study.beerorderservice.web.model.BeerOrderPagedList;
+import net.shyshkin.study.beerdata.dto.BeerOrderDto;
+import net.shyshkin.study.beerdata.dto.BeerOrderPagedList;
 import org.springframework.data.domain.Pageable;
 
 import java.util.UUID;

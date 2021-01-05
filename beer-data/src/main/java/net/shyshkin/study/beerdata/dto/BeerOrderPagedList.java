@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.shyshkin.study.beerorderservice.web.model;
+package net.shyshkin.study.beerdata.dto;
 
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
