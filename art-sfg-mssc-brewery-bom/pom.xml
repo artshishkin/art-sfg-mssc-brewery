@@ -9,13 +9,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.0</version>
+        <version>2.4.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>net.shyshkin.study</groupId>
     <artifactId>art-sfg-mssc-brewery-bom</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
 
     <name>art-sfg-mssc-brewery-bom</name>
     <description>Tutorial on Microservices from SFG (Udemy) - Bill Of Materials</description>
