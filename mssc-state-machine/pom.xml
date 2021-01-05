@@ -10,7 +10,7 @@
     </parent>
     <groupId>net.shyshkin.study</groupId>
     <artifactId>mssc-state-machine</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>mssc-state-machine</name>
     <description>Spring State Machine introduction</description>
 
