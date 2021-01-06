@@ -14,6 +14,10 @@ import org.springframework.statemachine.support.DefaultStateMachineContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
+import static net.shyshkin.study.beerorderservice.domain.BeerOrderEventEnum.*;
+
 @Service
 @RequiredArgsConstructor
 public class BeerOrderManagerImpl implements BeerOrderManager {
@@ -29,8 +33,19 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
         beerOrder.setOrderStatus(BeerOrderStatusEnum.NEW);
         BeerOrder savedOrder = beerOrderRepository.save(beerOrder);
 
-        sendBeerOrderEvent(beerOrder, BeerOrderEventEnum.VALIDATE_ORDER);
+        sendBeerOrderEvent(beerOrder, VALIDATE_ORDER);
         return savedOrder;
+    }
+
+    @Override
+    public void processValidationResult(UUID orderId, boolean isValid) {
+
+        BeerOrder order = beerOrderRepository.getOne(orderId);
+
+        BeerOrderEventEnum event = isValid ?
+                VALIDATION_PASSED :
+                VALIDATION_FAILED;
+        sendBeerOrderEvent(order, event);
     }
 
     private void sendBeerOrderEvent(BeerOrder beerOrder, BeerOrderEventEnum eventEnum) {

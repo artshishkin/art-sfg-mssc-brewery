@@ -27,7 +27,7 @@ public class BeerOrderValidationListener {
         Boolean orderValid = validator.validateOrder(beerOrder);
 
         return ValidateOrderResult.builder()
-                .isValid(orderValid)
+                .valid(orderValid)
                 .orderId(orderId)
                 .build();
     }
