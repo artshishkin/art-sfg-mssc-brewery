@@ -2,7 +2,7 @@ package net.shyshkin.study.beerservice.services.inventory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.shyshkin.study.beerservice.services.inventory.model.BeerInventoryDto;
+import net.shyshkin.study.beerdata.dto.BeerInventoryDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,9 +1,9 @@
 package net.shyshkin.study.beerorderservice.web.mappers;
 
+import net.shyshkin.study.beerdata.dto.BeerDto;
 import net.shyshkin.study.beerdata.dto.BeerOrderLineDto;
 import net.shyshkin.study.beerorderservice.domain.BeerOrderLine;
 import net.shyshkin.study.beerorderservice.services.beerservice.BeerService;
-import net.shyshkin.study.beerorderservice.services.beerservice.model.BeerDto;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;

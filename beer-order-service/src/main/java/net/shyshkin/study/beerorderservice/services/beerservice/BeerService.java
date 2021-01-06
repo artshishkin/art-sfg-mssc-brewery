@@ -1,6 +1,7 @@
 package net.shyshkin.study.beerorderservice.services.beerservice;
 
-import net.shyshkin.study.beerorderservice.services.beerservice.model.BeerDto;
+
+import net.shyshkin.study.beerdata.dto.BeerDto;
 
 import java.util.Optional;
 import java.util.UUID;

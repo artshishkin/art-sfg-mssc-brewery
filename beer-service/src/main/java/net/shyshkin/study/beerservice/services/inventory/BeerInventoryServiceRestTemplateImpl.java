@@ -2,7 +2,7 @@ package net.shyshkin.study.beerservice.services.inventory;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.shyshkin.study.beerservice.services.inventory.model.BeerInventoryDto;
+import net.shyshkin.study.beerdata.dto.BeerInventoryDto;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cache.annotation.Cacheable;
