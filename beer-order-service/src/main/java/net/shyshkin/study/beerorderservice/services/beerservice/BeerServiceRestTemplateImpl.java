@@ -16,8 +16,8 @@ import java.util.UUID;
 @ConfigurationProperties(prefix = "net.shyshkin.client", ignoreUnknownFields = false)
 public class BeerServiceRestTemplateImpl implements BeerService {
 
-    static final String BEER_UPC_PATH = "/api/v1/beerUpc/{upc}";
-    static final String BEER_PATH = "/api/v1/beer/{beerId}";
+    public static final String BEER_UPC_PATH = "/api/v1/beerUpc/{upc}";
+    public static final String BEER_PATH = "/api/v1/beer/{beerId}";
 
     @Setter
     private String beerServiceHost;

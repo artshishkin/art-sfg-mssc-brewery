@@ -127,3 +127,9 @@ Steps:
 
 -  after start login to Artemis Management Console and view Queues
 -  to view messages in console exclude listeners (comment out @Component)
+
+####  Section 17: Integration Testing of Sagas
+
+#####  235. Testing with WireMock
+
+[WireMock Examples](https://github.com/JensPiegsa/wiremock-extension/blob/master/src/test/java/com/github/jenspiegsa/wiremockextension/ExampleTest.java)
