@@ -9,12 +9,12 @@ import net.shyshkin.study.beerinventoryservice.repositories.BeerInventoryReposit
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Service;
 
-import static net.shyshkin.study.beerinventoryservice.config.JmsConfig.NEW_INVENTORY_QUEUE;
+import static net.shyshkin.study.beerdata.queue.Queues.NEW_INVENTORY_QUEUE;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class InventoryEventListener {
+public class NewInventoryListener {
 
     private final BeerInventoryRepository repository;
 
