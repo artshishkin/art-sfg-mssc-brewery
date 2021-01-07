@@ -1,6 +1,7 @@
 package net.shyshkin.study.beerorderservice.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.shyshkin.study.beerorderservice.domain.BeerOrder;
 import net.shyshkin.study.beerorderservice.domain.BeerOrderEventEnum;
 import net.shyshkin.study.beerorderservice.domain.BeerOrderStatusEnum;
@@ -18,6 +19,7 @@ import java.util.UUID;
 
 import static net.shyshkin.study.beerorderservice.domain.BeerOrderEventEnum.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BeerOrderManagerImpl implements BeerOrderManager {
@@ -49,6 +51,18 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
             sendBeerOrderEvent(validatedOrder, ALLOCATE_ORDER);
         } else
             sendBeerOrderEvent(order, VALIDATION_FAILED);
+    }
+
+    @Override
+    public void processAllocationResult(UUID orderId, boolean hasError, boolean isPending) {
+        BeerOrder order = beerOrderRepository.getOne(orderId);
+
+        BeerOrderEventEnum allocationEvent =
+                hasError ?
+                        ALLOCATION_FAILED :
+                        isPending ? ALLOCATION_NO_INVENTORY : ALLOCATION_SUCCESS;
+        log.debug("After receiving Allocation result for Order `{}` sending Event {}", orderId, allocationEvent);
+        sendBeerOrderEvent(order, allocationEvent);
     }
 
     private void sendBeerOrderEvent(BeerOrder beerOrder, BeerOrderEventEnum eventEnum) {
