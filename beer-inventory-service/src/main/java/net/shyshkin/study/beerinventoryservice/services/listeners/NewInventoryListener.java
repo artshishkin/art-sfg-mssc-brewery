@@ -1,4 +1,4 @@
-package net.shyshkin.study.beerinventoryservice.services;
+package net.shyshkin.study.beerinventoryservice.services.listeners;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
