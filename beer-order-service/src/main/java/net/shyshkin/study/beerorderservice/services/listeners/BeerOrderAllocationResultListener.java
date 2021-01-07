@@ -21,15 +21,23 @@ public class BeerOrderAllocationResultListener {
     @JmsListener(destination = Queues.ALLOCATE_ORDER_RESULT_QUEUE)
     public void listenResult(AllocateOrderResult allocateOrderResult) {
 
-        BeerOrderDto beerOrder = allocateOrderResult.getBeerOrder();
-        UUID orderId = beerOrder.getId();
+        BeerOrderDto beerOrderDto = allocateOrderResult.getBeerOrderDto();
+        UUID orderId = beerOrderDto.getId();
         boolean orderHasAllocationOrder = allocateOrderResult.isAllocationError();
         boolean pendingInventory = allocateOrderResult.isPendingInventory();
         log.debug("Allocation: Order with id `{}` has {} Error{}",
                 orderId,
                 orderHasAllocationOrder ? "an" : "NO",
                 pendingInventory ? ", inventory is PENDING" : "");
-        beerOrderManager.processAllocationResult(orderId, orderHasAllocationOrder, pendingInventory);
 
+        if (orderHasAllocationOrder){
+            beerOrderManager.beerOrderAllocationFailed(beerOrderDto);
+            return;
+        }
+        if (pendingInventory){
+            beerOrderManager.beerOrderAllocationPendingInventory(beerOrderDto);
+            return;
+        }
+        beerOrderManager.beerOrderAllocationPassed(beerOrderDto);
     }
 }

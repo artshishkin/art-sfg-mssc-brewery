@@ -17,7 +17,7 @@ public class AllocateOrderResult implements Serializable {
 
     static final long serialVersionUID = -8140255571091468689L;
 
-    private BeerOrderDto beerOrder;
+    private BeerOrderDto beerOrderDto;
     private boolean allocationError;
     private boolean pendingInventory;
 

@@ -1,5 +1,6 @@
 package net.shyshkin.study.beerorderservice.services;
 
+import net.shyshkin.study.beerdata.dto.BeerOrderDto;
 import net.shyshkin.study.beerorderservice.domain.BeerOrder;
 
 import java.util.UUID;
@@ -12,5 +13,9 @@ public interface BeerOrderManager {
 
     void processValidationResult(UUID orderId, boolean isValid);
 
-    void processAllocationResult(UUID orderId, boolean hasError, boolean isPending);
+    void beerOrderAllocationPassed(BeerOrderDto beerOrder);
+
+    void beerOrderAllocationPendingInventory(BeerOrderDto beerOrder);
+
+    void beerOrderAllocationFailed(BeerOrderDto beerOrder);
 }

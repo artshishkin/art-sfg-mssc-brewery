@@ -22,16 +22,22 @@ public class AllocateOrderListener {
 
     @JmsListener(destination = ALLOCATE_ORDER_QUEUE)
     @SendTo(ALLOCATE_ORDER_RESULT_QUEUE)
-    public AllocateOrderResult listen(AllocateOrderRequest allocateOrderRequest) {
-        BeerOrderDto beerOrder = allocateOrderRequest.getBeerOrder();
+    public AllocateOrderResult listen(AllocateOrderRequest request) {
+        AllocateOrderResult.AllocateOrderResultBuilder builder = AllocateOrderResult.builder();
 
-        Boolean allocationSuccess = allocateOrder.allocateOrder(beerOrder);
+        try {
+            BeerOrderDto beerOrderDto = request.getBeerOrder();
 
-        AllocateOrderResult result = AllocateOrderResult.builder()
-                .beerOrder(beerOrder)
-                .allocationError(!allocationSuccess)
-                .pendingInventory(false)
-                .build();
+            Boolean allocationSuccess = allocateOrder.allocateOrder(beerOrderDto);
+
+            builder
+                    .beerOrderDto(beerOrderDto)
+                    .pendingInventory(!allocationSuccess);
+        } catch (Exception ignored) {
+            log.error("Allocation failed for order {}", request.getBeerOrder().getId());
+            builder.allocationError(true);
+        }
+        AllocateOrderResult result = builder.build();
         log.debug("Allocation with Result {}", result);
         return result;
     }
