@@ -42,10 +42,13 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
 
         BeerOrder order = beerOrderRepository.getOne(orderId);
 
-        BeerOrderEventEnum event = isValid ?
-                VALIDATION_PASSED :
-                VALIDATION_FAILED;
-        sendBeerOrderEvent(order, event);
+        if (isValid) {
+            sendBeerOrderEvent(order, VALIDATION_PASSED);
+            // TODO: 07.01.2021 Something weired from SFG - It needs to be refactored
+            BeerOrder validatedOrder = beerOrderRepository.findOneById(orderId);
+            sendBeerOrderEvent(validatedOrder, ALLOCATE_ORDER);
+        } else
+            sendBeerOrderEvent(order, VALIDATION_FAILED);
     }
 
     private void sendBeerOrderEvent(BeerOrder beerOrder, BeerOrderEventEnum eventEnum) {

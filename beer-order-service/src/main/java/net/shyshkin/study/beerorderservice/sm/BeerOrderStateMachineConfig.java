@@ -20,6 +20,7 @@ import static net.shyshkin.study.beerorderservice.domain.BeerOrderStatusEnum.*;
 public class BeerOrderStateMachineConfig extends StateMachineConfigurerAdapter<BeerOrderStatusEnum, BeerOrderEventEnum> {
 
     private final Action<BeerOrderStatusEnum, BeerOrderEventEnum> validateOrderAction;
+    private final Action<BeerOrderStatusEnum, BeerOrderEventEnum> allocateOrderAction;
 
     @Override
     public void configure(StateMachineStateConfigurer<BeerOrderStatusEnum, BeerOrderEventEnum> states) throws Exception {
@@ -44,7 +45,12 @@ public class BeerOrderStateMachineConfig extends StateMachineConfigurerAdapter<B
                 .withExternal().source(NEW).target(VALIDATED).event(VALIDATION_PASSED)
                 .and()
 
-                .withExternal().source(NEW).target(VALIDATION_EXCEPTION).event(VALIDATION_FAILED);
+                .withExternal().source(NEW).target(VALIDATION_EXCEPTION).event(VALIDATION_FAILED)
+                .and()
+
+                .withExternal().source(VALIDATED).target(ALLOCATION_PENDING)
+                .event(ALLOCATE_ORDER)
+                .action(allocateOrderAction);
 
     }
 }
