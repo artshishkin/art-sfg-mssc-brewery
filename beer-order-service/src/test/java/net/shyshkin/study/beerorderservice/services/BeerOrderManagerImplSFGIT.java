@@ -32,6 +32,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static net.shyshkin.study.beerorderservice.services.beerservice.BeerServiceRestTemplateImpl.BEER_UPC_PATH;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
 
 @SpringBootTest
 @ExtendWith(WireMockExtension.class)
@@ -80,7 +81,7 @@ class BeerOrderManagerImplSFGIT {
     }
 
     @Test
-    void testNewToAllocated() throws JsonProcessingException, InterruptedException {
+    void testNewToAllocated() throws JsonProcessingException {
         //given
         BeerOrder beerOrder = createBeerOrder();
         BeerDto beerDto = BeerDto.builder()
@@ -98,7 +99,11 @@ class BeerOrderManagerImplSFGIT {
         BeerOrder newBeerOrder = beerOrderManager.newBeerOrder(beerOrder);
 
         //then
-        Thread.sleep(1000);
+        await().untilAsserted(() -> {
+            BeerOrder foundOrder = beerOrderRepository.findById(newBeerOrder.getId()).get();
+            // TODO: 08.01.2021 Need to be ALLOCATED
+            assertThat(foundOrder.getOrderStatus()).isEqualTo(BeerOrderStatusEnum.ALLOCATION_PENDING);
+        });
 
         BeerOrder retrievedBeerOrder = beerOrderRepository.findById(newBeerOrder.getId()).get();
 
