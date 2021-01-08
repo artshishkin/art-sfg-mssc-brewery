@@ -21,6 +21,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static net.shyshkin.study.beerorderservice.services.beerservice.BeerServiceRestTemplateImpl.BEER_UPC_PATH;
@@ -111,10 +112,12 @@ class BeerOrderManagerImplIT {
         BeerOrder newBeerOrder = beerOrderManager.newBeerOrder(beerOrder);
 
         //then
-        await().untilAsserted(() -> {
-            BeerOrder foundOrder = beerOrderRepository.findById(newBeerOrder.getId()).get();
-            assertThat(foundOrder.getOrderStatus()).isEqualTo(BeerOrderStatusEnum.VALIDATION_EXCEPTION);
-        });
+        await()
+                .timeout(2L, TimeUnit.SECONDS)
+                .untilAsserted(() -> {
+                    BeerOrder foundOrder = beerOrderRepository.findById(newBeerOrder.getId()).get();
+                    assertThat(foundOrder.getOrderStatus()).isEqualTo(BeerOrderStatusEnum.VALIDATION_EXCEPTION);
+                });
     }
 
     @Test
