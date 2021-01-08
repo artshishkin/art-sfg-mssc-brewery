@@ -22,13 +22,24 @@ public class AllocateOrderListener {
     public AllocateOrderResult listen(AllocateOrderRequest request) {
         BeerOrderDto beerOrderDto = request.getBeerOrder();
 
+        if ("fail-allocation".equals(beerOrderDto.getCustomerRef())) {
+            return AllocateOrderResult.builder()
+                    .beerOrderDto(beerOrderDto)
+                    .allocationError(true)
+                    .build();
+        }
+
+        boolean partialAllocation = "partial-allocation".equals(beerOrderDto.getCustomerRef());
+
         beerOrderDto.getBeerOrderLines().forEach(line -> {
-            line.setQuantityAllocated(line.getOrderQuantity());
+            Integer orderQuantity = line.getOrderQuantity();
+            if (partialAllocation) orderQuantity--;
+            line.setQuantityAllocated(orderQuantity);
         });
 
         AllocateOrderResult result = AllocateOrderResult.builder()
                 .beerOrderDto(beerOrderDto)
-                .pendingInventory(false)
+                .pendingInventory(partialAllocation)
                 .build();
 
         log.debug("Allocation with Result {}", result);

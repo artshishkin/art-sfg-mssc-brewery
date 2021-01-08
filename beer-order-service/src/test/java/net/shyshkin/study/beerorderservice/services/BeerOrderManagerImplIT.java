@@ -14,6 +14,8 @@ import net.shyshkin.study.beerorderservice.repositories.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -89,8 +91,13 @@ class BeerOrderManagerImplIT {
 
     }
 
-    @Test
-    void validationErrorTest() throws JsonProcessingException {
+    @ParameterizedTest(name="[{index}] {arguments}")
+    @CsvSource({
+            "fail-validation, VALIDATION_EXCEPTION",
+            "fail-allocation, ALLOCATION_EXCEPTION",
+            "partial-allocation, PENDING_INVENTORY"
+    })
+    void failTests(final String failName, final BeerOrderStatusEnum expectedFinalState) throws JsonProcessingException {
         //given
         BeerOrder beerOrder = createBeerOrder();
         BeerDto beerDto = BeerDto.builder()
@@ -100,7 +107,7 @@ class BeerOrderManagerImplIT {
                 .build();
 
         //fake ref to mark process failing
-        beerOrder.setCustomerRef("fail-validation");
+        beerOrder.setCustomerRef(failName);
 
         String json = objectMapper.writeValueAsString(beerDto);
 
@@ -116,7 +123,7 @@ class BeerOrderManagerImplIT {
                 .timeout(2L, TimeUnit.SECONDS)
                 .untilAsserted(() -> {
                     BeerOrder foundOrder = beerOrderRepository.findById(newBeerOrder.getId()).get();
-                    assertThat(foundOrder.getOrderStatus()).isEqualTo(BeerOrderStatusEnum.VALIDATION_EXCEPTION);
+                    assertThat(foundOrder.getOrderStatus()).isEqualTo(expectedFinalState);
                 });
     }
 
@@ -171,7 +178,7 @@ class BeerOrderManagerImplIT {
         lines.add(BeerOrderLine.builder()
                 .beerId(beerId)
                 .upc(beerUpc)
-                .orderQuantity(1)
+                .orderQuantity(3)
                 .beerOrder(beerOrder)
                 .build());
 
