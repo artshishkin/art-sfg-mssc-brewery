@@ -79,6 +79,15 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
         processAllocationResult(beerOrder, ALLOCATION_FAILED);
     }
 
+    @Override
+    public void beerOrderPickedUp(UUID orderId) {
+        beerOrderRepository
+                .findById(orderId)
+                .ifPresentOrElse(
+                        beerOrderRetrieved -> sendBeerOrderEvent(beerOrderRetrieved, BEERORDER_PICKED_UP),
+                        () -> log.error("Order with id `{}` not found", orderId));
+    }
+
     private void processAllocationResult(BeerOrderDto beerOrderDto, BeerOrderEventEnum allocationEvent) {
         UUID orderId = beerOrderDto.getId();
         Optional<BeerOrder> orderOptional = beerOrderRepository.findById(orderId);

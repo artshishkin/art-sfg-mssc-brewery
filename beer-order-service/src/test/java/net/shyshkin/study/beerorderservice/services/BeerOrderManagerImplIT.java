@@ -88,6 +88,46 @@ class BeerOrderManagerImplIT {
 
     }
 
+    @Test
+    void testNewToPickedUp() throws JsonProcessingException {
+        //given
+        BeerOrder beerOrder = createBeerOrder();
+        BeerDto beerDto = BeerDto.builder()
+                .upc(beerUpc)
+                .id(beerId)
+                .beerStyle(BeerStyleEnum.PILSNER)
+                .build();
+
+        String json = objectMapper.writeValueAsString(beerDto);
+
+        givenThat(
+                get(BEER_UPC_PATH.replace("{upc}", beerUpc))
+                        .willReturn(okJson(json)));
+
+        //when
+        BeerOrder newBeerOrder = beerOrderManager.newBeerOrder(beerOrder);
+
+        //then
+        UUID orderId = newBeerOrder.getId();
+
+        await().untilAsserted(() -> {
+            BeerOrder foundOrder = beerOrderRepository.findById(orderId).get();
+            assertThat(foundOrder.getOrderStatus()).isEqualTo(BeerOrderStatusEnum.ALLOCATED);
+        });
+
+        beerOrderManager.beerOrderPickedUp(orderId);
+
+        await().untilAsserted(() -> {
+            BeerOrder foundOrder = beerOrderRepository.findById(orderId).get();
+            assertThat(foundOrder.getOrderStatus()).isEqualTo(BeerOrderStatusEnum.PICKED_UP);
+        });
+
+        BeerOrder retrievedBeerOrder = beerOrderRepository.findById(orderId).get();
+
+        assertThat(retrievedBeerOrder)
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("orderStatus", BeerOrderStatusEnum.PICKED_UP);
+    }
 
     private BeerOrder createBeerOrder() {
 
