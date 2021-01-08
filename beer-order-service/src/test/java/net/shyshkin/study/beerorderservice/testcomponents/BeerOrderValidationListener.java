@@ -16,8 +16,13 @@ public class BeerOrderValidationListener {
     @SendTo(Queues.VALIDATE_ORDER_RESULT_QUEUE)
     public ValidateOrderResult validateOrder(ValidateOrderRequest validateOrderRequest) {
 
+        boolean isValid = true;
+
+        if ("fail-validation".equals(validateOrderRequest.getBeerOrder().getCustomerRef()))
+            isValid = false;
+
         return ValidateOrderResult.builder()
-                .valid(true)
+                .valid(isValid)
                 .orderId(validateOrderRequest.getBeerOrder().getId())
                 .build();
     }

@@ -89,6 +89,35 @@ class BeerOrderManagerImplIT {
     }
 
     @Test
+    void validationErrorTest() throws JsonProcessingException {
+        //given
+        BeerOrder beerOrder = createBeerOrder();
+        BeerDto beerDto = BeerDto.builder()
+                .upc(beerUpc)
+                .id(beerId)
+                .beerStyle(BeerStyleEnum.PILSNER)
+                .build();
+
+        //fake ref to mark process failing
+        beerOrder.setCustomerRef("fail-validation");
+
+        String json = objectMapper.writeValueAsString(beerDto);
+
+        givenThat(
+                get(BEER_UPC_PATH.replace("{upc}", beerUpc))
+                        .willReturn(okJson(json)));
+
+        //when
+        BeerOrder newBeerOrder = beerOrderManager.newBeerOrder(beerOrder);
+
+        //then
+        await().untilAsserted(() -> {
+            BeerOrder foundOrder = beerOrderRepository.findById(newBeerOrder.getId()).get();
+            assertThat(foundOrder.getOrderStatus()).isEqualTo(BeerOrderStatusEnum.VALIDATION_EXCEPTION);
+        });
+    }
+
+    @Test
     void testNewToPickedUp() throws JsonProcessingException {
         //given
         BeerOrder beerOrder = createBeerOrder();
