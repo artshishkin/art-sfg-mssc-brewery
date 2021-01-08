@@ -16,6 +16,8 @@ import org.springframework.statemachine.support.DefaultStateMachineContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
 import java.util.UUID;
 
 import static net.shyshkin.study.beerorderservice.domain.BeerOrderEventEnum.*;
@@ -23,6 +25,7 @@ import static net.shyshkin.study.beerorderservice.domain.BeerOrderEventEnum.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BeerOrderManagerImpl implements BeerOrderManager {
 
     private final StateMachineFactory<BeerOrderStatusEnum, BeerOrderEventEnum> stateMachineFactory;
@@ -40,10 +43,15 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
         return savedOrder;
     }
 
+    @Transactional
     @Override
     public void processValidationResult(UUID orderId, boolean isValid) {
 
-        BeerOrder order = beerOrderRepository.getOne(orderId);
+        log.debug("processValidationResult UUID is {}", orderId);
+        Optional<BeerOrder> orderOptional = beerOrderRepository.findById(orderId);
+
+        BeerOrder order = orderOptional
+                .orElseThrow(EntityNotFoundException::new);
 
         if (isValid) {
             sendBeerOrderEvent(order, VALIDATION_PASSED);
@@ -73,24 +81,30 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
 
     private void processAllocationResult(BeerOrderDto beerOrderDto, BeerOrderEventEnum allocationEvent) {
         UUID orderId = beerOrderDto.getId();
-        BeerOrder order = beerOrderRepository.getOne(orderId);
+        Optional<BeerOrder> orderOptional = beerOrderRepository.findById(orderId);
 
-        log.debug("After receiving Allocation result for Order `{}` sending Event {}", orderId, allocationEvent);
-        sendBeerOrderEvent(order, allocationEvent);
+        orderOptional
+                .ifPresentOrElse(order -> {
+                            log.debug("After receiving Allocation result for Order `{}` sending Event {}", orderId, allocationEvent);
+                            sendBeerOrderEvent(order, allocationEvent);
+                        },
+                        () -> log.error("Error while allocation order `{}` not found", orderId));
     }
 
     private void updateAllocatedQty(BeerOrderDto beerOrderDto) {
         UUID orderId = beerOrderDto.getId();
-        BeerOrder beerOrder = beerOrderRepository.getOne(orderId);
 
-        beerOrder.getBeerOrderLines().forEach(beerOrderLine -> {
-            beerOrderDto.getBeerOrderLines().forEach(beerOrderLineDto -> {
-                if (beerOrderDto.getId().equals(beerOrderLine.getId())) {
-                    beerOrderLine.setQuantityAllocated(beerOrderLineDto.getQuantityAllocated());
-                }
-            });
-        });
-        beerOrderRepository.save(beerOrder);
+        beerOrderRepository.findById(orderId).ifPresentOrElse(beerOrder -> {
+                    beerOrder.getBeerOrderLines().forEach(beerOrderLine -> {
+                        beerOrderDto.getBeerOrderLines().forEach(beerOrderLineDto -> {
+                            if (beerOrderDto.getId().equals(beerOrderLine.getId())) {
+                                beerOrderLine.setQuantityAllocated(beerOrderLineDto.getQuantityAllocated());
+                            }
+                        });
+                    });
+                    beerOrderRepository.save(beerOrder);
+                },
+                () -> log.error("Error while allocation order `{}` not found", orderId));
     }
 
     private void sendBeerOrderEvent(BeerOrder beerOrder, BeerOrderEventEnum eventEnum) {

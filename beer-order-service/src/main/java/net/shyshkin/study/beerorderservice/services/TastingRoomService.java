@@ -7,6 +7,7 @@ import net.shyshkin.study.beerorderservice.bootstrap.BeerOrderBootStrap;
 import net.shyshkin.study.beerorderservice.domain.Customer;
 import net.shyshkin.study.beerorderservice.repositories.BeerOrderRepository;
 import net.shyshkin.study.beerorderservice.repositories.CustomerRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ import java.util.UUID;
 
 @Service
 @Slf4j
+@Profile("!test")
 public class TastingRoomService {
 
     private final CustomerRepository customerRepository;

@@ -10,6 +10,7 @@ import net.shyshkin.study.beerorderservice.domain.BeerOrder;
 import net.shyshkin.study.beerorderservice.domain.BeerOrderLine;
 import net.shyshkin.study.beerorderservice.domain.BeerOrderStatusEnum;
 import net.shyshkin.study.beerorderservice.domain.Customer;
+import net.shyshkin.study.beerorderservice.repositories.BeerOrderRepository;
 import net.shyshkin.study.beerorderservice.repositories.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.HashSet;
@@ -36,6 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestPropertySource(properties = {
         "net.shyshkin.client.beer-service-host=http://localhost:8083"
 })
+@ActiveProfiles("test")
 class BeerOrderManagerImplSFGIT {
 
     @Autowired
@@ -44,6 +47,8 @@ class BeerOrderManagerImplSFGIT {
     @Autowired
     CustomerRepository customerRepository;
 
+    @Autowired
+    BeerOrderRepository beerOrderRepository;
 
     @Autowired
     WireMockServer wireMockServer;
@@ -75,7 +80,7 @@ class BeerOrderManagerImplSFGIT {
     }
 
     @Test
-    void testNewToAllocated() throws JsonProcessingException {
+    void testNewToAllocated() throws JsonProcessingException, InterruptedException {
         //given
         BeerOrder beerOrder = createBeerOrder();
         BeerDto beerDto = BeerDto.builder()
@@ -90,10 +95,14 @@ class BeerOrderManagerImplSFGIT {
                 .willReturn(okJson(json)));
 
         //when
-        BeerOrder savedBeerOrder = beerOrderManager.newBeerOrder(beerOrder);
+        BeerOrder newBeerOrder = beerOrderManager.newBeerOrder(beerOrder);
 
         //then
-        assertThat(savedBeerOrder)
+        Thread.sleep(1000);
+
+        BeerOrder retrievedBeerOrder = beerOrderRepository.findById(newBeerOrder.getId()).get();
+
+        assertThat(retrievedBeerOrder)
                 .isNotNull()
                 .hasFieldOrPropertyWithValue("orderStatus", BeerOrderStatusEnum.ALLOCATED);
     }

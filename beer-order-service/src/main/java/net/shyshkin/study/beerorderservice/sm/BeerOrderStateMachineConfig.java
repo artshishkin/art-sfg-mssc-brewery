@@ -42,10 +42,10 @@ public class BeerOrderStateMachineConfig extends StateMachineConfigurerAdapter<B
                 .action(validateOrderAction)
                 .and()
 
-                .withExternal().source(NEW).target(VALIDATED).event(VALIDATION_PASSED)
+                .withExternal().source(VALIDATION_PENDING).target(VALIDATED).event(VALIDATION_PASSED)
                 .and()
 
-                .withExternal().source(NEW).target(VALIDATION_EXCEPTION).event(VALIDATION_FAILED)
+                .withExternal().source(VALIDATION_PENDING).target(VALIDATION_EXCEPTION).event(VALIDATION_FAILED)
                 .and()
 
                 .withExternal().source(VALIDATED).target(ALLOCATION_PENDING)
