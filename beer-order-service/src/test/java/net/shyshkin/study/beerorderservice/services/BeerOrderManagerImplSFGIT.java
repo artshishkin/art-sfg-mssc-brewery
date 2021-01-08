@@ -101,8 +101,7 @@ class BeerOrderManagerImplSFGIT {
         //then
         await().untilAsserted(() -> {
             BeerOrder foundOrder = beerOrderRepository.findById(newBeerOrder.getId()).get();
-            // TODO: 08.01.2021 Need to be ALLOCATED
-            assertThat(foundOrder.getOrderStatus()).isEqualTo(BeerOrderStatusEnum.ALLOCATION_PENDING);
+            assertThat(foundOrder.getOrderStatus()).isEqualTo(BeerOrderStatusEnum.ALLOCATED);
         });
 
         BeerOrder retrievedBeerOrder = beerOrderRepository.findById(newBeerOrder.getId()).get();
