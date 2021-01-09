@@ -56,7 +56,7 @@ class PaymentServiceImplTest {
     class PreAuth2Auth {
 
         @Transactional
-        @RepeatedTest(100)
+        @RepeatedTest(1000)
         @DisplayName("Testing change states NEW -> PRE_AUTH -> AUTH")
         void auth() {
             //given
@@ -84,10 +84,11 @@ class PaymentServiceImplTest {
                     .stream()
                     .mapToInt(Integer::intValue)
                     .sum();
+            System.out.println(repetitions);
             assertAll(
-                    () -> assertThat(100 * repetitions.get(AUTH) / totalCount).isBetween(55, 73),              //theoretically 64
-                    () -> assertThat(100 * repetitions.get(PRE_AUTH_ERROR) / totalCount).isBetween(14, 26),    //theoretically 20
-                    () -> assertThat(100 * repetitions.get(AUTH_ERROR) / totalCount).isBetween(10, 22)         //theoretically 16
+                    () -> assertThat(100 * repetitions.get(AUTH) / totalCount).isBetween(59, 69),              //theoretically 64
+                    () -> assertThat(100 * repetitions.get(PRE_AUTH_ERROR) / totalCount).isBetween(17, 23),    //theoretically 20
+                    () -> assertThat(100 * repetitions.get(AUTH_ERROR) / totalCount).isBetween(13, 19)         //theoretically 16
             );
         }
     }

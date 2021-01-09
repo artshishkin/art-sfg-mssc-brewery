@@ -8,7 +8,7 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Component;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static net.shyshkin.study.msscstatemachine.services.PaymentService.PAYMENT_ID_HEADER;
 
@@ -16,14 +16,12 @@ import static net.shyshkin.study.msscstatemachine.services.PaymentService.PAYMEN
 @Component
 public class PaymentSMActions {
 
-    private final static Random random = new Random();
-
     public Action<PaymentState, PaymentEvent> preAuthAction() {
 
         return context -> {
             log.debug("preAuthAction was called");
 
-            boolean isApproved = random.nextInt(10) < 8;
+            boolean isApproved = ThreadLocalRandom.current().nextInt(10) < 8;
             log.debug("{}", isApproved ? "Approved" : "Declined! NO CREDIT!!!");
 
             PaymentEvent eventToSend = isApproved ? PaymentEvent.PRE_AUTH_APPROVED : PaymentEvent.PRE_AUTH_DECLINED;
@@ -42,7 +40,7 @@ public class PaymentSMActions {
         return context -> {
             log.debug("authAction was called");
 
-            boolean isApproved = random.nextInt(10) < 8;
+            boolean isApproved = ThreadLocalRandom.current().nextInt(10) < 8;
             log.debug("{}", isApproved ? "Approved" : "Declined! NO CREDIT!!!");
 
             PaymentEvent eventToSend = isApproved ? PaymentEvent.AUTH_APPROVED : PaymentEvent.AUTH_DECLINED;
