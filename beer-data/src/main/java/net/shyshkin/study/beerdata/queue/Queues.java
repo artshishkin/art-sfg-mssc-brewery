@@ -9,4 +9,5 @@ public final class Queues {
     public static final String ALLOCATE_ORDER_RESULT_QUEUE = "allocate-order-result";
 
     public static final String ALLOCATION_FAILURE_QUEUE = "allocation-failure";
+    public static final String DEALLOCATE_ORDER_QUEUE = "deallocate-order";
 }

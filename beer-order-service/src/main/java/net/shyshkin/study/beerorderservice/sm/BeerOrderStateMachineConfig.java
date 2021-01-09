@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import net.shyshkin.study.beerorderservice.domain.BeerOrderEventEnum;
 import net.shyshkin.study.beerorderservice.domain.BeerOrderStatusEnum;
 import net.shyshkin.study.beerorderservice.sm.actions.AllocationFailureAction;
+import net.shyshkin.study.beerorderservice.sm.actions.DeallocateOrderAction;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.action.Action;
 import org.springframework.statemachine.config.EnableStateMachineFactory;
@@ -24,6 +25,7 @@ public class BeerOrderStateMachineConfig extends StateMachineConfigurerAdapter<B
     private final Action<BeerOrderStatusEnum, BeerOrderEventEnum> allocateOrderAction;
     private final Action<BeerOrderStatusEnum, BeerOrderEventEnum> validationFailureAction;
     private final AllocationFailureAction allocationFailureAction;
+    private final DeallocateOrderAction deallocateOrderAction;
 
     @Override
     public void configure(StateMachineStateConfigurer<BeerOrderStatusEnum, BeerOrderEventEnum> states) throws Exception {
@@ -74,7 +76,9 @@ public class BeerOrderStateMachineConfig extends StateMachineConfigurerAdapter<B
                 .withExternal().source(VALIDATION_PENDING).target(CANCELED).event(CANCEL_ORDER).and()
                 .withExternal().source(VALIDATED).target(CANCELED).event(CANCEL_ORDER).and()
                 .withExternal().source(ALLOCATION_PENDING).target(CANCELED).event(CANCEL_ORDER).and()
-                .withExternal().source(ALLOCATED).target(CANCELED).event(CANCEL_ORDER).and();
+
+                .withExternal().source(ALLOCATED).target(CANCELED).event(CANCEL_ORDER)
+                .action(deallocateOrderAction);
 
     }
 }
