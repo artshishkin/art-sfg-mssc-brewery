@@ -34,7 +34,8 @@ public class BeerOrderStateMachineConfig extends StateMachineConfigurerAdapter<B
                 .end(PICKED_UP)
                 .end(VALIDATION_EXCEPTION)
                 .end(ALLOCATION_EXCEPTION)
-                .end(DELIVERY_EXCEPTION);
+                .end(DELIVERY_EXCEPTION)
+                .end(CANCELED);
     }
 
     @Override
@@ -67,7 +68,13 @@ public class BeerOrderStateMachineConfig extends StateMachineConfigurerAdapter<B
                 .withExternal().source(ALLOCATION_PENDING).target(PENDING_INVENTORY).event(ALLOCATION_NO_INVENTORY)
                 .and()
 
-                .withExternal().source(ALLOCATED).target(PICKED_UP).event(BEERORDER_PICKED_UP);
+                .withExternal().source(ALLOCATED).target(PICKED_UP).event(BEERORDER_PICKED_UP)
+                .and()
+
+                .withExternal().source(VALIDATION_PENDING).target(CANCELED).event(CANCEL_ORDER).and()
+                .withExternal().source(VALIDATED).target(CANCELED).event(CANCEL_ORDER).and()
+                .withExternal().source(ALLOCATION_PENDING).target(CANCELED).event(CANCEL_ORDER).and()
+                .withExternal().source(ALLOCATED).target(CANCELED).event(CANCEL_ORDER).and();
 
     }
 }
