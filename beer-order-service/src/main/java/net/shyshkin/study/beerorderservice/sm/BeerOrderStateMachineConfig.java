@@ -3,6 +3,7 @@ package net.shyshkin.study.beerorderservice.sm;
 import lombok.RequiredArgsConstructor;
 import net.shyshkin.study.beerorderservice.domain.BeerOrderEventEnum;
 import net.shyshkin.study.beerorderservice.domain.BeerOrderStatusEnum;
+import net.shyshkin.study.beerorderservice.sm.actions.AllocationFailureAction;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.action.Action;
 import org.springframework.statemachine.config.EnableStateMachineFactory;
@@ -22,6 +23,7 @@ public class BeerOrderStateMachineConfig extends StateMachineConfigurerAdapter<B
     private final Action<BeerOrderStatusEnum, BeerOrderEventEnum> validateOrderAction;
     private final Action<BeerOrderStatusEnum, BeerOrderEventEnum> allocateOrderAction;
     private final Action<BeerOrderStatusEnum, BeerOrderEventEnum> validationFailureAction;
+    private final AllocationFailureAction allocationFailureAction;
 
     @Override
     public void configure(StateMachineStateConfigurer<BeerOrderStatusEnum, BeerOrderEventEnum> states) throws Exception {
@@ -59,6 +61,7 @@ public class BeerOrderStateMachineConfig extends StateMachineConfigurerAdapter<B
                 .and()
 
                 .withExternal().source(ALLOCATION_PENDING).target(ALLOCATION_EXCEPTION).event(ALLOCATION_FAILED)
+                .action(allocationFailureAction)
                 .and()
 
                 .withExternal().source(ALLOCATION_PENDING).target(PENDING_INVENTORY).event(ALLOCATION_NO_INVENTORY)

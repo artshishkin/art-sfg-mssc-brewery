@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jenspiegsa.wiremockextension.WireMockExtension;
 import net.shyshkin.study.beerdata.dto.BeerDto;
 import net.shyshkin.study.beerdata.dto.BeerStyleEnum;
+import net.shyshkin.study.beerdata.events.AllocationFailureEvent;
+import net.shyshkin.study.beerdata.queue.Queues;
 import net.shyshkin.study.beerorderservice.domain.BeerOrder;
 import net.shyshkin.study.beerorderservice.domain.BeerOrderLine;
 import net.shyshkin.study.beerorderservice.domain.BeerOrderStatusEnum;
@@ -18,6 +20,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.HashSet;
@@ -46,6 +49,9 @@ class BeerOrderManagerImplIT {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    JmsTemplate jmsTemplate;
 
     UUID beerId = UUID.randomUUID();
     String beerUpc = "987654";
@@ -91,7 +97,7 @@ class BeerOrderManagerImplIT {
 
     }
 
-    @ParameterizedTest(name="[{index}] {arguments}")
+    @ParameterizedTest(name = "[{index}] {arguments}")
     @CsvSource({
             "fail-validation, VALIDATION_EXCEPTION",
             "fail-allocation, ALLOCATION_EXCEPTION",
@@ -119,12 +125,18 @@ class BeerOrderManagerImplIT {
         BeerOrder newBeerOrder = beerOrderManager.newBeerOrder(beerOrder);
 
         //then
+        UUID beerOrderId = newBeerOrder.getId();
         await()
                 .timeout(2L, TimeUnit.SECONDS)
                 .untilAsserted(() -> {
                     BeerOrder foundOrder = beerOrderRepository.findById(newBeerOrder.getId()).get();
                     assertThat(foundOrder.getOrderStatus()).isEqualTo(expectedFinalState);
                 });
+
+        if ("fail-allocation".equals(failName)) {
+            AllocationFailureEvent message = (AllocationFailureEvent) jmsTemplate.receiveAndConvert(Queues.ALLOCATION_FAILURE_QUEUE);
+            assertThat(message).hasFieldOrPropertyWithValue("orderId", beerOrderId);
+        }
     }
 
     @Test
