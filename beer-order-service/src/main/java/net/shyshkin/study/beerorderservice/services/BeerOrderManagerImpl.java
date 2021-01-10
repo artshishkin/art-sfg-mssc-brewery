@@ -88,6 +88,15 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
                         () -> log.error("Order with id `{}` not found", orderId));
     }
 
+    @Override
+    public void cancelOrder(UUID orderId) {
+        beerOrderRepository
+                .findById(orderId)
+                .ifPresentOrElse(
+                        beerOrderRetrieved -> sendBeerOrderEvent(beerOrderRetrieved, CANCEL_ORDER),
+                        () -> log.error("Order with id `{}` not found", orderId));
+    }
+
     private void processAllocationResult(BeerOrderDto beerOrderDto, BeerOrderEventEnum allocationEvent) {
         UUID orderId = beerOrderDto.getId();
         Optional<BeerOrder> orderOptional = beerOrderRepository.findById(orderId);

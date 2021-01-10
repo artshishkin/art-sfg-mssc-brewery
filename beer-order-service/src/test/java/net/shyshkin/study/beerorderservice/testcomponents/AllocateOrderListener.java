@@ -29,6 +29,13 @@ public class AllocateOrderListener {
                     .build();
         }
 
+        if ("pause-allocation".equals(beerOrderDto.getCustomerRef())){
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException ignored) {
+            }
+        }
+
         boolean partialAllocation = "partial-allocation".equals(beerOrderDto.getCustomerRef());
 
         beerOrderDto.getBeerOrderLines().forEach(line -> {

@@ -14,12 +14,16 @@ public class BeerOrderValidationListener {
 
     @JmsListener(destination = Queues.VALIDATE_ORDER_QUEUE)
     @SendTo(Queues.VALIDATE_ORDER_RESULT_QUEUE)
-    public ValidateOrderResult validateOrder(ValidateOrderRequest validateOrderRequest) {
+    public ValidateOrderResult validateOrder(ValidateOrderRequest validateOrderRequest) throws InterruptedException {
 
         boolean isValid = true;
 
         if ("fail-validation".equals(validateOrderRequest.getBeerOrder().getCustomerRef()))
             isValid = false;
+
+        if ("pause-validation".equals(validateOrderRequest.getBeerOrder().getCustomerRef())) {
+            Thread.sleep(200);
+        }
 
         return ValidateOrderResult.builder()
                 .valid(isValid)
