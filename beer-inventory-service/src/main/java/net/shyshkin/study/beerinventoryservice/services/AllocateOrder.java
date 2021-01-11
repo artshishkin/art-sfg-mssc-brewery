@@ -6,4 +6,6 @@ public interface AllocateOrder {
 
     Boolean allocateOrder(BeerOrderDto beerOrderDto);
 
+    void deallocateOrder(BeerOrderDto beerOrderDto);
+
 }

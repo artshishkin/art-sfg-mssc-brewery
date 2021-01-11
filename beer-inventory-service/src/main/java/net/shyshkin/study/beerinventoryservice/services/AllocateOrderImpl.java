@@ -42,6 +42,14 @@ public class AllocateOrderImpl implements AllocateOrder {
         return totalOrdered.get() == totalAllocated.get();
     }
 
+    @Override
+    public void deallocateOrder(BeerOrderDto beerOrderDto) {
+        log.debug("Deallocation Order Id: {}", beerOrderDto.getId());
+        beerOrderDto
+                .getBeerOrderLines()
+                .forEach(this::deallocateBeerOrderLine);
+    }
+
     private void allocateBeerOrderLine(BeerOrderLineDto beerOrderLine) {
 
         List<BeerInventory> beerInventoryList = beerInventoryRepository.findAllByUpc(beerOrderLine.getUpc());
@@ -59,13 +67,25 @@ public class AllocateOrderImpl implements AllocateOrder {
 
                         beerInventoryRepository.save(beerInventory);
 
-                    }else if (inventory>0){ //partial allocation
-                        beerOrderLine.setQuantityAllocated(allocatedQty+inventory);
+                    } else if (inventory > 0) { //partial allocation
+                        beerOrderLine.setQuantityAllocated(allocatedQty + inventory);
                         beerInventory.setQuantityOnHand(0);
 
                         beerInventoryRepository.delete(beerInventory);
                     }
                 });
 
+    }
+
+    private void deallocateBeerOrderLine(BeerOrderLineDto beerOrderLine) {
+
+        BeerInventory beerInventory = BeerInventory.builder()
+                .upc(beerOrderLine.getUpc())
+                .beerId(beerOrderLine.getBeerId())
+                .quantityOnHand(beerOrderLine.getQuantityAllocated())
+                .build();
+        BeerInventory savedInventory = beerInventoryRepository.save(beerInventory);
+
+        log.debug("Saved Inventory for Beer Upc: {}, Inventory Id: {}", savedInventory.getUpc(), savedInventory.getId());
     }
 }
