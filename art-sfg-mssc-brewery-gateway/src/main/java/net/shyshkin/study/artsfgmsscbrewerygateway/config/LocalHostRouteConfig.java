@@ -12,6 +12,7 @@ public class LocalHostRouteConfig {
     @Bean
     public RouteLocator localHostRoutes(RouteLocatorBuilder builder,
                                         @Value("${net.shyshkin.routes.beer-service}") final String beerServiceUri,
+                                        @Value("${net.shyshkin.routes.beer-inventory-service}") final String beerInventoryServiceUri,
                                         @Value("${net.shyshkin.routes.beer-order-service}") final String beerOrderServiceUri) {
         return builder.routes()
                 .route("beer-service",
@@ -20,6 +21,9 @@ public class LocalHostRouteConfig {
                 .route("order-service",
                         r -> r.path("/api/v1/customers", "/api/v1/customers/**")
                                 .uri(beerOrderServiceUri))
+                .route("inventory-service",
+                        r -> r.path("/api/v1/beer/*/inventory")
+                                .uri(beerInventoryServiceUri))
                 .build();
     }
 }
