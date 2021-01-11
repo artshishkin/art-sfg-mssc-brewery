@@ -12,6 +12,7 @@
         <module>art-sfg-jms</module>
         <module>beer-data</module>
         <module>mssc-state-machine</module>
+        <module>art-sfg-mssc-brewery-gateway</module>
     </modules>
     <parent>
         <groupId>net.shyshkin.study</groupId>
