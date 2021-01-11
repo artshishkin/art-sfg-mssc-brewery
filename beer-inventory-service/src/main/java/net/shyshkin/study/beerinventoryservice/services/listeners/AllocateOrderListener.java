@@ -24,6 +24,7 @@ public class AllocateOrderListener {
     @SendTo(ALLOCATE_ORDER_RESULT_QUEUE)
     public AllocateOrderResult listen(AllocateOrderRequest request) {
         AllocateOrderResult.AllocateOrderResultBuilder builder = AllocateOrderResult.builder();
+        builder.allocationError(false);
 
         try {
             BeerOrderDto beerOrderDto = request.getBeerOrder();
