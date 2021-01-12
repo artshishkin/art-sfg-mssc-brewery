@@ -13,6 +13,7 @@
         <module>beer-data</module>
         <module>mssc-state-machine</module>
         <module>art-sfg-mssc-brewery-gateway</module>
+        <module>art-sfg-mssc-brewery-eureka</module>
     </modules>
     <parent>
         <groupId>net.shyshkin.study</groupId>
