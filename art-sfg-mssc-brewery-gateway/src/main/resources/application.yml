@@ -1,0 +1,18 @@
+spring.application.name: art-brewery-gateway
+server.port: 9090
+net.shyshkin.routes:
+  beer-service: http://localhost:8080
+  beer-order-service: http://localhost:8081
+  beer-inventory-service: http://localhost:8082
+
+logging:
+  level:
+    org.springframework.cloud.gateway: debug
+
+---
+spring:
+  profiles:
+    active: local-discovery
+eureka:
+  client:
+    register-with-eureka: false
