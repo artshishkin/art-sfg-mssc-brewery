@@ -13,7 +13,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static net.shyshkin.study.beerservice.services.inventory.BeerInventoryServiceRestTemplateImpl.INVENTORY_PATH;
+import static net.shyshkin.study.beerservice.services.inventory.BeerInventoryService.INVENTORY_PATH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.http.MediaType.APPLICATION_JSON;

@@ -6,6 +6,7 @@ import net.shyshkin.study.beerdata.dto.BeerInventoryDto;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +19,9 @@ import java.util.UUID;
 
 @Component
 @Slf4j
+@Profile("!local-discovery")
 @ConfigurationProperties(prefix = "net.shyshkin.client", ignoreUnknownFields = false)
 public class BeerInventoryServiceRestTemplateImpl implements BeerInventoryService {
-
-    static final String INVENTORY_PATH = "/api/v1/beer/{beerId}/inventory";
 
     @Setter
     private String beerInventoryServiceHost;
@@ -44,9 +44,11 @@ public class BeerInventoryServiceRestTemplateImpl implements BeerInventoryServic
                 },
                 beerId
         );
-        return Objects.requireNonNull(responseEntity.getBody())
+        int onHand = Objects.requireNonNull(responseEntity.getBody())
                 .stream()
                 .mapToInt(BeerInventoryDto::getQuantityOnHand)
                 .sum();
+        log.debug("BeerId: `{}`. On hand is: {}", beerId, onHand);
+        return onHand;
     }
 }
