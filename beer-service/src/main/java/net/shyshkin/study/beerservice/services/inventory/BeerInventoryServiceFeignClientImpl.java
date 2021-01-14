@@ -16,7 +16,7 @@ import java.util.UUID;
 @Slf4j
 @Profile("local-discovery")
 @RequiredArgsConstructor
-public class BeerInventoryServiceFiegnClientImpl implements BeerInventoryService {
+public class BeerInventoryServiceFeignClientImpl implements BeerInventoryService {
 
     private final InventoryServiceFeignClient feignClient;
 
