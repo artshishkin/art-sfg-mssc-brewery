@@ -133,3 +133,50 @@ Steps:
 #####  235. Testing with WireMock
 
 [WireMock Examples](https://github.com/JensPiegsa/wiremock-extension/blob/master/src/test/java/com/github/jenspiegsa/wiremockextension/ExampleTest.java)
+
+####  Section 23: Spring Cloud Config
+
+#####  273. Spring Cloud Config Server Configuration
+
+-  GET `localhost:8888/foo/default`
+
+```json
+{
+    "name": "foo",
+    "profiles": [
+        "default"
+    ],
+    "label": null,
+    "version": "00e296ff9309e4e66353b5f43003393232d62c6a",
+    "state": null,
+    "propertySources": [
+        {
+            "name": "https://github.com/artshishkin/art-sfg-mssc-example-config-repo/file:C:\\Users\\Admin\\AppData\\Local\\Temp\\config-repo-16298660152083958882\\application.yml",
+            "source": {
+                "foo": "bar"
+            }
+        }
+    ]
+}
+```
+-  **OR**
+-  GET `host.docker.internal:8888/some_app_name/dev_profile`
+```json
+{
+    "name": "some_app_name",
+    "profiles": [
+        "dev_profile"
+    ],
+    "label": null,
+    "version": "00e296ff9309e4e66353b5f43003393232d62c6a",
+    "state": null,
+    "propertySources": [
+        {
+            "name": "https://github.com/artshishkin/art-sfg-mssc-example-config-repo/file:C:\\Users\\Admin\\AppData\\Local\\Temp\\config-repo-16298660152083958882\\application.yml",
+            "source": {
+                "foo": "bar"
+            }
+        }
+    ]
+}
+```
