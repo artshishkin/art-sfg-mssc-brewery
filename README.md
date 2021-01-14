@@ -180,3 +180,76 @@ Steps:
     ]
 }
 ```
+
+#####  274. Server Side Application Configuration
+
+-  copy `application-localmysql.properties` from beer-service module into `art-sfg-mssc-brewery-config-repo/beer-service`
+-  rename it to `application-local.properties`
+-  push `art-sfg-mssc-brewery-config-repo`
+-  start `ArtSfgMsscConfigServerApplication`
+-  GET `localhost:8888/all/default` -> receive global config
+```json
+{
+    "name": "all",
+    "profiles": [
+        "default"
+    ],
+    "label": null,
+    "version": "6243d2bab0061cbf22a0606fbc61df0217565629",
+    "state": null,
+    "propertySources": [
+        {
+            "name": "https://github.com/artshishkin/art-sfg-mssc-brewery-config-repo/file:C:\\Users\\Admin\\AppData\\Local\\Temp\\config-repo-8342947173172847625\\application.yml",
+            "source": {
+                "some.global.property": "globalPropertyValue"
+            }
+        }
+    ]
+}
+```
+-  GET `localhost:8888/beer-service/default` -> receive global config (for beer-service we have no default profile in GIT)
+-  GET `localhost:8888/beer-service` -> error  
+-  GET `localhost:8888/beer-service/local` -> receive config for it (same as in `application-local.properties`) PLUS global
+```json
+{
+    "name": "beer-service",
+    "profiles": [
+        "local"
+    ],
+    "label": null,
+    "version": "6243d2bab0061cbf22a0606fbc61df0217565629",
+    "state": null,
+    "propertySources": [
+        {
+            "name": "https://github.com/artshishkin/art-sfg-mssc-brewery-config-repo/file:C:\\Users\\Admin\\AppData\\Local\\Temp\\config-repo-8342947173172847625\\beer-service\\application-local.properties",
+            "source": {
+                "spring.datasource.url": "jdbc:mysql://localhost:3306/beerservice?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC",
+                "spring.datasource.username": "beer_service",
+                "spring.datasource.password": "password",
+                "spring.jpa.database": "mysql",
+                "spring.datasource.platform": "mysql",
+                "spring.jpa.hibernate.ddl-auto": "update",
+                "spring.jpa.properties.hibernate.dialect": "org.hibernate.dialect.MySQL8Dialect",
+                "spring.datasource.driver-class-name": "com.mysql.cj.jdbc.Driver",
+                "spring.datasource.hikari.maximum-pool-size": "5",
+                "spring.datasource.hikari.data-source-properties.cachePrepStmts": "true",
+                "spring.datasource.hikari.data-source-properties.prepStmtCacheSize": "250",
+                "spring.datasource.hikari.data-source-properties.prepStmtCacheSqlLimit": "2048",
+                "spring.datasource.hikari.data-source-properties.useServerPrepStmts": "true",
+                "spring.datasource.hikari.data-source-properties.useLocalSessionState": "true",
+                "spring.datasource.hikari.data-source-properties.rewriteBatchedStatements": "true",
+                "spring.datasource.hikari.data-source-properties.cacheResultSetMetadata": "true",
+                "spring.datasource.hikari.data-source-properties.cacheServerConfiguration": "true",
+                "spring.datasource.hikari.data-source-properties.elideSetAutoCommits": "true",
+                "spring.datasource.hikari.data-source-properties.maintainTimeStats": "false"
+            }
+        },
+        {
+            "name": "https://github.com/artshishkin/art-sfg-mssc-brewery-config-repo/file:C:\\Users\\Admin\\AppData\\Local\\Temp\\config-repo-8342947173172847625\\application.yml",
+            "source": {
+                "some.global.property": "globalPropertyValue"
+            }
+        }
+    ]
+}
+```
