@@ -253,3 +253,7 @@ Steps:
     ]
 }
 ```
+
+#####  275. Spring Cloud Client Configuration
+
+-  change active profiles from `localmysql,local-discovery` to `local,local-discovery`
