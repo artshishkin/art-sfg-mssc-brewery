@@ -257,3 +257,10 @@ Steps:
 #####  275. Spring Cloud Client Configuration
 
 -  change active profiles from `localmysql,local-discovery` to `local,local-discovery`
+
+####  Section 24: Distributed Tracing
+
+#####  278. Zipkin Server
+
+-  [Zipkin Quick Start](https://zipkin.io/pages/quickstart.html)
+-  `docker run -d -p 9411:9411 openzipkin/zipkin`
