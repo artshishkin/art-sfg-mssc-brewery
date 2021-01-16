@@ -15,7 +15,7 @@
 
     <groupId>net.shyshkin.study</groupId>
     <artifactId>art-sfg-mssc-brewery-bom</artifactId>
-    <version>0.0.4</version>
+    <version>0.0.5</version>
 
     <name>art-sfg-mssc-brewery-bom</name>
     <description>Tutorial on Microservices from SFG (Udemy) - Bill Of Materials</description>
@@ -93,7 +93,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-actuator</artifactId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -103,12 +103,6 @@
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
