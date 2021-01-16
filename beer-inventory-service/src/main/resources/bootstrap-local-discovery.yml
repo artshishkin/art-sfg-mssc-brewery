@@ -1,0 +1,8 @@
+spring:
+  cloud:
+    config:
+      fail-fast: true
+      discovery:
+        service-id: mssc-brewery-config
+    discovery:
+      enabled: true
