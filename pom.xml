@@ -5,14 +5,10 @@
     <packaging>pom</packaging>
     <modules>
         <module>beer-service</module>
-        <module>brewery</module>
-        <module>brewery-client</module>
         <module>beer-order-service</module>
         <module>beer-inventory-service</module>
         <module>beer-inventory-failover</module>
-        <module>art-sfg-jms</module>
         <module>beer-data</module>
-        <module>mssc-state-machine</module>
         <module>art-sfg-mssc-brewery-gateway</module>
         <module>art-sfg-mssc-brewery-eureka</module>
         <module>art-sfg-mssc-config-server</module>

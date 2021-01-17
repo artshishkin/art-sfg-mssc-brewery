@@ -1,1 +1,0 @@
-package net.shyshkin.study.breweryclient.web.client;
