@@ -9,3 +9,9 @@ logging:
   level:
     com.netflix.eureka: OFF
     com.netflix.discovery: OFF
+
+spring:
+  security:
+    user:
+      name: EurekaUser
+      password: EurekaSuperSecretPass
