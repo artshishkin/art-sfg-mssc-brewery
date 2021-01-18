@@ -2,6 +2,8 @@ spring:
   cloud:
     config:
       fail-fast: true
+      username: MyUserName
+      password: MySecretPassword
       discovery:
         service-id: mssc-brewery-config
     discovery:
