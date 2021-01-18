@@ -264,3 +264,16 @@ Steps:
 
 -  [Zipkin Quick Start](https://zipkin.io/pages/quickstart.html)
 -  `docker run -d -p 9411:9411 openzipkin/zipkin`
+
+####  Section 25: Securing Spring Cloud
+
+#####  284. Property Encryption / Decryption
+
+-  Set Environment Variable
+-  `ENCRYPT_KEY=MySuperSecretKey`
+-  POST `localhost:8888/encrypt` with body `MyPassword` -> 
+    -  will receive encrypted password `ab29f52397a4bdbc89a9873d9cd46e492c20112c0d1204774e68240f9d74d652`
+-  POST `localhost:8888/decrypt` with body `ab29f52397a4bdbc89a9873d9cd46e492c20112c0d1204774e68240f9d74d652` -> 
+    -  will receive decrypted password `MyPassword`
+
+
