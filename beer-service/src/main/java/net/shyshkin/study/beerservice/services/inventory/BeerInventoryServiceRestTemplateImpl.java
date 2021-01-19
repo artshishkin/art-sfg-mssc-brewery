@@ -3,6 +3,7 @@ package net.shyshkin.study.beerservice.services.inventory;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.shyshkin.study.beerdata.dto.BeerInventoryDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cache.annotation.Cacheable;
@@ -20,7 +21,7 @@ import java.util.UUID;
 @Component
 @Slf4j
 @Profile("!local-discovery")
-@ConfigurationProperties(prefix = "net.shyshkin.client", ignoreUnknownFields = false)
+@ConfigurationProperties(prefix = "net.shyshkin.client", ignoreUnknownFields = true)
 public class BeerInventoryServiceRestTemplateImpl implements BeerInventoryService {
 
     @Setter
@@ -28,8 +29,12 @@ public class BeerInventoryServiceRestTemplateImpl implements BeerInventoryServic
 
     private final RestTemplate restTemplate;
 
-    public BeerInventoryServiceRestTemplateImpl(RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplate = restTemplateBuilder.build();
+    public BeerInventoryServiceRestTemplateImpl(RestTemplateBuilder restTemplateBuilder,
+                                                @Value("${net.shyshkin.client.inventory-user}") String inventoryUser,
+                                                @Value("${net.shyshkin.client.inventory-password}") String inventoryPassword) {
+        this.restTemplate = restTemplateBuilder
+                .basicAuthentication(inventoryUser, inventoryPassword)
+                .build();
     }
 
     @Override
