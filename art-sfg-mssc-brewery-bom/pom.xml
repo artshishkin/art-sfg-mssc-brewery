@@ -15,7 +15,7 @@
 
     <groupId>net.shyshkin.study</groupId>
     <artifactId>art-sfg-mssc-brewery-bom</artifactId>
-    <version>0.0.6</version>
+    <version>0.0.7</version>
 
     <name>art-sfg-mssc-brewery-bom</name>
     <description>Tutorial on Microservices from SFG (Udemy) - Bill Of Materials</description>
@@ -52,6 +52,8 @@
         <spring-cloud.version>2020.0.0</spring-cloud.version>
         <awaitility.version>4.0.2</awaitility.version>
         <logstash-logback-encoder.version>6.3</logstash-logback-encoder.version>
+        <docker.image.prefix>artarkatesoft</docker.image.prefix>
+        <docker.image.name>${project.artifactId}</docker.image.name>
     </properties>
 
     <dependencyManagement>
@@ -169,6 +171,12 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <layers>
+                        <enabled>true</enabled>
+                        <includeLayerTools>true</includeLayerTools>
+                    </layers>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -195,6 +203,34 @@
                             -Amapstruct.defaultComponentModel=spring
                         </compilerArg>
                     </compilerArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.33.0</version>
+                <configuration>
+                    <!--<dockerHost>unix:///var/run/docker.sock</dockerHost>-->
+                    <!--<dockerHost>http://192.168.1.41:2375</dockerHost>-->
+                    <!--<dockerHost>tcp://localhost:2375</dockerHost>-->
+                    <verbose>true</verbose>
+                    <containerNamePattern>%a</containerNamePattern>
+                    <images>
+                        <image>
+                            <name>${docker.image.prefix}/${docker.image.name}</name>
+                            <alias>${project.artifactId}</alias>
+                            <build>
+                                <assembly>
+                                    <descriptorRef>artifact</descriptorRef>
+                                </assembly>
+                                <dockerFile>Dockerfile</dockerFile>
+                                <tags>
+                                    <tag>latest</tag>
+                                    <tag>${project.version}</tag>
+                                </tags>
+                            </build>
+                        </image>
+                    </images>
                 </configuration>
             </plugin>
             <plugin>
