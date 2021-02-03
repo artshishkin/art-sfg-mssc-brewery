@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+
+#  docker run -it --rm -p 8161:8161 -p 61616:61616 vromero/activemq-artemis
+  jms:
+    image: vromero/activemq-artemis
+    ports:
+      - 8161:8161
+      - 61616:61616
