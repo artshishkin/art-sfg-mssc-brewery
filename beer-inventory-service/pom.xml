@@ -11,6 +11,10 @@
 
     <artifactId>beer-inventory-service</artifactId>
 
+    <properties>
+        <docker.skip>false</docker.skip>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>net.shyshkin.study</groupId>

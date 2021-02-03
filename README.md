@@ -276,4 +276,13 @@ Steps:
 -  POST `localhost:8888/decrypt` with body `ab29f52397a4bdbc89a9873d9cd46e492c20112c0d1204774e68240f9d74d652` -> 
     -  will receive decrypted password `MyPassword`
 
+####  Section 26: Building Docker Images with Maven
 
+#####  299. Push Images to Docker Hub
+
+-  `mvn clean package docker:build docker:push` - was errors
+```
+[ERROR] No plugin found for prefix 'docker' in the current project and in the plugin groups [org.apache.maven.plugins, org.codehaus.mojo] available from the repositories [local (C:\Use
+rs\Admin\.m2\repository), central (https://repo.maven.apache.org/maven2)] -> [Help 1]
+```
+-  made with Intellij IDEA 

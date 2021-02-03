@@ -46,6 +46,10 @@
         </developer>
     </developers>
 
+    <properties>
+        <docker.skip>true</docker.skip>
+    </properties>
+
     <repositories>
         <repository>
             <id>art_shishkin-release</id>
