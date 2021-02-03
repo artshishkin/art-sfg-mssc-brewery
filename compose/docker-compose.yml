@@ -14,3 +14,22 @@ services:
     image: openzipkin/zipkin
     ports: ["9411:9411"]
 
+  eureka:
+    image: artarkatesoft/art-sfg-mssc-brewery-eureka
+    ports:
+      - 8761:8761
+#    healthcheck: # because curl is not present
+#      test: ["CMD", "curl", "-f", "http://EurekaUser:EurekaSuperSecretPass@eureka:8761/actuator/health"]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 3
+
+  config:
+    image: artarkatesoft/art-sfg-mssc-config-server
+    ports:
+      - 8888:8888 # Actually not needed because docker-compose creates network "compose_default" with the default driver and we do not need to expose port
+    depends_on:
+      - eureka
+    environment:
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://EurekaUser:EurekaSuperSecretPass@eureka:8761/eureka
+
