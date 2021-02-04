@@ -36,9 +36,8 @@ services:
     depends_on:
       eureka:
         condition: service_healthy
-    environment:
-      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: ${EUREKA_CLIENT_SERVICE_URL}
-      EUREKA_INSTANCE_PREFER_IP_ADDRESS: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS}
+    env_file:
+      - eureka_def.env
 #    healthcheck:  # we can override healthcheck in Dockerfile
 #      test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
 #      interval: 30s
@@ -55,14 +54,13 @@ services:
         condition: service_healthy
       jms:
         condition: service_healthy
+    env_file:
+      - common.env
+      - eureka_def.env
     environment:
-      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: ${EUREKA_CLIENT_SERVICE_URL}
-      EUREKA_INSTANCE_PREFER_IP_ADDRESS: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS}
       SPRING_PROFILES_ACTIVE: local-discovery,localmysql
 #      SPRING_PROFILES_ACTIVE: local-discovery,local,base_log #We can not override Cloud Config Property (by default)
       SPRING_CLOUD_DISCOVERY_ENABLED: 'true'  # localmysql profile disables discovery - we need to switch it on
-      SPRING_ZIPKIN_BASE_URL: ${ZIPKIN_URL}
-      SPRING_ZIPKIN_ENABLED: 'true'
       SPRING_ARTEMIS_HOST: jms
       SPRING_CLOUD_CONFIG_FAIL_FAST: 'true'
       SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/beerinventoryservice?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
@@ -76,25 +74,23 @@ services:
     depends_on:
       eureka:
         condition: service_healthy
+    env_file:
+      - common.env
+      - eureka_def.env
     environment:
       SPRING_PROFILES_ACTIVE: local-discovery
-      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: ${EUREKA_CLIENT_SERVICE_URL}
-      EUREKA_INSTANCE_PREFER_IP_ADDRESS: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS}
       SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
-      SPRING_ZIPKIN_BASE_URL: ${ZIPKIN_URL}
-      SPRING_ZIPKIN_ENABLED: 'true'
 
   beer-service:
     image: artarkatesoft/beer-service
     ports: ["8080:8080"]
+    env_file:
+      - common.env
+      - eureka_def.env
     environment:
       SPRING_PROFILES_ACTIVE: local-discovery,localmysql
-      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: ${EUREKA_CLIENT_SERVICE_URL}
-      EUREKA_INSTANCE_PREFER_IP_ADDRESS: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS}
       SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
       SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/beerservice?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
-      SPRING_ZIPKIN_BASE_URL: ${ZIPKIN_URL}
-      SPRING_ZIPKIN_ENABLED: 'true'
       SPRING_ARTEMIS_HOST: jms
       SPRING_CLOUD_CONFIG_DISCOVERY_ENABLED: 'true'   # TODO: fix this Error
 #      NET_SHYSHKIN_CLIENT_BEER_INVENTORY_SERVICE_HOST: http://inventory-service:8083 #Because we use FeignClient we do not need to set up inventory url
@@ -113,14 +109,13 @@ services:
   beer-order-service:
     image: artarkatesoft/beer-order-service
     ports: ["8081:8081"]
+    env_file:
+      - common.env
+      - eureka_def.env
     environment:
       SPRING_PROFILES_ACTIVE: local-discovery,localmysql
-      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: ${EUREKA_CLIENT_SERVICE_URL}
-      EUREKA_INSTANCE_PREFER_IP_ADDRESS: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS}
       SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
       SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/beerorderservice?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
-      SPRING_ZIPKIN_BASE_URL: ${ZIPKIN_URL}
-      SPRING_ZIPKIN_ENABLED: 'true'
       SPRING_ARTEMIS_HOST: jms
       SPRING_CLOUD_CONFIG_DISCOVERY_ENABLED: 'true'   # TODO: fix this Error
       NET_SHYSHKIN_CLIENT_BEER_SERVICE_HOST: http://beer-service:8080
@@ -137,12 +132,11 @@ services:
   gateway:
     image: artarkatesoft/art-sfg-mssc-brewery-gateway
     ports: ["9090:9090"]
+    env_file:
+      - common.env
+      - eureka_def.env
     environment:
       SPRING_PROFILES_ACTIVE: local-discovery
-      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: ${EUREKA_CLIENT_SERVICE_URL}
-      EUREKA_INSTANCE_PREFER_IP_ADDRESS: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS}
-      SPRING_ZIPKIN_BASE_URL: ${ZIPKIN_URL}
-      SPRING_ZIPKIN_ENABLED: 'true'      
     depends_on:
       eureka:
         condition: service_healthy
