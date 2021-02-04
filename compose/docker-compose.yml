@@ -33,3 +33,22 @@ services:
     environment:
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://EurekaUser:EurekaSuperSecretPass@eureka:8761/eureka
 
+  inventory-service:
+    image: artarkatesoft/beer-inventory-service
+    ports: ["8082:8082"]
+    depends_on:
+      - eureka
+      - config
+      - jms
+    environment:
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://EurekaUser:EurekaSuperSecretPass@eureka:8761/eureka
+      SPRING_PROFILES_ACTIVE: local-discovery,localmysql,base_log
+#      SPRING_PROFILES_ACTIVE: local-discovery,local,base_log #We can not override Cloud Config Property (by default)
+      SPRING_CLOUD_DISCOVERY_ENABLED: 'true'  # localmysql profile disables discovery - we need to switch it on
+      SPRING_ZIPKIN_BASE_URL: http://zipkin:9411
+      SPRING_ARTEMIS_HOST: jms
+      SPRING_CLOUD_CONFIG_FAIL_FAST: 'true'
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/beerinventoryservice?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+      SPRING_CLOUD_CONFIG_DISCOVERY_ENABLED: 'true'   # TODO: fix this Error
+
+
