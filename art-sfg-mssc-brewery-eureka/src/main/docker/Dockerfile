@@ -7,6 +7,9 @@ FROM openjdk:11-jre-slim
 
 RUN apt update && apt install -y curl
 
+HEALTHCHECK  --interval=5s --timeout=2s --start-period=10s --retries=5 \
+    CMD curl -f localhost:8761/actuator/health || false
+
 LABEL PROJECT_NAME=${project.artifactId} \
       PROJECT=${project.id}
 
