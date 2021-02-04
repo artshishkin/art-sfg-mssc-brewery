@@ -37,7 +37,7 @@ services:
       eureka:
         condition: service_healthy
     environment:
-      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://EurekaUser:EurekaSuperSecretPass@eureka:8761/eureka
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: ${EUREKA_CLIENT_SERVICE_URL}
 #    healthcheck:  # we can override healthcheck in Dockerfile
 #      test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
 #      interval: 30s
@@ -55,7 +55,7 @@ services:
       jms:
         condition: service_healthy
     environment:
-      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://EurekaUser:EurekaSuperSecretPass@eureka:8761/eureka
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: ${EUREKA_CLIENT_SERVICE_URL}
       SPRING_PROFILES_ACTIVE: local-discovery,localmysql,base_log
 #      SPRING_PROFILES_ACTIVE: local-discovery,local,base_log #We can not override Cloud Config Property (by default)
       SPRING_CLOUD_DISCOVERY_ENABLED: 'true'  # localmysql profile disables discovery - we need to switch it on
