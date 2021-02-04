@@ -9,7 +9,7 @@
     </parent>
     <groupId>net.shyshkin.study</groupId>
     <artifactId>beer-inventory-failover</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.2</version>
     <name>beer-inventory-failover</name>
     <description>Beer Inventory Failover Service</description>
 
@@ -22,7 +22,7 @@
         <dependency>
             <groupId>net.shyshkin.study</groupId>
             <artifactId>beer-data</artifactId>
-            <version>0.0.2-SNAPSHOT</version>
+            <version>0.0.2</version>
         </dependency>
 
         <dependency>

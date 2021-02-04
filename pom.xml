@@ -21,7 +21,7 @@
 
     <groupId>net.shyshkin.study</groupId>
     <artifactId>art-sfg-mssc-brewery</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.2</version>
     <name>art-sfg-mssc-brewery</name>
 
     <description>Tutorial on Microservices from SFG (Udemy)</description>

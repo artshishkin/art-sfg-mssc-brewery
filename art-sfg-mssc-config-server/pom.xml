@@ -10,7 +10,7 @@
     </parent>
     <groupId>net.shyshkin.study</groupId>
     <artifactId>art-sfg-mssc-config-server</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>art-sfg-mssc-config-server</name>
     <description>Configuration server for microservices</description>
 
