@@ -18,18 +18,19 @@ services:
     image: artarkatesoft/art-sfg-mssc-brewery-eureka
     ports:
       - 8761:8761
-#    healthcheck: # because curl is not present
-#      test: ["CMD", "curl", "-f", "http://EurekaUser:EurekaSuperSecretPass@eureka:8761/actuator/health"]
-#      interval: 30s
-#      timeout: 10s
-#      retries: 3
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://EurekaUser:EurekaSuperSecretPass@localhost:8761/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   config:
     image: artarkatesoft/art-sfg-mssc-config-server
     ports:
       - 8888:8888 # Actually not needed because docker-compose creates network "compose_default" with the default driver and we do not need to expose port
     depends_on:
-      - eureka
+      eureka:
+        condition: service_healthy
     environment:
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://EurekaUser:EurekaSuperSecretPass@eureka:8761/eureka
 
@@ -37,9 +38,12 @@ services:
     image: artarkatesoft/beer-inventory-service
     ports: ["8082:8082"]
     depends_on:
-      - eureka
-      - config
-      - jms
+      eureka:
+        condition: service_healthy
+      config:
+        condition: service_started
+      jms:
+        condition: service_started
     environment:
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://EurekaUser:EurekaSuperSecretPass@eureka:8761/eureka
       SPRING_PROFILES_ACTIVE: local-discovery,localmysql,base_log
