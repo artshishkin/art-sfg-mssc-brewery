@@ -23,11 +23,6 @@ services:
     image: artarkatesoft/art-sfg-mssc-brewery-eureka
     ports:
       - 8761:8761
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://EurekaUser:EurekaSuperSecretPass@localhost:8761/actuator/health"]
-#      interval: 30s
-#      timeout: 10s
-#      retries: 3
 
   config:
     image: artarkatesoft/art-sfg-mssc-config-server
@@ -38,11 +33,6 @@ services:
         condition: service_healthy
     env_file:
       - eureka_def.env
-#    healthcheck:  # we can override healthcheck in Dockerfile
-#      test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
-#      interval: 30s
-#      timeout: 10s
-#      retries: 3
 
   inventory-service:
     image: artarkatesoft/beer-inventory-service
@@ -65,8 +55,6 @@ services:
       SPRING_CLOUD_CONFIG_FAIL_FAST: 'true'
       SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/beerinventoryservice?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
       SPRING_CLOUD_CONFIG_DISCOVERY_ENABLED: 'true'   # TODO: fix this Error
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://inventory_username:inventory_password@localhost:8082/actuator/health"]
 
   inventory-failover:
     image: artarkatesoft/beer-inventory-failover
