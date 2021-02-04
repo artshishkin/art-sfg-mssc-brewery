@@ -10,7 +10,7 @@
     </parent>
     <groupId>net.shyshkin.study</groupId>
     <artifactId>art-sfg-mssc-brewery-gateway</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>art-sfg-mssc-brewery-gateway</name>
     <description>Spring Cloud Gateway part of SFG Tutorial on Microservices</description>
 
@@ -43,6 +43,11 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-sleuth</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
         <dependency>
