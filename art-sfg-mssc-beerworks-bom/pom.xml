@@ -15,10 +15,10 @@
 
     <groupId>net.shyshkin.study</groupId>
     <artifactId>art-sfg-mssc-beerworks-bom</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
 
     <name>art-sfg-mssc-beerworks-bom</name>
-    <description>Tutorial on Microservices from SFG (Udemy) -Top Bill Of Materials</description>
+    <description>Tutorial on Microservices from SFG (Udemy) - Top Bill Of Materials</description>
     <url>http://dev.shyshkin.net</url>
 
     <licenses>
@@ -80,15 +80,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-config</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-bootstrap</artifactId>
         </dependency>
 
         <dependency>
