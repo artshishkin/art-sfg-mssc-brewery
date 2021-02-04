@@ -37,6 +37,7 @@ services:
   inventory-service:
     image: artarkatesoft/beer-inventory-service
     ports: ["8082:8082"]
+    restart: on-failure
     depends_on:
       eureka:
         condition: service_healthy
@@ -72,6 +73,7 @@ services:
   beer-service:
     image: artarkatesoft/beer-service
     ports: ["8080:8080"]
+    restart: on-failure
     env_file:
       - common.env
       - eureka_def.env
@@ -97,6 +99,7 @@ services:
   beer-order-service:
     image: artarkatesoft/beer-order-service
     ports: ["8081:8081"]
+    restart: on-failure
     env_file:
       - common.env
       - eureka_def.env
