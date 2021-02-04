@@ -8,6 +8,11 @@ services:
     ports:
       - 8161:8161
       - 61616:61616
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8161"]
+      interval: 20s
+      timeout: 10s
+      retries: 3
 
 #  docker run -d -p 9411:9411 openzipkin/zipkin
   zipkin:
@@ -48,7 +53,7 @@ services:
       config:
         condition: service_healthy
       jms:
-        condition: service_started
+        condition: service_healthy
     environment:
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://EurekaUser:EurekaSuperSecretPass@eureka:8761/eureka
       SPRING_PROFILES_ACTIVE: local-discovery,localmysql,base_log
