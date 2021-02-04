@@ -38,6 +38,7 @@ services:
         condition: service_healthy
     environment:
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: ${EUREKA_CLIENT_SERVICE_URL}
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS}
 #    healthcheck:  # we can override healthcheck in Dockerfile
 #      test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
 #      interval: 30s
@@ -56,6 +57,7 @@ services:
         condition: service_healthy
     environment:
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: ${EUREKA_CLIENT_SERVICE_URL}
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS}
       SPRING_PROFILES_ACTIVE: local-discovery,localmysql
 #      SPRING_PROFILES_ACTIVE: local-discovery,local,base_log #We can not override Cloud Config Property (by default)
       SPRING_CLOUD_DISCOVERY_ENABLED: 'true'  # localmysql profile disables discovery - we need to switch it on
@@ -77,6 +79,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: local-discovery
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: ${EUREKA_CLIENT_SERVICE_URL}
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS}
       SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
       SPRING_ZIPKIN_BASE_URL: ${ZIPKIN_URL}
       SPRING_ZIPKIN_ENABLED: 'true'
@@ -87,6 +90,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: local-discovery,localmysql
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: ${EUREKA_CLIENT_SERVICE_URL}
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS}
       SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
       SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/beerservice?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
       SPRING_ZIPKIN_BASE_URL: ${ZIPKIN_URL}
@@ -112,6 +116,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: local-discovery,localmysql
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: ${EUREKA_CLIENT_SERVICE_URL}
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS}
       SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
       SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/beerorderservice?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
       SPRING_ZIPKIN_BASE_URL: ${ZIPKIN_URL}
@@ -135,6 +140,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: local-discovery
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: ${EUREKA_CLIENT_SERVICE_URL}
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS}
       SPRING_ZIPKIN_BASE_URL: ${ZIPKIN_URL}
       SPRING_ZIPKIN_ENABLED: 'true'      
     depends_on:
