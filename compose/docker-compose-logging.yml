@@ -1,0 +1,156 @@
+version: '3.8'
+
+services:
+
+#  docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.5.2
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.1
+    ports:
+      - 9200:9200
+    environment:
+      discovery.type: single-node
+
+#  docker run -it --rm -p 8161:8161 -p 61616:61616 vromero/activemq-artemis
+  jms:
+    image: vromero/activemq-artemis
+    ports:
+      - 8161:8161
+      - 61616:61616
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8161"]
+      interval: 20s
+      timeout: 10s
+      retries: 3
+
+#  docker run -d -p 9411:9411 openzipkin/zipkin
+  zipkin:
+    image: openzipkin/zipkin
+    ports: ["9411:9411"]
+
+  eureka:
+    image: artarkatesoft/art-sfg-mssc-brewery-eureka
+    ports:
+      - 8761:8761
+
+  config:
+    image: artarkatesoft/art-sfg-mssc-config-server
+    ports:
+      - 8888:8888 # Actually not needed because docker-compose creates network "compose_default" with the default driver and we do not need to expose port
+    depends_on:
+      eureka:
+        condition: service_healthy
+    env_file:
+      - eureka_def.env
+
+  inventory-service:
+    image: artarkatesoft/beer-inventory-service
+    ports: ["8082:8082"]
+    restart: on-failure
+    depends_on:
+      eureka:
+        condition: service_healthy
+      config:
+        condition: service_healthy
+      jms:
+        condition: service_healthy
+    env_file:
+      - common.env
+      - eureka_def.env
+    environment:
+      SPRING_PROFILES_ACTIVE: local-discovery,localmysql
+#      SPRING_PROFILES_ACTIVE: local-discovery,local,base_log #We can not override Cloud Config Property (by default)
+      SPRING_CLOUD_DISCOVERY_ENABLED: 'true'  # localmysql profile disables discovery - we need to switch it on
+      SPRING_ARTEMIS_HOST: jms
+      SPRING_CLOUD_CONFIG_FAIL_FAST: 'true'
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/beerinventoryservice?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+      SPRING_CLOUD_CONFIG_DISCOVERY_ENABLED: 'true'   # TODO: fix this Error
+
+  inventory-failover:
+    image: artarkatesoft/beer-inventory-failover
+    ports: ["8083:8083"]
+    depends_on:
+      eureka:
+        condition: service_healthy
+    env_file:
+      - common.env
+      - eureka_def.env
+    environment:
+      SPRING_PROFILES_ACTIVE: local-discovery
+      SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
+
+  beer-service:
+    image: artarkatesoft/beer-service
+    ports: ["8080:8080"]
+    restart: on-failure
+    env_file:
+      - common.env
+      - eureka_def.env
+    environment:
+      SPRING_PROFILES_ACTIVE: local-discovery,localmysql
+      SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/beerservice?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+      SPRING_ARTEMIS_HOST: jms
+      SPRING_CLOUD_CONFIG_DISCOVERY_ENABLED: 'true'   # TODO: fix this Error
+#      NET_SHYSHKIN_CLIENT_BEER_INVENTORY_SERVICE_HOST: http://inventory-service:8083 #Because we use FeignClient we do not need to set up inventory url
+    depends_on:
+      eureka:
+        condition: service_healthy
+      config:
+        condition: service_healthy
+      jms:
+        condition: service_healthy
+      inventory-service:
+        condition: service_healthy
+      inventory-failover:
+        condition: service_healthy
+
+  beer-order-service:
+    image: artarkatesoft/beer-order-service
+    ports: ["8081:8081"]
+    restart: on-failure
+    env_file:
+      - common.env
+      - eureka_def.env
+    environment:
+      SPRING_PROFILES_ACTIVE: local-discovery,localmysql
+      SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/beerorderservice?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+      SPRING_ARTEMIS_HOST: jms
+      SPRING_CLOUD_CONFIG_DISCOVERY_ENABLED: 'true'   # TODO: fix this Error
+      NET_SHYSHKIN_CLIENT_BEER_SERVICE_HOST: http://beer-service:8080
+    depends_on:
+      eureka:
+        condition: service_healthy
+      config:
+        condition: service_healthy
+      jms:
+        condition: service_healthy
+      beer-service:
+        condition: service_healthy
+
+  gateway:
+    image: artarkatesoft/art-sfg-mssc-brewery-gateway
+    ports: ["9090:9090"]
+    env_file:
+      - common.env
+      - eureka_def.env
+    environment:
+      SPRING_PROFILES_ACTIVE: local-discovery
+    depends_on:
+      eureka:
+        condition: service_healthy
+      config:
+        condition: service_healthy
+      inventory-service:
+        condition: service_healthy
+      beer-service:
+        condition: service_healthy
+      beer-order-service:
+        condition: service_healthy
+
+
+
+
+
+
+
