@@ -18,6 +18,23 @@ services:
     depends_on:
       - elasticsearch
 
+#  docker run -d \
+#  --name=filebeat \
+#  --user=root \
+#  --volume="$(pwd)/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro" \
+#  --volume="/var/lib/docker/containers:/var/lib/docker/containers:ro" \
+#  --volume="/var/run/docker.sock:/var/run/docker.sock:ro" \
+#  docker.elastic.co/beats/filebeat:7.10.2 filebeat -e -strict.perms=false \
+#  -E output.elasticsearch.hosts=["elasticsearch:9200"]
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:7.10.1
+    volumes:
+      - ./filebeat/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro  # Configuration file
+      -  /var/lib/docker/containers:/var/lib/docker/containers:ro           # Docker logs
+      -  /var/run/docker.sock:/var/run/docker.sock:ro                       # Additional information about containers
+    user: root
+    restart: on-failure
+
 #  docker run -it --rm -p 8161:8161 -p 61616:61616 vromero/activemq-artemis
   jms:
     image: vromero/activemq-artemis
@@ -72,6 +89,9 @@ services:
       SPRING_CLOUD_CONFIG_FAIL_FAST: 'true'
       SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/beerinventoryservice?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
       SPRING_CLOUD_CONFIG_DISCOVERY_ENABLED: 'true'   # TODO: fix this Error
+    labels:
+      collect_logs_with_filebeat: 'true'
+
 
   inventory-failover:
     image: artarkatesoft/beer-inventory-failover
@@ -85,6 +105,8 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: local-discovery
       SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
+    labels:
+      collect_logs_with_filebeat: 'true'
 
   beer-service:
     image: artarkatesoft/beer-service
@@ -111,6 +133,8 @@ services:
         condition: service_healthy
       inventory-failover:
         condition: service_healthy
+    labels:
+      collect_logs_with_filebeat: 'true'
 
   beer-order-service:
     image: artarkatesoft/beer-order-service
@@ -135,6 +159,8 @@ services:
         condition: service_healthy
       beer-service:
         condition: service_healthy
+    labels:
+      collect_logs_with_filebeat: 'true'
 
   gateway:
     image: artarkatesoft/art-sfg-mssc-brewery-gateway
@@ -155,6 +181,8 @@ services:
         condition: service_healthy
       beer-order-service:
         condition: service_healthy
+    labels:
+      collect_logs_with_filebeat: 'true'
 
 
 
