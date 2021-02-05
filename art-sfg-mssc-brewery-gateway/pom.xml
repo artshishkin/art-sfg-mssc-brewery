@@ -10,7 +10,7 @@
     </parent>
     <groupId>net.shyshkin.study</groupId>
     <artifactId>art-sfg-mssc-brewery-gateway</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>art-sfg-mssc-brewery-gateway</name>
     <description>Spring Cloud Gateway part of SFG Tutorial on Microservices</description>
 
