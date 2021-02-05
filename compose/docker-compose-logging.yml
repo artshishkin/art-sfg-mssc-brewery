@@ -28,6 +28,7 @@ services:
 #  -E output.elasticsearch.hosts=["elasticsearch:9200"]
   filebeat:
     image: docker.elastic.co/beats/filebeat:7.10.1
+    command: filebeat -e -strict.perms=false
     volumes:
       - ./filebeat/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro  # Configuration file
       -  /var/lib/docker/containers:/var/lib/docker/containers:ro           # Docker logs
@@ -91,7 +92,7 @@ services:
       SPRING_CLOUD_CONFIG_DISCOVERY_ENABLED: 'true'   # TODO: fix this Error
     labels:
       collect_logs_with_filebeat: 'true'
-
+      decode_log_event_to_json_object: 'true'
 
   inventory-failover:
     image: artarkatesoft/beer-inventory-failover
@@ -107,6 +108,7 @@ services:
       SPRING_CLOUD_DISCOVERY_ENABLED: 'true'
     labels:
       collect_logs_with_filebeat: 'true'
+      decode_log_event_to_json_object: 'true'
 
   beer-service:
     image: artarkatesoft/beer-service
@@ -135,6 +137,7 @@ services:
         condition: service_healthy
     labels:
       collect_logs_with_filebeat: 'true'
+      decode_log_event_to_json_object: 'true'
 
   beer-order-service:
     image: artarkatesoft/beer-order-service
@@ -161,6 +164,7 @@ services:
         condition: service_healthy
     labels:
       collect_logs_with_filebeat: 'true'
+      decode_log_event_to_json_object: 'true'
 
   gateway:
     image: artarkatesoft/art-sfg-mssc-brewery-gateway
@@ -183,6 +187,7 @@ services:
         condition: service_healthy
     labels:
       collect_logs_with_filebeat: 'true'
+      decode_log_event_to_json_object: 'true'
 
 
 

@@ -294,3 +294,37 @@ rs\Admin\.m2\repository), central (https://repo.maven.apache.org/maven2)] -> [He
 -  `docker-compose up -d`
 -  `docker-compose down`
 
+#### Section 28: Consolidated Logging with ELK Stack
+
+#####  317. View Logs in Kibana
+
+1. Start docker compose
+    -  `docker-compose -f docker-compose-logging.yml up -d`  
+2.  View `filebeat` logs
+    -  Exiting: error loading config file: config file ("filebeat.yml") can only be writable by the owner but the permissions are "-rwxrwxrwx" (to fix the permissions use: 'chmod go-w /usr/share/filebeat/filebeat.yml')
+    -  in Windows we can disable the permission checking by adding:
+        -  `command: filebeat -e -strict.perms=false`
+3.  View logs
+    -  localhost: 5601
+    -  Kibana -> Discover ->
+    -  Create index pattern
+        -  Your index pattern matches 2 sources.
+        -  Index pattern name: `filebeat*`
+        -  Next step
+    -  Select a primary time field for use with the global time filter.
+        -  `@timestamp`
+        -  Create index pattern
+    -  Kibana -> Discover
+        -  by trace id -> not working
+        -  no  data from pattern
+```json
+{
+    "trace": {
+    "trace_id": "%mdc{X-B3-TraceId}",
+    "span_id": "%mdc{X-B3-SpanId}",
+    "parent_span_id": "%mdc{X-B3-ParentSpanId}",
+    "exportable": "%mdc{X-Span-Export}"
+    }
+}
+```         
+           
