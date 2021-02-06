@@ -378,6 +378,23 @@ rs\Admin\.m2\repository), central (https://repo.maven.apache.org/maven2)] -> [He
     -  Great, I'm done  
 4.  Create another Database Cluster for Beer Order Service        
 
+#####  322. Configure Database
 
-
+1.  Create MySQL Connection
+    -  MySQL Workbench
+        -  Connection name: `inventory-service-db-digital-ocean`
+        -  Hostname: host of DigitalOcean `db-mysql-fra1-67417-inventory-do-user-8611302-0.b.db.ondigitalocean.com` 
+        -  Port: 25060
+        -  Username: doadmin
+        -  Password: from DO
+        -  Default schema: defaultdb
+        -  SSL CA File: path to downloaded file from Digital Ocean
+        -  Create Connection (Save)
+2.  Initialize Database  
+    -  Connect to DB
+    -  use inventory script [mysql-init.sql](beer-inventory-service/src/main/scripts/mysql-init.sql)
+    -  evaluate
+3.  Make the same for beer-service and beer-order-service    
+            
+        
            
