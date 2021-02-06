@@ -9,6 +9,11 @@ services:
       - 9200:9200
     environment:
       discovery.type: single-node
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=50s"]
+      interval: 20s
+      timeout: 10s
+      retries: 3
 
 #  docker run --link YOUR_ELASTICSEARCH_CONTAINER_NAME_OR_ID:elasticsearch -p 5601:5601 docker.elastic.co/kibana/kibana:7.10.2
   kibana:
@@ -16,7 +21,8 @@ services:
     ports: ["5601:5601"]
     restart: on-failure
     depends_on:
-      - elasticsearch
+      elasticsearch:
+        condition: service_healthy
 
 #  docker run -d \
 #  --name=filebeat \
