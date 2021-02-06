@@ -327,4 +327,57 @@ rs\Admin\.m2\repository), central (https://repo.maven.apache.org/maven2)] -> [He
     }
 }
 ```         
+
+####  Section 29: Deploying with Docker Swarm
+
+#####  321. Provision Database Servers
+
+1.  Create new Project in Digital Ocean
+    -  Name: `Brewery Microservices from SFG`
+    -  Description: `Microservices with Spring Boot Tutorial from SpringframeworkGuru`
+2.  Create Database Cluster for Inventory Service
+    -  DigitalOcean Console
+    -  Manage -> Databases -> 
+    -  Create a Database Cluster
+        -  MySQL 8
+        -  Frankfurt
+        -  VPC Network: `fra1-vpc-01` (early created)
+        -  DB name: `db-mysql-fra1-96429-beer-service`
+        -  Project: `Brewery Microservices from SFG`
+        -  `Important: We will automatically create a default database (defaultdb) and default admin user (doadmin).`
+        -  Create Cluster
+    -  Secure this database cluster
+        -  Restrict inbound connections
+            -  Add trusted sources
+        -  Skip for now
+3.  Create another Database Cluster for Beer Service
+    -  `db-mysql-fra1-40585-inventory-service`
+        -  Create Cluster
+    -  Connection details
+        - Connect to this database cluster
+            -  Public network:
+                -  username = doadmin
+                -  password = **************** show
+                -  host = db-mysql-fra1-40585-inventory-service-do-user-8611302-0.b.db.ondigitalocean.com
+                -  port = 25060
+                -  database = defaultdb
+                -  sslmode = REQUIRED
+                -  Download CA certificate -> rename it to `ca-certificate-inventory.crt`
+                -  Connection String
+                    -  `mysql://doadmin:show-password@db-mysql-fra1-40585-inventory-service-do-user-8611302-0.b.db.ondigitalocean.com:25060/defaultdb?ssl-mode=REQUIRED`                
+            -  Private network:
+                -  only host changes
+                    -  `host = private-db-mysql-fra1-40585-inventory-service-do-user-8611302-0.b.db.ondigitalocean.com`
+                -  Connection String
+                    -  `mysql://doadmin:o2u...password...jeh@private-db-mysql-fra1-40585-inventory-service-do-user-8611302-0.b.db.ondigitalocean.com:25060/defaultdb?ssl-mode=REQUIRED`
+    -  Next Steps
+        -  A few things to help set up this database cluster
+            -  Migrate an existing database
+            -  Choose a time for automatic updates
+            -  Restore from a backup
+    -  Great, I'm done  
+4.  Create another Database Cluster for Beer Order Service        
+
+
+
            
