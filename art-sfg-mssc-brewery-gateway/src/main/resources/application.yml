@@ -15,8 +15,10 @@ spring:
       instrumentation-type: decorate_on_each # Less performing and deprecated. Will be removed in Sleuth 4.0.0
 ---
 spring:
-  profiles:
-    active: local-discovery
+  config:
+    activate:
+      on-profile:
+        - local-discovery
 eureka:
   client:
     register-with-eureka: false

@@ -1,15 +1,28 @@
 spring:
   application:
-    name: inventory-service
+    name: beer-service
   cloud:
     config:
+      enabled: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - local-discovery
+  cloud:
+    config:
+      enabled: true
       fail-fast: true
       username: MyUserName
       password: MySecretPassword
       discovery:
+        enabled: true
         service-id: mssc-brewery-config
     discovery:
       enabled: true
+
 eureka:
   client:
     service-url:
