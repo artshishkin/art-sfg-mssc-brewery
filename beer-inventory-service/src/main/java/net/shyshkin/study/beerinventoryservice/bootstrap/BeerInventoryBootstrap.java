@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.shyshkin.study.beerinventoryservice.domain.BeerInventory;
 import net.shyshkin.study.beerinventoryservice.repositories.BeerInventoryRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
@@ -13,7 +14,7 @@ import java.util.UUID;
  */
 @Slf4j
 @RequiredArgsConstructor
-//@Component
+@Component
 public class BeerInventoryBootstrap implements CommandLineRunner {
     public static final String BEER_1_UPC = "0631234200036";
     public static final String BEER_2_UPC = "0631234300019";

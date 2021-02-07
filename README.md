@@ -396,5 +396,31 @@ rs\Admin\.m2\repository), central (https://repo.maven.apache.org/maven2)] -> [He
     -  evaluate
 3.  Make the same for beer-service and beer-order-service    
             
-        
+#####  323. Configure Java Truststore
+
+1.  Theory
+    -  [Difference Between a Java Keystore and a Truststore](https://www.baeldung.com/java-keystore-truststore-difference)
+    -  [Введение во взаимную аутентификацию сервисов на Java c TLS/SSL](https://habr.com/ru/company/dbtc/blog/487318/)
+    -  [Keystore в Java](https://javadev.ru/https/ssl-keystore-java/)
+3.  Create truststore 
+    -  Copy certificate into docker folder
+    -  `keytool -importcert -alias DoMySQLCert -file .\ca-certificate-inventory.crt -keystore truststore -storepass superSecretPassword`
+        -  was generated truststore
+4.  Add Program arguments
+    -  javax.net.ssl.trustStore
+        -  `-Djavax.net.ssl.trustStore=C:\Users\Admin\IdeaProjects\Study\SpringFrameworkGuru\MicroservicesCourse\art-sfg-mssc-brewery\beer-inventory-service\src\main\docker\truststore`
+    -  javax.net.ssl.trustStorePassword             
+        -  `-Djavax.net.ssl.trustStorePassword=superSecretPassword`
+    -  Edit Configuration - add these arguments             
+5.  Create new profile for DigitalOcean SQL
+    -  create file `application-dosql.properties` from `localmysql`
+    -  update `datasource.url` 
+        -  modify hostname
+        -  modify port
+        -  sslMode -> `ssl-mode=REQUIRED`
+6.  Activate profile
+    -  Edit Configuration
+    -  Active profiles: dosql        
+
+
            
