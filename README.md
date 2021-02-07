@@ -422,5 +422,9 @@ rs\Admin\.m2\repository), central (https://repo.maven.apache.org/maven2)] -> [He
     -  Edit Configuration
     -  Active profiles: dosql        
 
+##### 324. Add Truststore file to Docker Image
+
+
+
 
            
