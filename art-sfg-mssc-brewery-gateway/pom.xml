@@ -9,7 +9,7 @@
     </parent>
     <groupId>net.shyshkin.study</groupId>
     <artifactId>art-sfg-mssc-brewery-gateway</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.3</version>
     <name>art-sfg-mssc-brewery-gateway</name>
     <description>Spring Cloud Gateway part of SFG Tutorial on Microservices</description>
 
@@ -132,7 +132,7 @@
 
 
   <scm>
-    <tag>HEAD</tag>
+    <tag>art-sfg-mssc-brewery-0.0.4</tag>
     <connection>scm:git:https://github.com/artshishkin/art-sfg-mssc-brewery.git</connection>
     <developerConnection>scm:git:https://github.com/artshishkin/art-sfg-mssc-brewery.git</developerConnection>
     <url>https://github.com/artshishkin/art-sfg-mssc-brewery</url>
