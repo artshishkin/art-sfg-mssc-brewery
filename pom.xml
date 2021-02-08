@@ -20,7 +20,7 @@
 
     <groupId>net.shyshkin.study</groupId>
     <artifactId>art-sfg-mssc-brewery</artifactId>
-    <version>0.0.5</version>
+    <version>0.0.6-SNAPSHOT</version>
     <name>art-sfg-mssc-brewery</name>
 
     <description>Tutorial on Microservices from SFG (Udemy)</description>
@@ -67,7 +67,7 @@
         <connection>scm:git:https://github.com/artshishkin/art-sfg-mssc-brewery.git</connection>
         <developerConnection>scm:git:https://github.com/artshishkin/art-sfg-mssc-brewery.git</developerConnection>
         <url>https://github.com/artshishkin/art-sfg-mssc-brewery</url>
-      <tag>art-sfg-mssc-brewery-0.0.5</tag>
+      <tag>HEAD</tag>
   </scm>
 
 </project>
