@@ -424,7 +424,10 @@ rs\Admin\.m2\repository), central (https://repo.maven.apache.org/maven2)] -> [He
 
 ##### 324. Add Truststore file to Docker Image
 
+#####  325. Docker Image Release Process
 
-
+-  `mvn release:prepare -DdryRun`
+-  check everything is correct
+-  `mvn release:clean`
 
            

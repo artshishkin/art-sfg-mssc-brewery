@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+release.properties
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.next
