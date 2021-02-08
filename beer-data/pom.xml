@@ -46,6 +46,16 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <extensions>
+            <extension>
+                <groupId>io.packagecloud.maven.wagon</groupId>
+                <artifactId>maven-packagecloud-wagon</artifactId>
+                <version>0.0.6</version>
+            </extension>
+        </extensions>
+    </build>
+
   <scm>
     <tag>HEAD</tag>
     <connection>scm:git:https://github.com/artshishkin/art-sfg-mssc-brewery.git</connection>
