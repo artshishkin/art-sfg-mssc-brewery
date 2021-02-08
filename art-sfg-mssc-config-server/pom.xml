@@ -9,7 +9,7 @@
     </parent>
     <groupId>net.shyshkin.study</groupId>
     <artifactId>art-sfg-mssc-config-server</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4-SNAPSHOT</version>
     <name>art-sfg-mssc-config-server</name>
     <description>Configuration server for microservices</description>
 
@@ -122,7 +122,7 @@
 
 
   <scm>
-    <tag>art-sfg-mssc-brewery-0.0.4</tag>
+    <tag>HEAD</tag>
     <connection>scm:git:https://github.com/artshishkin/art-sfg-mssc-brewery.git</connection>
     <developerConnection>scm:git:https://github.com/artshishkin/art-sfg-mssc-brewery.git</developerConnection>
     <url>https://github.com/artshishkin/art-sfg-mssc-brewery</url>

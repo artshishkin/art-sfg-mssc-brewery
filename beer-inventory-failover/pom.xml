@@ -8,7 +8,7 @@
     </parent>
     <groupId>net.shyshkin.study</groupId>
     <artifactId>beer-inventory-failover</artifactId>
-    <version>0.0.4</version>
+    <version>0.0.5-SNAPSHOT</version>
     <name>beer-inventory-failover</name>
     <description>Beer Inventory Failover Service</description>
 
@@ -21,7 +21,7 @@
         <dependency>
             <groupId>net.shyshkin.study</groupId>
             <artifactId>beer-data</artifactId>
-            <version>0.0.3</version>
+            <version>0.0.4-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -46,7 +46,7 @@
 
 
   <scm>
-    <tag>art-sfg-mssc-brewery-0.0.4</tag>
+    <tag>HEAD</tag>
     <connection>scm:git:https://github.com/artshishkin/art-sfg-mssc-brewery.git</connection>
     <developerConnection>scm:git:https://github.com/artshishkin/art-sfg-mssc-brewery.git</developerConnection>
     <url>https://github.com/artshishkin/art-sfg-mssc-brewery</url>
