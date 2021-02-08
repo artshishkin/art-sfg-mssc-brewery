@@ -52,4 +52,16 @@
     <developerConnection>scm:git:https://github.com/artshishkin/art-sfg-mssc-brewery.git</developerConnection>
     <url>https://github.com/artshishkin/art-sfg-mssc-brewery</url>
   </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>packagecloud.my_repo_releases</id>
+            <url>packagecloud+https://packagecloud.io/art_shishkin/release</url>
+        </repository>
+        <snapshotRepository>
+            <id>packagecloud.my_repo_snapshots</id>
+            <url>packagecloud+https://packagecloud.io/art_shishkin/snapshot</url>
+        </snapshotRepository>
+    </distributionManagement>
+
 </project>

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.4.1</version>
-        <relativePath /> <!-- lookup parent from repository -->
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>net.shyshkin.study</groupId>
     <artifactId>art-sfg-mssc-brewery-eureka</artifactId>
@@ -123,11 +124,22 @@
         </repository>
     </repositories>
 
+    <scm>
+        <tag>HEAD</tag>
+        <connection>scm:git:https://github.com/artshishkin/art-sfg-mssc-brewery.git</connection>
+        <developerConnection>scm:git:https://github.com/artshishkin/art-sfg-mssc-brewery.git</developerConnection>
+        <url>https://github.com/artshishkin/art-sfg-mssc-brewery</url>
+    </scm>
 
-  <scm>
-    <tag>HEAD</tag>
-    <connection>scm:git:https://github.com/artshishkin/art-sfg-mssc-brewery.git</connection>
-    <developerConnection>scm:git:https://github.com/artshishkin/art-sfg-mssc-brewery.git</developerConnection>
-    <url>https://github.com/artshishkin/art-sfg-mssc-brewery</url>
-  </scm>
+    <distributionManagement>
+        <repository>
+            <id>packagecloud.my_repo_releases</id>
+            <url>packagecloud+https://packagecloud.io/art_shishkin/release</url>
+        </repository>
+        <snapshotRepository>
+            <id>packagecloud.my_repo_snapshots</id>
+            <url>packagecloud+https://packagecloud.io/art_shishkin/snapshot</url>
+        </snapshotRepository>
+    </distributionManagement>
+
 </project>
