@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -7,7 +8,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.4.1</version>
-        <relativePath /> <!-- lookup parent from repository -->
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>net.shyshkin.study</groupId>
@@ -56,22 +57,86 @@
         </extensions>
     </build>
 
-  <scm>
-    <tag>HEAD</tag>
-    <connection>scm:git:https://github.com/artshishkin/art-sfg-mssc-brewery.git</connection>
-    <developerConnection>scm:git:https://github.com/artshishkin/art-sfg-mssc-brewery.git</developerConnection>
-    <url>https://github.com/artshishkin/art-sfg-mssc-brewery</url>
-  </scm>
+    <scm>
+        <tag>HEAD</tag>
+        <connection>scm:git:https://github.com/artshishkin/art-sfg-mssc-brewery.git</connection>
+        <developerConnection>scm:git:https://github.com/artshishkin/art-sfg-mssc-brewery.git</developerConnection>
+        <url>https://github.com/artshishkin/art-sfg-mssc-brewery</url>
+    </scm>
 
-    <distributionManagement>
-        <repository>
-            <id>packagecloud.my_repo_releases</id>
-            <url>packagecloud+https://packagecloud.io/art_shishkin/release</url>
-        </repository>
-        <snapshotRepository>
-            <id>packagecloud.my_repo_snapshots</id>
-            <url>packagecloud+https://packagecloud.io/art_shishkin/snapshot</url>
-        </snapshotRepository>
-    </distributionManagement>
+    <profiles>
+        <profile>
+            <id>dockerbuild</id>
+            <activation>
+                <file>
+                    <exists>src/main/docker/Dockerfile</exists>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <!--   push to docker with release-->
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>push-to-docker</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                    <goal>push</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>packagecloud</id>
+            <distributionManagement>
+                <repository>
+                    <id>packagecloud.my_repo_releases</id>
+                    <url>packagecloud+https://packagecloud.io/art_shishkin/release</url>
+                </repository>
+                <snapshotRepository>
+                    <id>packagecloud.my_repo_snapshots</id>
+                    <url>packagecloud+https://packagecloud.io/art_shishkin/snapshot</url>
+                </snapshotRepository>
+            </distributionManagement>
+            <repositories>
+                <repository>
+                    <id>art_shishkin-release</id>
+                    <url>https://packagecloud.io/art_shishkin/release/maven2</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+        </profile>
+
+        <profile>
+            <id>artifactory_local</id>
+            <distributionManagement>
+                <repository>
+                    <id>central-local</id>
+                    <name>7e94538cc00e-releases</name>
+                    <url>http://localhost:8181/artifactory/libs-release-local</url>
+                </repository>
+                <snapshotRepository>
+                    <id>snapshots-local</id>
+                    <name>7e94538cc00e-snapshots</name>
+                    <url>http://localhost:8181/artifactory/libs-snapshot-local</url>
+                </snapshotRepository>
+            </distributionManagement>
+            <repositories>
+                <!--From file settings.xml-->
+            </repositories>
+        </profile>
+    </profiles>
 
 </project>

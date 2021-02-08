@@ -485,7 +485,12 @@ rs\Admin\.m2\repository), central (https://repo.maven.apache.org/maven2)] -> [He
     -  deploy to artifactory
         -  `art-sfg-mssc-beerworks-bom>mvn clean deploy -P artifactory_local`
         -  `art-sfg-mssc-brewery-bom>mvn clean deploy -P artifactory_local`
-            
+7.  Deploy all artifacts to Artifactory
+    -  `mvn clean deploy -P artifactory_local`
+8.  Prepare Release
+    -  `mvn release:prepare -P artifactory_local`
+9.  Perform Release
+    -  `mvn release:perform -P artifactory_local`          
 
 
 

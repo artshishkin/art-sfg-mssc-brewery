@@ -15,7 +15,7 @@
     <parent>
         <groupId>net.shyshkin.study</groupId>
         <artifactId>art-sfg-mssc-brewery-bom</artifactId>
-        <version>0.0.11</version>
+        <version>0.0.12</version>
     </parent>
 
     <groupId>net.shyshkin.study</groupId>
@@ -50,18 +50,29 @@
         <project.scm.id>github</project.scm.id>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>art_shishkin-release</id>
-            <url>https://packagecloud.io/art_shishkin/release/maven2</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
+    <profiles>
+        <profile>
+            <id>packagecloud</id>
+            <repositories>
+                <repository>
+                    <id>art_shishkin-release</id>
+                    <url>https://packagecloud.io/art_shishkin/release/maven2</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+        </profile>
+        <profile>
+            <id>artifactory_local</id>
+            <repositories>
+                <!--From file settings.xml-->
+            </repositories>
+        </profile>
+    </profiles>
 
     <scm>
         <connection>scm:git:https://github.com/artshishkin/art-sfg-mssc-brewery.git</connection>
