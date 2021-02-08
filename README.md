@@ -453,11 +453,39 @@ rs\Admin\.m2\repository), central (https://repo.maven.apache.org/maven2)] -> [He
     -  `</server>`
     -  use PASSWORD in plain text
     -  **OR**
-    -  `mvn --encrypt-password` + Enter -> insert PASSWORD
+    -  `mvn --encrypt-password` + Enter -> insert PASSWORD (deprecated)
         -  `{7a8MxCHIq3gHK5Kk5c3nMKe1ZArCovlI5EuVunlbexM=}`
     -  **OR** 
-    -  use TOKEN instead of PASSWORD 
-        
+    -  use TOKEN instead of PASSWORD (better solution)
+4.  Release
+    -  `mvn release:prepare`
+    -  `mvn release:perform`
+5.  Exceeded packagecloud Free limit
+    -  250MB
+    -  Need to migrate somewhere else -> for example Local Artifactory (for development purposes)    
+6.  Deploy artifacts to Artifactory
+    -  `docker volume create artifactory-data`
+    -  `docker run -d --name artifactory -p 8182:8082 -p 8181:8081 -v artifactory-data:/var/opt/jfrog/artifactory docker.bintray.io/jfrog/artifactory-oss:6.21.0`
+    -  `docker logs -f artifactory` -> to view credentials
+    -  admin password
+    -  localhost:8181 -> change password `qwerty123QWERTY`
+    -  create Repositories for Maven
+    -  view [art-spring-core-devops-aws](https://github.com/artshishkin/art-spring-core-devops-aws) - Section 6, Step 60
+    -  in `settings.xml` we have       
+        -  `<server>`
+        -  `    <username>admin</username>`
+        -  `    <password>AP7rgxNdpRkby5Y74TasgtVEXp7</password>`
+        -  `    <id>central-local</id>`
+        -  `</server>`
+        -  `<server>`
+        -  `    <username>admin</username>`
+        -  `    <password>AP7rgxNdpRkby5Y74TasgtVEXp7</password>`
+        -  `    <id>snapshots-local</id>`
+        -  `</server>`
+    -  deploy to artifactory
+        -  `art-sfg-mssc-beerworks-bom>mvn clean deploy -P artifactory_local`
+        -  `art-sfg-mssc-brewery-bom>mvn clean deploy -P artifactory_local`
+            
 
 
 
