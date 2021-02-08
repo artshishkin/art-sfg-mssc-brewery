@@ -455,6 +455,8 @@ rs\Admin\.m2\repository), central (https://repo.maven.apache.org/maven2)] -> [He
     -  **OR**
     -  `mvn --encrypt-password` + Enter -> insert PASSWORD
         -  `{7a8MxCHIq3gHK5Kk5c3nMKe1ZArCovlI5EuVunlbexM=}`
+    -  **OR** 
+    -  use TOKEN instead of PASSWORD 
         
 
 
