@@ -426,8 +426,39 @@ rs\Admin\.m2\repository), central (https://repo.maven.apache.org/maven2)] -> [He
 
 #####  325. Docker Image Release Process
 
--  `mvn release:prepare -DdryRun`
--  check everything is correct
--  `mvn release:clean`
+1.  Release prepare dry run
+    -  `mvn release:prepare -DdryRun`
+    -  check everything is correct
+    -  `mvn release:clean`
+2.  Release prepare
+    -  `mvn release:prepare`
+    -  got an error
+        -  [ERROR] Failed to execute goal org.apache.maven.plugins:maven-release-plugin:3.0.0-M1:prepare (default-cli) on project art-sfg-mssc-brewery: Unable to commit files
+        -  [ERROR] Provider message:
+        -  [ERROR] The git-push command failed.
+        -  [ERROR] Command output:
+        -  [ERROR] Host key verification failed.
+        -  [ERROR] fatal: Could not read from remote repository.
+        -  [ERROR]
+        -  [ERROR] Please make sure you have the correct access rights
+        -  [ERROR] and the repository exists.
+    -  ~~mvn release:rollback~~  (failed - `[ERROR] The git-push command failed.`) and also wrong command
+    -  `mvn release:clean`
+3.  Set up credentials for github
+    -  in settings.xml add server    
+    -  `<server>`
+    -  `  <id>github</id>`
+    -  `  <username>USERNAME</username>`
+    -  `  <password>PASSWORD</password>`
+    -  `</server>`
+    -  use PASSWORD in plain text
+    -  **OR**
+    -  `mvn --encrypt-password` + Enter -> insert PASSWORD
+        -  `{7a8MxCHIq3gHK5Kk5c3nMKe1ZArCovlI5EuVunlbexM=}`
+        
 
-           
+
+
+
+
+                

@@ -48,6 +48,7 @@
 
     <properties>
         <docker.skip>true</docker.skip>
+        <project.scm.id>github</project.scm.id>
     </properties>
 
     <repositories>
@@ -64,7 +65,9 @@
     </repositories>
 
     <scm>
-        <developerConnection>scm:git:git@github.com:artshishkin/art-sfg-mssc-brewery.git</developerConnection>
+        <connection>scm:git:https://github.com/artshishkin/art-sfg-mssc-brewery.git</connection>
+        <developerConnection>scm:git:https://github.com/artshishkin/art-sfg-mssc-brewery.git</developerConnection>
+        <url>https://github.com/artshishkin/art-sfg-mssc-brewery</url>
     </scm>
 
 </project>
