@@ -530,6 +530,16 @@ You can override this behavior in Docker by adding --iptables=false to the Docke
     -  Resize
     -  Turn On 
 
+#####  329. Configure Kibana Server
+
+-  SSH to it
+-  copy private IP of Elasticsearch server `10.114.16.6` (SFG uses public IP, I use private and private net)
+-  `docker run --add-host elasticsearch:10.114.16.6 -p 5601:5601 docker.elastic.co/kibana/kibana:7.10.1`
+-  test it is running -> OK
+-  curl http://64.227.124.128:5601/
+-  stop running container -> rerun it in detached mode
+-  `docker run -d --add-host elasticsearch:10.114.16.6 -p 5601:5601 docker.elastic.co/kibana/kibana:7.10.1`
+
 
 
                 
