@@ -492,7 +492,19 @@ rs\Admin\.m2\repository), central (https://repo.maven.apache.org/maven2)] -> [He
 9.  Perform Release
     -  `mvn release:perform -P artifactory_local`          
 
+#####  326. Provision Service VMs
 
+-  Create Droplets -> Marketplace
+-  Docker on Ubuntu
+-  Frankfurt
+-  SSH Key `digital_ocean`
+-  6 droplets:
+    -  jms
+    -  zipkin
+    -  kibana
+    -  elastic
+    -  eureka
+    -  spring-config
 
 
 
