@@ -550,5 +550,42 @@ You can override this behavior in Docker by adding --iptables=false to the Docke
 -  SSH to it
 -  `docker run -d -p 8761:8761 artarkatesoft/art-sfg-mssc-brewery-eureka`
 
+#####  332. Configure Spring Cloud Config Server
+
+-  SSH to it
+-  copy private IP of Eureka server `10.114.16.9` (SFG uses public IP, I use private and private VPC network)
+-  `docker run -d -p 8888:8888 -e EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://EurekaUser:EurekaSuperSecretPass@10.114.16.9:8761/eureka -e EUREKA_INSTANCE_PREFER_IP_ADDRESS=true artarkatesoft/art-sfg-mssc-config-server`
+-  **OR**
+-  `docker run -d -p 8888:8888 -e eureka.client.service-url.defaultZone=http://EurekaUser:EurekaSuperSecretPass@10.114.16.9:8761/eureka -e eureka.instance.prefer-ip-address=true artarkatesoft/art-sfg-mssc-config-server`
+-  **OR** public IP
+-  `docker run -d -p 8888:8888 -e eureka.client.service-url.defaultZone=http://EurekaUser:EurekaSuperSecretPass@157.230.119.137:8761/eureka -e eureka.instance.prefer-ip-address=true artarkatesoft/art-sfg-mssc-config-server`
+-  All points to 172.17.0.2:8888 but actual IPs:
+    -  public: `104.248.253.6`
+    -  private: `10.114.16.10`
+-  If I go http://104.248.253.6:8888/actuator -> Login
+```json
+{
+  "_links": {
+    "self": {
+      "href": "http://104.248.253.6:8888/actuator",
+      "templated": false
+    },
+    "health": {
+      "href": "http://104.248.253.6:8888/actuator/health",
+      "templated": false
+    },
+    "health-path": {
+      "href": "http://104.248.253.6:8888/actuator/health/{*path}",
+      "templated": true
+    },
+    "info": {
+      "href": "http://104.248.253.6:8888/actuator/info",
+      "templated": false
+    }
+  }
+}
+```
+
+       
 
                 
