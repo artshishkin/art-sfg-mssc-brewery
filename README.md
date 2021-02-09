@@ -586,6 +586,17 @@ You can override this behavior in Docker by adding --iptables=false to the Docke
 }
 ```
 
-       
+#####  333. Spring Cloud Config Server IP Address Update
+
+-  172.17.0.2 is internal IP of container inside the Docker context
+-  to modify we can set IP manually by  
+    -  `eureka.instance.ip-address=PUBLIC_IP_ADDRESS`
+```shell script
+docker run -d -p 8888:8888 \
+ -e eureka.client.service-url.defaultZone=http://EurekaUser:EurekaSuperSecretPass@10.114.16.9:8761/eureka \
+ -e eureka.instance.prefer-ip-address=true \
+ -e eureka.instance.ip-address=104.248.253.6  \
+  artarkatesoft/art-sfg-mssc-config-server
+```
 
                 
