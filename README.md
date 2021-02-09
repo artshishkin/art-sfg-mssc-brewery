@@ -545,4 +545,10 @@ You can override this behavior in Docker by adding --iptables=false to the Docke
 -  SSH to it
 -  `docker run -d -p 9411:9411 openzipkin/zipkin`
 
+#####  331. Configure Eureka Server
+
+-  SSH to it
+-  `docker run -d -p 8761:8761 artarkatesoft/art-sfg-mssc-brewery-eureka`
+
+
                 
