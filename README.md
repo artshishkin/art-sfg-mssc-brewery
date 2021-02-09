@@ -520,6 +520,15 @@ You can override this behavior in Docker by adding --iptables=false to the Docke
 ```
 -  Just for now we enable public entrypoints for Docker Containers
 
+#####  328. Configure Elasticsearch Server
+
+-  SSH to it
+-  `docker run -p 9200:9200 -p 9300:9300 -d -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.10.1`
+-  can not start on Basic 1vCPU and 1Gb RAM
+-  Resize to Basic Droplet with 1 vCPU and 2 Gb RAM
+    -  Turn Off
+    -  Resize
+    -  Turn On 
 
 
 
