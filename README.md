@@ -506,6 +506,21 @@ rs\Admin\.m2\repository), central (https://repo.maven.apache.org/maven2)] -> [He
     -  eureka
     -  spring-config
 
+#####  327. Configure JMS Server
+
+-  SSH to it
+    -  `ssh -i ~\.ssh\digital_ocean root@165.227.167.220`
+-  start JMS
+    -  `docker run -d --rm -p 8161:8161 -p 61616:61616 vromero/activemq-artemis`  
+```
+Note: The default firewall for the Docker One-Click is UFW, which is a front end to iptables. 
+However, Docker modifies iptables directly to set up communication to and from containers. 
+This means that UFW won’t give you a full picture of the firewall settings. 
+You can override this behavior in Docker by adding --iptables=false to the Docker daemon.
+```
+-  Just for now we enable public entrypoints for Docker Containers
+
+
 
 
                 
