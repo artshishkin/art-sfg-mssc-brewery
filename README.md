@@ -540,6 +540,9 @@ You can override this behavior in Docker by adding --iptables=false to the Docke
 -  stop running container -> rerun it in detached mode
 -  `docker run -d --add-host elasticsearch:10.114.16.6 -p 5601:5601 docker.elastic.co/kibana/kibana:7.10.1`
 
+#####  330. Configure Zipkin Server
 
+-  SSH to it
+-  `docker run -d -p 9411:9411 openzipkin/zipkin`
 
                 
