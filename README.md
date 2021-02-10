@@ -640,9 +640,7 @@ docker run -d -p 8888:8888 \
     -  `docker stack deploy -c  docker-compose-digitalocean.yml only-filebeat`
     -  **or**
     -  by using `portainer` (**but** change version to **3.7**)
-
-
-
+ 
 #####  339. Spring Cloud Configuration
 
 -  we need to pass configuration into our digitalocean profile
@@ -684,6 +682,40 @@ spring:
 }
 ```
 -  config for profile digitalocean into repo `art-sfg-mssc-brewery-config-repo`
+      
+#####  338. Eureka Swarm Configuration (Using SPRING_APPLICATION_JSON)
 
-
-               
+-  View [2. Externalized Configuration](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config)  
+-  Use [jsoneditoronline](https://jsoneditoronline.org/) to modify JSON
+-  Modify config according to digitalocean config
+```yaml
+eureka:
+  client:
+    service-url:
+      defaultZone: http://EurekaUser:EurekaSuperSecretPass@10.114.16.6:8761/eureka
+    region: default
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: false
+    hostname: order-service
+```  
+-  transforming config into JSON [onlineyamltools](https://onlineyamltools.com/convert-yaml-to-json)
+```json
+{
+  "eureka": {
+    "client": {
+      "service-url": {
+        "defaultZone": "http://EurekaUser:EurekaSuperSecretPass@10.114.16.6:8761/eureka"
+      },
+      "region": "default",
+      "register-with-eureka": true
+    },
+    "instance": {
+      "prefer-ip-address": false,
+      "hostname": "order-service"
+    }
+  }
+}
+```
+-  combine it with json in step 339
+-  inline JSON into `SPRING_APPLICATION_JSON` using [jsoneditoronline](https://jsoneditoronline.org/)               
