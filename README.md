@@ -630,7 +630,16 @@ docker run -d -p 8888:8888 \
 3.  Provision 2 another nodes Docker Droplet with UserData from [UserDataNode23.sh](digital_ocean/UserDataDockerDroplet/UserDataNode23.sh)
     -  replace line with join token by token from step 2
 
+##### 337. Filebeat Swarm Configuration
 
+1. Create image from filebeat to include filebeat config file
+    -  `docker image build --file Dockerfile --tag artarkatesoft/mssc-filebeat:7.10.1 --tag artarkatesoft/mssc-filebeat:latest  .`
+    -  `docker image push artarkatesoft/mssc-filebeat`
+    -  `docker image push artarkatesoft/mssc-filebeat:7.10.1`
+2.  Deploy stack with filebeat
+    -  `docker stack deploy -c  docker-compose-digitalocean.yml only-filebeat`
+    -  **or**
+    -  by using `portainer` (**but** change version to **3.7**)
 
 
 
