@@ -598,6 +598,22 @@ docker run -d -p 8888:8888 \
  -e eureka.instance.ip-address=104.248.253.6  \
   artarkatesoft/art-sfg-mssc-config-server
 ```
+#####  Deploying Services by using UserData
+
+1.  Elasticsearch
+    -  1vCPU, 2GB
+    -  [UserDataElastic](digital_ocean/UserDataDockerDropletServices/UserDataElastic.sh)
+2.  JMS 
+    -  1vCPU, 1GB RAM
+    -  [UserDataJMS](digital_ocean/UserDataDockerDropletServices/UserDataJMS.sh)
+3.  Kibana
+    -  [UserDataKibana](digital_ocean/UserDataDockerDropletServices/UserDataKibana.sh)
+    -  copy private URL of Elasticsearch -> modify URL in UserData
+4.  [Eureka](digital_ocean/UserDataDockerDropletServices/UserDataEureka.sh)
+5.  [Zipkin](digital_ocean/UserDataDockerDropletServices/UserDataZipkin.sh)
+6.  Spring Cloud Config Server 
+    -  copy private URL of Eureka Server -> modify URL in UserData
+    -  [UserDataSpringConfig](digital_ocean/UserDataDockerDropletServices/UserDataSpringConfig.sh)              
 
 #####  335. [Linux Troubleshooting Commands](digital_ocean/LinuxTroubleshootingCommands.md)
 
@@ -613,6 +629,10 @@ docker run -d -p 8888:8888 \
         -  `docker swarm join-token manager` -> save it
 3.  Provision 2 another nodes Docker Droplet with UserData from [UserDataNode23.sh](digital_ocean/UserDataDockerDroplet/UserDataNode23.sh)
     -  replace line with join token by token from step 2
+
+
+
+
 
 
 
