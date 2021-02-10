@@ -643,7 +643,47 @@ docker run -d -p 8888:8888 \
 
 
 
+#####  339. Spring Cloud Configuration
 
+-  we need to pass configuration into our digitalocean profile
+```yaml
+spring:
+  cloud:
+    config:
+      enabled: true
+      fail-fast: true
+      username: MyUserName
+      password: MySecretPassword
+      discovery:
+        enabled: true
+        service-id: mssc-brewery-config
+    discovery:
+      enabled: true
+```
+-  one way is to use SPRING_APPLICATION_JSON
+-  transforming config into JSON [onlineyamltools](https://onlineyamltools.com/convert-yaml-to-json)
+```json
+{
+  "spring": {
+    "cloud": {
+      "config": {
+        "enabled": true,
+        "fail-fast": true,
+        "username": "MyUserName",
+        "password": "MySecretPassword",
+        "discovery": {
+          "enabled": true,
+          "service-id": "mssc-brewery-config"
+        }
+      },
+      "discovery": {
+        "enabled": true
+      }
+    }
+  }
+}
+```
+-  config for profile digitalocean into repo `art-sfg-mssc-brewery-config-repo`
 
 
                
