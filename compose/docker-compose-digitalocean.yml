@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.7'
 
 services:
 
@@ -20,12 +20,7 @@ services:
     ports: ["8082:8082"]
     restart: on-failure
     depends_on:
-      eureka:
-        condition: service_healthy
-      config:
-        condition: service_healthy
-      jms:
-        condition: service_healthy
+      - filebeat
     environment:
       SPRING_PROFILES_ACTIVE: digitalocean
       SPRING_APPLICATION_JSON: '{"eureka":{"client":{"service-url":{"defaultZone":"http://EurekaUser:EurekaSuperSecretPass@10.114.16.6:8761/eureka"},"region":"default","register-with-eureka":true},"instance":{"prefer-ip-address":false,"hostname":"inventory-service"}},"spring":{"cloud":{"config":{"enabled":true,"fail-fast":true,"username":"MyUserName","password":"MySecretPassword","discovery":{"enabled":true,"service-id":"mssc-brewery-config"}},"discovery":{"enabled":true}}}}'
@@ -33,19 +28,18 @@ services:
       collect_logs_with_filebeat: 'true'
       decode_log_event_to_json_object: 'true'
     deploy:
-      replicas: 2
+      replicas: 1
 
   inventory-failover:
     image: artarkatesoft/beer-inventory-failover
     ports: ["8083:8083"]
-    depends_on:
-      eureka:
-        condition: service_healthy
     environment:
       SPRING_APPLICATION_JSON: '{"eureka":{"client":{"service-url":{"defaultZone":"http://EurekaUser:EurekaSuperSecretPass@10.114.16.6:8761/eureka"},"region":"default","register-with-eureka":true},"instance":{"prefer-ip-address":false,"hostname":"inventory-failover"}},"spring":{"cloud":{"config":{"enabled":true,"fail-fast":true,"username":"MyUserName","password":"MySecretPassword","discovery":{"enabled":true,"service-id":"mssc-brewery-config"}},"discovery":{"enabled":true}}}}'
     labels:
       collect_logs_with_filebeat: 'true'
       decode_log_event_to_json_object: 'true'
+    deploy:
+      replicas: 1
 
   beer-service:
     image: artarkatesoft/beer-service
@@ -55,19 +49,13 @@ services:
       SPRING_PROFILES_ACTIVE: digitalocean
       SPRING_APPLICATION_JSON: '{"eureka":{"client":{"service-url":{"defaultZone":"http://EurekaUser:EurekaSuperSecretPass@10.114.16.6:8761/eureka"},"region":"default","register-with-eureka":true},"instance":{"prefer-ip-address":false,"hostname":"beer-service"}},"spring":{"cloud":{"config":{"enabled":true,"fail-fast":true,"username":"MyUserName","password":"MySecretPassword","discovery":{"enabled":true,"service-id":"mssc-brewery-config"}},"discovery":{"enabled":true}}}}'
     depends_on:
-      eureka:
-        condition: service_healthy
-      config:
-        condition: service_healthy
-      jms:
-        condition: service_healthy
-      inventory-service:
-        condition: service_healthy
-      inventory-failover:
-        condition: service_healthy
+      - inventory-service
+      - inventory-failover
     labels:
       collect_logs_with_filebeat: 'true'
       decode_log_event_to_json_object: 'true'
+    deploy:
+      replicas: 1
 
   beer-order-service:
     image: artarkatesoft/beer-order-service
@@ -77,17 +65,12 @@ services:
       SPRING_PROFILES_ACTIVE: digitalocean
       SPRING_APPLICATION_JSON: '{"eureka":{"client":{"service-url":{"defaultZone":"http://EurekaUser:EurekaSuperSecretPass@10.114.16.6:8761/eureka"},"region":"default","register-with-eureka":true},"instance":{"prefer-ip-address":false,"hostname":"beer-order-service"}},"spring":{"cloud":{"config":{"enabled":true,"fail-fast":true,"username":"MyUserName","password":"MySecretPassword","discovery":{"enabled":true,"service-id":"mssc-brewery-config"}},"discovery":{"enabled":true}}}}'
     depends_on:
-      eureka:
-        condition: service_healthy
-      config:
-        condition: service_healthy
-      jms:
-        condition: service_healthy
-      beer-service:
-        condition: service_healthy
+      - beer-service
     labels:
       collect_logs_with_filebeat: 'true'
       decode_log_event_to_json_object: 'true'
+    deploy:
+      replicas: 1
 
   gateway:
     image: artarkatesoft/art-sfg-mssc-brewery-gateway
@@ -97,18 +80,12 @@ services:
       SPRING_APPLICATION_JSON: '{"eureka":{"client":{"service-url":{"defaultZone":"http://EurekaUser:EurekaSuperSecretPass@10.114.16.6:8761/eureka"},"region":"default","register-with-eureka":false},"instance":{"prefer-ip-address":true}}}'
       SPRING_ZIPKIN_BASEURL: http://10.114.16.10:9411
     depends_on:
-      eureka:
-        condition: service_healthy
-      config:
-        condition: service_healthy
-      inventory-service:
-        condition: service_healthy
-      beer-service:
-        condition: service_healthy
-      beer-order-service:
-        condition: service_healthy
+      - inventory-service
+      - beer-service
+      - beer-order-service
     labels:
       collect_logs_with_filebeat: 'true'
       decode_log_event_to_json_object: 'true'
-
+    deploy:
+      replicas: 1
 

@@ -718,4 +718,27 @@ eureka:
 }
 ```
 -  combine it with json in step 339
--  inline JSON into `SPRING_APPLICATION_JSON` using [jsoneditoronline](https://jsoneditoronline.org/)               
+-  inline JSON into `SPRING_APPLICATION_JSON` using [jsoneditoronline](https://jsoneditoronline.org/)
+
+#####  341. Running Microservices with Docker Swarm
+
+1.  Login in Portainer
+2.  Stacks -> Add Stack
+    -  Name: `brewery`
+    -  Insert `docker-compose-digitalocean.yml` content
+3.  Debug
+    -  update config server
+        -  SSH to it
+        -  remove container
+            -  `docker container rm 636 -f`
+        -  run new with it's private IP
+            -  `docker run -d -p 8888:8888 -e eureka.client.service-url.defaultZone=http://EurekaUser:EurekaSuperSecretPass@10.114.16.6:8761/eureka -e eureka.instance.prefer-ip-address=true -e eureka.instance.ip-address=10.114.16.9  --restart unless-stopped  artarkatesoft/art-sfg-mssc-config-server`   
+4.  **DOES NOT WORK**
+    -  Deep debug is needed
+
+
+
+
+
+
+                  
