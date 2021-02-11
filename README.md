@@ -761,6 +761,10 @@ docker run -d -p 8888:8888 \
 2.  Disable filebeat for now
 3.  Increase healthcheck timeouts
 4.  Database global without SSL
+5.  Added `order-service` to stack
+    -  added environment variable
+    -  NET_SHYSHKIN_CLIENT_BEER_SERVICE_HOST: 'http://beer-service:8080'
+    -  it seems like it's RestTemplate does not use Eureka
 
 
 

@@ -66,27 +66,28 @@ services:
       retries: 5
     deploy:
       replicas: 1
-#
-#  beer-order-service:
-#    image: artarkatesoft/beer-order-service
-#    ports: ["8081:8081"]
-#    restart: on-failure
-#    environment:
-#      SPRING_PROFILES_ACTIVE: 'digitalocean,base_log'
-#      SPRING_APPLICATION_JSON: '{"eureka":{"client":{"service-url":{"defaultZone":"http://EurekaUser:EurekaSuperSecretPass@10.114.16.5:8761/eureka"},"region":"default","register-with-eureka":true},"instance":{"prefer-ip-address":false,"hostname":"beer-order-service"}},"spring":{"cloud":{"config":{"enabled":true,"fail-fast":true,"username":"MyUserName","password":"MySecretPassword","discovery":{"enabled":true,"service-id":"mssc-brewery-config"}},"discovery":{"enabled":true}}}}'
-#    depends_on:
-#      - beer-service
-#    labels:
-#      collect_logs_with_filebeat: 'true'
-#      decode_log_event_to_json_object: 'true'
-#    healthcheck:
-#      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
-#      interval: 30s
-#      timeout: 10s
-#      retries: 5
-#    deploy:
-#      replicas: 1
-#
+
+  beer-order-service:
+    image: artarkatesoft/beer-order-service
+    ports: ["8081:8081"]
+    restart: on-failure
+    environment:
+      SPRING_PROFILES_ACTIVE: 'digitalocean,base_log'
+      NET_SHYSHKIN_CLIENT_BEER_SERVICE_HOST: 'http://beer-service:8080'
+      SPRING_APPLICATION_JSON: '{"eureka":{"client":{"service-url":{"defaultZone":"http://EurekaUser:EurekaSuperSecretPass@10.114.16.5:8761/eureka"},"region":"default","register-with-eureka":true},"instance":{"prefer-ip-address":false,"hostname":"beer-order-service"}},"spring":{"cloud":{"config":{"enabled":true,"fail-fast":true,"username":"MyUserName","password":"MySecretPassword","discovery":{"enabled":true,"service-id":"mssc-brewery-config"}},"discovery":{"enabled":true}}}}'
+    depends_on:
+      - beer-service
+    labels:
+      collect_logs_with_filebeat: 'true'
+      decode_log_event_to_json_object: 'true'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    deploy:
+      replicas: 1
+
 #  gateway:
 #    image: artarkatesoft/art-sfg-mssc-brewery-gateway
 #    ports: ["9090:9090"]
