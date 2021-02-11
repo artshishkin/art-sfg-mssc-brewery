@@ -790,4 +790,10 @@ docker run -d -p 8888:8888 \
     -  logger_name: net.shyshkin.study.beerorderservice.services.beerservice.BeerServiceRestTemplateImpl
 	-  message: Calling Beer service (getBeerByUpc)
 
-                  
+#####  Multiple Nodes
+
+1.  Start another 2 Droplet Swarm Nodes
+    -  `docker swarm join-token manager`
+    -  `docker swarm join --token SWMTKN-1-4ln5cdclpvskm9omec731v810cdk9mjt8pmn22bin2m85pvayf-1h57oqvqx4aje92blmgoq1ppe 10.114.16.9:2377`
+2.  Deploy Stack through Portainer
+3.  Tested successfully                      
