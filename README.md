@@ -720,6 +720,25 @@ eureka:
 -  combine it with json in step 339
 -  inline JSON into `SPRING_APPLICATION_JSON` using [jsoneditoronline](https://jsoneditoronline.org/)
 
+##### Making Spring Config Service Auto Detect Private IP
+
+1.  SSH to it
+2.  Test using [DigitalOcean Metadata API](https://developers.digitalocean.com/documentation/metadata/)
+    -  view [How to find your private IP address on DigitalOcean?](https://stackoverflow.com/questions/32554992/how-to-find-your-private-ip-address-on-digitalocean) 
+    -  `curl -w "\n" http://169.254.169.254/metadata/v1/interfaces/private/0/ipv4/address`
+3.  Modify UserData
+```shell script
+private_ip=`curl -w "\n" http://169.254.169.254/metadata/v1/interfaces/private/0/ipv4/address`
+
+docker run -d -p 8888:8888 \
+ -e eureka.client.service-url.defaultZone=http://EurekaUser:EurekaSuperSecretPass@10.114.16.5:8761/eureka \
+ -e eureka.instance.prefer-ip-address=true \
+ -e eureka.instance.ip-address=$private_ip \
+ --restart unless-stopped \
+  artarkatesoft/art-sfg-mssc-config-server
+```
+
+    
 #####  341. Running Microservices with Docker Swarm
 
 1.  Login in Portainer
