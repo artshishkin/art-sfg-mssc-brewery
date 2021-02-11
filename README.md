@@ -755,6 +755,12 @@ docker run -d -p 8888:8888 \
 4.  **DOES NOT WORK**
     -  Deep debug is needed
 
+#####  Debug on 1 NODE
+
+1.  Create 1 Node or Resize existing to 2vCPU and 4GB
+2.  Disable filebeat for now
+3.  Increase healthcheck timeouts
+4.  Database global without SSL
 
 
 
