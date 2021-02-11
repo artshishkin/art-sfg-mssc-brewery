@@ -781,6 +781,13 @@ docker run -d -p 8888:8888 \
     -  `http://64.225.101.82:5601/`
     -  Search for Log Level: ERROR        
 
+#####  343. Zipkin Tracing
 
+1.  View Zipkin Server Content
+    -  http://68.183.222.205:9411/
+2.  Search timeouts by traceId, spanId
+    -  too many sequential calls -> view in Kibana by traceId
+    -  logger_name: net.shyshkin.study.beerorderservice.services.beerservice.BeerServiceRestTemplateImpl
+	-  message: Calling Beer service (getBeerByUpc)
 
                   
