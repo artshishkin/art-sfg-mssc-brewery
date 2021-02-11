@@ -2,27 +2,26 @@ version: '3.7'
 
 services:
 
-#  filebeat:
-#    image: artarkatesoft/mssc-filebeat:7.10.1
-#    volumes:
-#      -  /var/lib/docker/containers:/var/lib/docker/containers:ro           # Docker logs
-#      -  /var/run/docker.sock:/var/run/docker.sock:ro                       # Additional information about containers
-#    extra_hosts:
-#      - "elasticsearch:10.114.16.5"
-#    deploy:
-#      mode: global
-#      restart_policy:
-#        condition: on-failure
-
+  filebeat:
+    image: artarkatesoft/mssc-filebeat:7.10.1
+    volumes:
+      -  /var/lib/docker/containers:/var/lib/docker/containers:ro           # Docker logs
+      -  /var/run/docker.sock:/var/run/docker.sock:ro                       # Additional information about containers
+    extra_hosts:
+      - "elasticsearch:10.114.16.10"
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
 
   inventory-service:
     image: artarkatesoft/beer-inventory-service
     ports: ["8082:8082"]
     restart: on-failure
-#    depends_on:
-#      - filebeat
+    depends_on:
+      - filebeat
     environment:
-      SPRING_PROFILES_ACTIVE: 'digitalocean,base_log'
+      SPRING_PROFILES_ACTIVE: 'digitalocean'
       SPRING_APPLICATION_JSON: '{"eureka":{"client":{"service-url":{"defaultZone":"http://EurekaUser:EurekaSuperSecretPass@10.114.16.5:8761/eureka"},"region":"default","register-with-eureka":true},"instance":{"prefer-ip-address":false,"hostname":"inventory-service"}},"spring":{"cloud":{"config":{"enabled":true,"fail-fast":true,"username":"MyUserName","password":"MySecretPassword","discovery":{"enabled":true,"service-id":"mssc-brewery-config"}},"discovery":{"enabled":true}}}}'
     labels:
       collect_logs_with_filebeat: 'true'
@@ -51,7 +50,7 @@ services:
     ports: ["8080:8080"]
     restart: on-failure
     environment:
-      SPRING_PROFILES_ACTIVE: 'digitalocean,base_log'
+      SPRING_PROFILES_ACTIVE: 'digitalocean'
       SPRING_APPLICATION_JSON: '{"eureka":{"client":{"service-url":{"defaultZone":"http://EurekaUser:EurekaSuperSecretPass@10.114.16.5:8761/eureka"},"region":"default","register-with-eureka":true},"instance":{"prefer-ip-address":false,"hostname":"beer-service"}},"spring":{"cloud":{"config":{"enabled":true,"fail-fast":true,"username":"MyUserName","password":"MySecretPassword","discovery":{"enabled":true,"service-id":"mssc-brewery-config"}},"discovery":{"enabled":true}}}}'
     depends_on:
       - inventory-service
@@ -72,7 +71,7 @@ services:
     ports: ["8081:8081"]
     restart: on-failure
     environment:
-      SPRING_PROFILES_ACTIVE: 'digitalocean,base_log'
+      SPRING_PROFILES_ACTIVE: 'digitalocean'
       NET_SHYSHKIN_CLIENT_BEER_SERVICE_HOST: 'http://beer-service:8080'
       SPRING_APPLICATION_JSON: '{"eureka":{"client":{"service-url":{"defaultZone":"http://EurekaUser:EurekaSuperSecretPass@10.114.16.5:8761/eureka"},"region":"default","register-with-eureka":true},"instance":{"prefer-ip-address":false,"hostname":"beer-order-service"}},"spring":{"cloud":{"config":{"enabled":true,"fail-fast":true,"username":"MyUserName","password":"MySecretPassword","discovery":{"enabled":true,"service-id":"mssc-brewery-config"}},"discovery":{"enabled":true}}}}'
     depends_on:
@@ -92,7 +91,7 @@ services:
     image: artarkatesoft/art-sfg-mssc-brewery-gateway
     ports: ["9090:9090"]
     environment:
-      SPRING_PROFILES_ACTIVE: 'local-discovery,base_log'
+      SPRING_PROFILES_ACTIVE: 'local-discovery'
       SPRING_APPLICATION_JSON: '{"eureka":{"client":{"service-url":{"defaultZone":"http://EurekaUser:EurekaSuperSecretPass@10.114.16.5:8761/eureka"},"region":"default","register-with-eureka":false},"instance":{"prefer-ip-address":true}}}'
       SPRING_ZIPKIN_BASEURL: http://10.114.16.8:9411
     depends_on:

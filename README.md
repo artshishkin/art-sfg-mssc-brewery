@@ -766,7 +766,20 @@ docker run -d -p 8888:8888 \
     -  NET_SHYSHKIN_CLIENT_BEER_SERVICE_HOST: 'http://beer-service:8080'
     -  it seems like it's RestTemplate does not use Eureka
 
+#####  342. Tracing Requests for Troubleshooting
 
+1.  Commands
+    -  `docker stack ps brewery` - all containers of stack over all nodes
+    -  `docker ps` - only current node
+2.  Start up all services for tracing
+    -  elasticsearch
+    -  kibana
+    -  filebeat on Swarm Stack
+3.  Disable `base_log` profile in Swarm Stack     
+4.  Wait all is deployed
+5.  View Logs in Kibana
+    -  `http://64.225.101.82:5601/`
+    -  Search for Log Level: ERROR        
 
 
 
