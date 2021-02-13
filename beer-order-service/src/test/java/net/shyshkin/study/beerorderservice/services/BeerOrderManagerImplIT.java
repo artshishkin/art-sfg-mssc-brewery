@@ -35,13 +35,13 @@ import java.util.UUID;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static net.shyshkin.study.beerorderservice.services.beerservice.BeerServiceRestTemplateImpl.BEER_UPC_PATH;
+import static net.shyshkin.study.beerorderservice.services.beerservice.BeerServiceRestTemplateImpl.BEER_PATH;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 @SpringBootTest
 @ExtendWith(WireMockExtension.class)
-@ActiveProfiles("test")
+@ActiveProfiles({"test", "base_log"})
 class BeerOrderManagerImplIT {
 
     @Autowired
@@ -86,7 +86,7 @@ class BeerOrderManagerImplIT {
         String json = objectMapper.writeValueAsString(beerDto);
 
         givenThat(
-                get(BEER_UPC_PATH.replace("{upc}", beerUpc))
+                get(BEER_PATH.replace("{beerId}", beerId.toString()))
                         .willReturn(okJson(json)));
 
         //when
@@ -126,7 +126,7 @@ class BeerOrderManagerImplIT {
         beerOrder.setCustomerRef(fakeListenerKey);
 
         givenThat(
-                get(BEER_UPC_PATH.replace("{upc}", beerUpc))
+                get(BEER_PATH.replace("{beerId}", beerId.toString()))
                         .willReturn(okJson(json)));
 
         BeerOrder newBeerOrder = beerOrderManager.newBeerOrder(beerOrder);
@@ -177,7 +177,7 @@ class BeerOrderManagerImplIT {
         String json = objectMapper.writeValueAsString(beerDto);
 
         givenThat(
-                get(BEER_UPC_PATH.replace("{upc}", beerUpc))
+                get(BEER_PATH.replace("{beerId}", beerId.toString()))
                         .willReturn(okJson(json)));
 
         //when
@@ -211,7 +211,7 @@ class BeerOrderManagerImplIT {
         String json = objectMapper.writeValueAsString(beerDto);
 
         givenThat(
-                get(BEER_UPC_PATH.replace("{upc}", beerUpc))
+                get(BEER_PATH.replace("{beerId}", beerId.toString()))
                         .willReturn(okJson(json)));
 
         //when
@@ -266,7 +266,7 @@ class BeerOrderManagerImplIT {
         String json = objectMapper.writeValueAsString(beerDto);
 
         givenThat(
-                get(BEER_UPC_PATH.replace("{upc}", beerUpc))
+                get(BEER_PATH.replace("{beerId}", beerId.toString()))
                         .willReturn(okJson(json)));
 
         //when

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.shyshkin.study.beerdata.dto.BeerDto;
+import net.shyshkin.study.beerdata.dto.BeerPagedList;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -18,7 +19,8 @@ import java.util.UUID;
 public class BeerServiceRestTemplateImpl implements BeerService {
 
     public static final String BEER_UPC_PATH = "/api/v1/beerUpc/{upc}";
-    public static final String BEER_PATH = "/api/v1/beer/{beerId}";
+    public static final String BEER_PATH_ALL = "/api/v1/beer";
+    public static final String BEER_PATH = BEER_PATH_ALL + "/{beerId}";
 
     @Setter
     private String beerServiceHost;
@@ -28,20 +30,25 @@ public class BeerServiceRestTemplateImpl implements BeerService {
     @Override
     public Optional<BeerDto> getBeerById(UUID beerId) {
 
-        log.debug("Calling Beer service (getBeerById)");
+        log.debug("Calling Beer service getBeerById({})", beerId);
 
         BeerDto beerDto = restTemplate.getForObject(beerServiceHost + BEER_PATH, BeerDto.class, beerId);
 
-        return beerDto == null ? Optional.empty() : Optional.of(beerDto);
+        return Optional.ofNullable(beerDto);
     }
 
     @Override
     public Optional<BeerDto> getBeerByUpc(String upc) {
 
-        log.debug("Calling Beer service (getBeerByUpc)");
+        log.debug("Calling Beer service getBeerByUpc({})", upc);
 
         BeerDto beerDto = restTemplate.getForObject(beerServiceHost + BEER_UPC_PATH, BeerDto.class, upc);
 
-        return beerDto == null ? Optional.empty() : Optional.of(beerDto);
+        return Optional.ofNullable(beerDto);
+    }
+
+    @Override
+    public Optional<BeerPagedList> getListOfBeers() {
+        return Optional.ofNullable(restTemplate.getForObject(beerServiceHost + BEER_PATH_ALL, BeerPagedList.class));
     }
 }

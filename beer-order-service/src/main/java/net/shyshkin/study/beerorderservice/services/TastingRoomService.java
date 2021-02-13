@@ -1,81 +1,80 @@
 package net.shyshkin.study.beerorderservice.services;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.shyshkin.study.beerdata.dto.BeerDto;
 import net.shyshkin.study.beerdata.dto.BeerOrderDto;
 import net.shyshkin.study.beerdata.dto.BeerOrderLineDto;
+import net.shyshkin.study.beerdata.dto.BeerPagedList;
 import net.shyshkin.study.beerorderservice.bootstrap.BeerOrderBootStrap;
 import net.shyshkin.study.beerorderservice.domain.Customer;
-import net.shyshkin.study.beerorderservice.repositories.BeerOrderRepository;
 import net.shyshkin.study.beerorderservice.repositories.CustomerRepository;
+import net.shyshkin.study.beerorderservice.services.beerservice.BeerService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Function;
 
 @Service
 @Slf4j
 @Profile("!test")
+@RequiredArgsConstructor
 public class TastingRoomService {
 
     private final CustomerRepository customerRepository;
     private final BeerOrderService beerOrderService;
-    private final BeerOrderRepository beerOrderRepository;
-    private final List<String> beerUpcs = new ArrayList<>(3);
-
-    public TastingRoomService(CustomerRepository customerRepository, BeerOrderService beerOrderService,
-                              BeerOrderRepository beerOrderRepository) {
-        this.customerRepository = customerRepository;
-        this.beerOrderService = beerOrderService;
-        this.beerOrderRepository = beerOrderRepository;
-
-        beerUpcs.add(BeerOrderBootStrap.BEER_1_UPC);
-        beerUpcs.add(BeerOrderBootStrap.BEER_2_UPC);
-        beerUpcs.add(BeerOrderBootStrap.BEER_3_UPC);
-    }
+    private final BeerService beerService;
 
     @Transactional
     @Scheduled(fixedRate = 2000) //run every 2 seconds
     public void placeTastingRoomOrder() {
 
-        List<Customer> customerList = customerRepository.findAllByCustomerNameContaining(BeerOrderBootStrap.TASTING_ROOM);
-
-        if (customerRepository.countByCustomerNameContaining(BeerOrderBootStrap.TASTING_ROOM) == 1) { //should be just one
-//        if (customerList.size() == 1) { //should be just one
-            doPlaceOrder(customerList.get(0));
-        } else {
-            log.error("Too many or too few tasting room customers found");
-            List<Customer> all = customerRepository.findAll();
-            all.forEach(System.out::println);
-        }
+        customerRepository
+                .findByCustomerName(BeerOrderBootStrap.TASTING_ROOM)
+                .ifPresentOrElse(
+                        this::doPlaceOrder,
+                        () -> log.error("Too many or too few tasting room customers found")
+                );
     }
 
     private void doPlaceOrder(Customer customer) {
-        String beerToOrder = getRandomBeerUpc();
 
-        BeerOrderLineDto beerOrderLine = BeerOrderLineDto.builder()
-                .upc(beerToOrder)
-                .orderQuantity(new Random().nextInt(6)) //todo externalize value to property
-                .build();
-
-        List<BeerOrderLineDto> beerOrderLineSet = new ArrayList<>();
-        beerOrderLineSet.add(beerOrderLine);
-
-        BeerOrderDto beerOrder = BeerOrderDto.builder()
-                .customerId(customer.getId())
-                .customerRef(UUID.randomUUID().toString())
-                .beerOrderLines(beerOrderLineSet)
-                .build();
-
-        BeerOrderDto savedOrder = beerOrderService.placeOrder(customer.getId(), beerOrder);
-
+        getRandomBeer()
+                .map(beerId ->
+                        BeerOrderLineDto.builder()
+                                .beerId(beerId)
+//                    .upc(beerToOrder) //todo May be we need UPC
+                                .orderQuantity(ThreadLocalRandom.current().nextInt(5) + 1) //todo externalize value to property
+                                .build())
+                .map(List::of)
+                .map(beerOrderLineSet ->
+                        BeerOrderDto.builder()
+                                .customerId(customer.getId())
+                                .customerRef(UUID.randomUUID().toString())
+                                .beerOrderLines(beerOrderLineSet)
+                                .build())
+                .ifPresentOrElse(
+                        beerOrderDto -> beerOrderService.placeOrder(customer.getId(), beerOrderDto),
+                        () -> log.info("Could not place order for Customer: {}", customer));
     }
 
-    private String getRandomBeerUpc() {
-        return beerUpcs.get(new Random().nextInt(beerUpcs.size() - 0));
+    private Optional<UUID> getRandomBeer() {
+        Optional<BeerPagedList> listOfBeers = beerService.getListOfBeers();
+
+        if (listOfBeers.isEmpty())
+            log.debug("Failed to get list of beers");
+
+        Function<List<BeerDto>, BeerDto> chooseRandomBeer = list -> list.get(ThreadLocalRandom.current().nextInt(list.size()));
+
+        return listOfBeers
+                .map(BeerPagedList::getContent)
+                .map(chooseRandomBeer)
+                .map(BeerDto::getId);
     }
 }

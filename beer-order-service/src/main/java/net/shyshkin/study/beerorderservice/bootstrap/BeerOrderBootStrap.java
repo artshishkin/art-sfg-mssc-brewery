@@ -7,6 +7,7 @@ import net.shyshkin.study.beerorderservice.repositories.CustomerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -17,9 +18,6 @@ import java.util.UUID;
 @Component
 public class BeerOrderBootStrap implements CommandLineRunner {
     public static final String TASTING_ROOM = "Tasting Room";
-    public static final String BEER_1_UPC = "0631234200036";
-    public static final String BEER_2_UPC = "0631234300019";
-    public static final String BEER_3_UPC = "0083783375213";
 
     private final CustomerRepository customerRepository;
 
@@ -29,13 +27,21 @@ public class BeerOrderBootStrap implements CommandLineRunner {
     }
 
     private void loadCustomerData() {
-        if (customerRepository.findAllByCustomerNameContaining(TASTING_ROOM).size() == 0) {
+
+        Optional<Customer> customerOptional = customerRepository.findByCustomerName(TASTING_ROOM);
+
+        if (customerOptional.isEmpty()) {
             Customer savedCustomer = customerRepository.save(Customer.builder()
                     .customerName(TASTING_ROOM)
                     .apiKey(UUID.randomUUID())
                     .build());
-            log.debug("Tasting Room Customer Id: " + savedCustomer.getId());
-
+            log.info("##################################################################");
+            log.info("# Saved Customer Id: " + savedCustomer.getId()  + "#");
+            log.info("##################################################################");
+        } else {
+            log.info("##################################################################");
+            log.info("# Found Customer Id: " + customerOptional.get().getId() + "#");
+            log.info("##################################################################");
         }
     }
 }
