@@ -2,6 +2,8 @@ spring:
   application:
     name: order-service
   cloud:
+    discovery:
+      enabled: false
     config:
       enabled: false
 
