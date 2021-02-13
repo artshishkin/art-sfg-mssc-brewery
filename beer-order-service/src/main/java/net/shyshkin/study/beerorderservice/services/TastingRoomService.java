@@ -10,6 +10,7 @@ import net.shyshkin.study.beerorderservice.bootstrap.BeerOrderBootStrap;
 import net.shyshkin.study.beerorderservice.domain.Customer;
 import net.shyshkin.study.beerorderservice.repositories.CustomerRepository;
 import net.shyshkin.study.beerorderservice.services.beerservice.BeerService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -31,8 +32,11 @@ public class TastingRoomService {
     private final BeerOrderService beerOrderService;
     private final BeerService beerService;
 
+    @Value("${net.shyshkin.tasting-room.max-quantity}")
+    private Integer maxQuantity;
+
     @Transactional
-    @Scheduled(fixedRate = 2000) //run every 2 seconds
+    @Scheduled(fixedRateString = "${net.shyshkin.tasting-room.rate}")
     public void placeTastingRoomOrder() {
 
         customerRepository
@@ -50,7 +54,7 @@ public class TastingRoomService {
                         BeerOrderLineDto.builder()
                                 .beerId(beerId)
 //                    .upc(beerToOrder) //todo May be we need UPC
-                                .orderQuantity(ThreadLocalRandom.current().nextInt(5) + 1) //todo externalize value to property
+                                .orderQuantity(ThreadLocalRandom.current().nextInt(maxQuantity) + 1)
                                 .build())
                 .map(List::of)
                 .map(beerOrderLineSet ->
