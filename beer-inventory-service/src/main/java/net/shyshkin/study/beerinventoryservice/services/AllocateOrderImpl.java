@@ -22,7 +22,7 @@ public class AllocateOrderImpl implements AllocateOrder {
 
     @Override
     public Boolean allocateOrder(BeerOrderDto beerOrderDto) {
-        log.debug("Allocation Order Id: {}", beerOrderDto.getId());
+        log.debug("Allocation Order Id: {}, order: {}", beerOrderDto.getId(), beerOrderDto);
 
         AtomicInteger totalOrdered = new AtomicInteger();
         AtomicInteger totalAllocated = new AtomicInteger();
@@ -36,7 +36,7 @@ public class AllocateOrderImpl implements AllocateOrder {
                         allocateBeerOrderLine(beerOrderLine);
 
                     totalOrdered.addAndGet(orderedQuantity);
-                    totalAllocated.addAndGet(allocatedQuantity);
+                    totalAllocated.addAndGet(beerOrderLine.getQuantityAllocated());
                 });
         log.debug("Total Ordered: {}. Total allocated: {}", totalOrdered.get(), totalAllocated.get());
         return totalOrdered.get() == totalAllocated.get();
@@ -60,18 +60,19 @@ public class AllocateOrderImpl implements AllocateOrder {
                     int allocatedQty = requireNonNullElse(beerOrderLine.getQuantityAllocated(), 0);
                     int qtyToAllocate = orderQty - allocatedQty;
 
-                    if (inventory >= qtyToAllocate) { //full allocation
-                        inventory -= qtyToAllocate;
-                        beerOrderLine.setQuantityAllocated(qtyToAllocate);
-                        beerInventory.setQuantityOnHand(inventory);
+                    if (qtyToAllocate > 0) {
+                        if (inventory >= qtyToAllocate) { //full allocation
+                            inventory -= qtyToAllocate;
+                            beerOrderLine.setQuantityAllocated(allocatedQty + qtyToAllocate);
+                            beerInventory.setQuantityOnHand(inventory);
 
-                        beerInventoryRepository.save(beerInventory);
+                            beerInventoryRepository.save(beerInventory);
 
-                    } else if (inventory > 0) { //partial allocation
-                        beerOrderLine.setQuantityAllocated(allocatedQty + inventory);
-                        beerInventory.setQuantityOnHand(0);
+                        } else if (inventory > 0) { //partial allocation
+                            beerOrderLine.setQuantityAllocated(allocatedQty + inventory);
+                            beerInventory.setQuantityOnHand(0);
+                        }
                     }
-
                     if (beerInventory.getQuantityOnHand() == 0) {
                         beerInventoryRepository.delete(beerInventory);
                     }
