@@ -28,7 +28,7 @@ import static net.shyshkin.study.beerorderservice.domain.BeerOrderEventEnum.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
+//@Transactional
 public class BeerOrderManagerImpl implements BeerOrderManager {
 
     private final StateMachineFactory<BeerOrderStatusEnum, BeerOrderEventEnum> stateMachineFactory;
@@ -46,7 +46,7 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
         return savedOrder;
     }
 
-    @Transactional
+    //    @Transactional
     @Override
     public void processValidationResult(UUID orderId, boolean isValid) {
 
@@ -63,10 +63,12 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
     }
 
     @EventListener(AllocateOrderSpringEvent.class)
+    @Transactional
     @Async
     public void sendEventToAllocateOrderEventListener(AllocateOrderSpringEvent event) {
         UUID orderId = (UUID) event.getSource();
         // TODO: 07.01.2021 Something weired from SFG - It needs to be refactored
+        log.debug("Sending Event To ALLOCATE_ORDER {}", orderId);
         BeerOrder validatedOrder = beerOrderRepository.findOneById(orderId);
         sendBeerOrderEvent(validatedOrder, ALLOCATE_ORDER);
     }
