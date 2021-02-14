@@ -22,7 +22,7 @@ public class BeerOrderValidationListener {
             isValid = false;
 
         if ("pause-validation".equals(validateOrderRequest.getBeerOrder().getCustomerRef())) {
-            Thread.sleep(200);
+            Thread.sleep(400);
         }
 
         return ValidateOrderResult.builder()

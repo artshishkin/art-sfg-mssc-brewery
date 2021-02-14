@@ -20,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.HashSet;
@@ -31,7 +32,7 @@ import static com.github.jenspiegsa.wiremockextension.ManagedWireMockServer.with
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
-import static net.shyshkin.study.beerorderservice.services.beerservice.BeerServiceRestTemplateImpl.BEER_UPC_PATH;
+import static net.shyshkin.study.beerorderservice.services.beerservice.BeerServiceRestTemplateImpl.BEER_PATH;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
@@ -40,7 +41,7 @@ import static org.awaitility.Awaitility.await;
 @TestPropertySource(properties = {
         "net.shyshkin.client.beer-service-host=http://localhost:8083"
 })
-//@ActiveProfiles("test")
+@ActiveProfiles({"test","base_log"})
 //@ComponentScan(excludeFilters = @ComponentScan.Filter(classes = {TastingRoomService.class},type = FilterType.ASSIGNABLE_TYPE))
 class BeerOrderManagerImplSFGIT {
 
@@ -97,7 +98,7 @@ class BeerOrderManagerImplSFGIT {
 
         String json = objectMapper.writeValueAsString(beerDto);
 
-        wireMockServer.stubFor(get(BEER_UPC_PATH.replace("{upc}", beerUpc))
+        wireMockServer.stubFor(get(BEER_PATH.replace("{beerId}",  beerId.toString()))
                 .willReturn(okJson(json)));
 
         //when
@@ -130,7 +131,7 @@ class BeerOrderManagerImplSFGIT {
 
         String json = objectMapper.writeValueAsString(beerDto);
 
-        wireMockServer.stubFor(get(BEER_UPC_PATH.replace("{upc}", beerUpc))
+        wireMockServer.stubFor(get(BEER_PATH.replace("{beerId}",  beerId.toString()))
                 .willReturn(okJson(json)));
 
         //when

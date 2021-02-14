@@ -11,6 +11,7 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -28,6 +29,7 @@ public class DeallocateOrderAction implements Action<BeerOrderStatusEnum, BeerOr
     private final BeerOrderMapper mapper;
 
     @Override
+    @Transactional
     public void execute(StateContext<BeerOrderStatusEnum, BeerOrderEventEnum> context) {
         Optional
                 .ofNullable(context.getMessage())
