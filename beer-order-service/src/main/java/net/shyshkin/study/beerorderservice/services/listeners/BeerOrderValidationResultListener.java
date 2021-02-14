@@ -7,6 +7,7 @@ import net.shyshkin.study.beerdata.queue.Queues;
 import net.shyshkin.study.beerorderservice.services.BeerOrderManager;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -18,6 +19,7 @@ public class BeerOrderValidationResultListener {
     private final BeerOrderManager beerOrderManager;
 
     @JmsListener(destination = Queues.VALIDATE_ORDER_RESULT_QUEUE)
+    @Transactional
     public void listenResult(ValidateOrderResult validateOrderResult) {
 
         UUID orderId = validateOrderResult.getOrderId();
