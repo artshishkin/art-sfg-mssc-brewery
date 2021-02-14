@@ -50,7 +50,7 @@ public class BeerOrderStateMachineConfig extends StateMachineConfigurerAdapter<B
                 .and()
 
                 .withExternal().source(VALIDATION_PENDING).target(VALIDATED).event(VALIDATION_PASSED)
-                .action(allocateTransitionAction)
+//                .action(allocateTransitionAction)
                 .and()
 
                 .withExternal().source(VALIDATION_PENDING).target(VALIDATION_EXCEPTION).event(VALIDATION_FAILED)

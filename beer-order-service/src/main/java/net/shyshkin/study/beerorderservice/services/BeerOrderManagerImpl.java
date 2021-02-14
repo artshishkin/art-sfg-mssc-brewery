@@ -12,7 +12,6 @@ import net.shyshkin.study.beerorderservice.sm.events.AllocateOrderSpringEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineFactory;
 import org.springframework.statemachine.support.DefaultStateMachineContext;
@@ -64,7 +63,7 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
 
     @EventListener(AllocateOrderSpringEvent.class)
     @Transactional
-    @Async
+//    @Async
     public void sendEventToAllocateOrderEventListener(AllocateOrderSpringEvent event) {
         UUID orderId = (UUID) event.getSource();
         // TODO: 07.01.2021 Something weired from SFG - It needs to be refactored
