@@ -28,14 +28,14 @@ public class AllocateOrderListener {
 
         try {
             BeerOrderDto beerOrderDto = request.getBeerOrder();
+            builder.beerOrderDto(beerOrderDto);
 
             Boolean allocationSuccess = allocateOrder.allocateOrder(beerOrderDto);
 
-            builder
-                    .beerOrderDto(beerOrderDto)
-                    .pendingInventory(!allocationSuccess);
-        } catch (Exception ignored) {
-            log.error("Allocation failed for order {}", request.getBeerOrder().getId());
+            builder.pendingInventory(!allocationSuccess);
+
+        } catch (Exception exception) {
+            log.error("Allocation failed for order {}", request.getBeerOrder().getId(), exception);
             builder.allocationError(true);
         }
         AllocateOrderResult result = builder.build();
