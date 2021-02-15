@@ -53,7 +53,7 @@ public class BeerOrderManagerImpl implements BeerOrderManager {
         Optional<BeerOrder> orderOptional = beerOrderRepository.findById(orderId);
 
         BeerOrder order = orderOptional
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new EntityNotFoundException("Order with id `" + orderId + "` not found among total of " + beerOrderRepository.count() + " orders"));
 
         if (isValid) {
             sendBeerOrderEvent(order, VALIDATION_PASSED);
