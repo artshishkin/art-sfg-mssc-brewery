@@ -35,6 +35,10 @@ public class TastingRoomService {
     @Value("${net.shyshkin.tasting-room.max-quantity}")
     private Integer maxQuantity;
 
+    public void setMaxQuantity( Integer maxQuantity) {
+        this.maxQuantity = maxQuantity;
+    }
+
     @Transactional
     @Scheduled(fixedRateString = "${net.shyshkin.tasting-room.rate}")
     public void placeTastingRoomOrder() {
@@ -53,7 +57,6 @@ public class TastingRoomService {
                 .map(beerId ->
                         BeerOrderLineDto.builder()
                                 .beerId(beerId)
-//                    .upc(beerToOrder) //todo May be we need UPC
                                 .orderQuantity(ThreadLocalRandom.current().nextInt(maxQuantity) + 1)
                                 .build())
                 .map(List::of)
@@ -78,6 +81,7 @@ public class TastingRoomService {
 
         return listOfBeers
                 .map(BeerPagedList::getContent)
+                .filter(list -> !list.isEmpty())
                 .map(chooseRandomBeer)
                 .map(BeerDto::getId);
     }
