@@ -11,5 +11,12 @@
 
     <artifactId>beer-tasting-room-service</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>net.shyshkin.study</groupId>
+            <artifactId>beer-data</artifactId>
+            <version>0.0.7-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 </project>
