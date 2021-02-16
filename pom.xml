@@ -11,6 +11,7 @@
         <module>art-sfg-mssc-brewery-gateway</module>
         <module>art-sfg-mssc-brewery-eureka</module>
         <module>art-sfg-mssc-config-server</module>
+        <module>beer-tasting-room-service</module>
     </modules>
     <parent>
         <groupId>net.shyshkin.study</groupId>
