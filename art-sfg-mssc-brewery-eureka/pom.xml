@@ -9,7 +9,7 @@
     </parent>
     <groupId>net.shyshkin.study</groupId>
     <artifactId>art-sfg-mssc-brewery-eureka</artifactId>
-    <version>0.0.6-SNAPSHOT</version>
+    <version>0.0.6</version>
     <name>art-sfg-mssc-brewery-eureka</name>
     <description>Eureka server for SFG Tutorial on Microservices</description>
 
@@ -131,7 +131,7 @@
     </repositories>
 
     <scm>
-        <tag>HEAD</tag>
+        <tag>art-sfg-mssc-brewery-0.0.7</tag>
         <connection>scm:git:https://github.com/artshishkin/art-sfg-mssc-brewery.git</connection>
         <developerConnection>scm:git:https://github.com/artshishkin/art-sfg-mssc-brewery.git</developerConnection>
         <url>https://github.com/artshishkin/art-sfg-mssc-brewery</url>
