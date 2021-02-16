@@ -5,7 +5,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.shyshkin.study.beerdata.dto.BeerDto;
 import net.shyshkin.study.beerdata.dto.BeerPagedList;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,7 +14,6 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-@ConfigurationProperties(prefix = "net.shyshkin.client", ignoreUnknownFields = false)
 @RequiredArgsConstructor
 public class BeerServiceRestTemplateImpl implements BeerService {
 
@@ -23,6 +22,7 @@ public class BeerServiceRestTemplateImpl implements BeerService {
     public static final String BEER_PATH = BEER_PATH_ALL + "/{beerId}";
 
     @Setter
+    @Value("{net.shyshkin.client.beer-service-host}")
     private String beerServiceHost;
 
     private final RestTemplate restTemplate;
