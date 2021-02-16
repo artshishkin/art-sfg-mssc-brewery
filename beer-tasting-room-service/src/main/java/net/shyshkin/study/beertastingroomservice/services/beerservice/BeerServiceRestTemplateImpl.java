@@ -22,7 +22,7 @@ public class BeerServiceRestTemplateImpl implements BeerService {
     public static final String BEER_PATH = BEER_PATH_ALL + "/{beerId}";
 
     @Setter
-    @Value("{net.shyshkin.client.beer-service-host}")
+    @Value("${net.shyshkin.client.beer-service-host}")
     private String beerServiceHost;
 
     private final RestTemplate restTemplate;

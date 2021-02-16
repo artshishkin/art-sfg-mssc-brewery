@@ -17,7 +17,7 @@ public class OrderServiceRestTemplateImpl implements OrderService {
     private final RestTemplate restTemplate;
 
     @Setter
-    @Value("{net.shyshkin.client.order-service-host}")
+    @Value("${net.shyshkin.client.order-service-host}")
     private String orderServiceHost;
 
     @Override

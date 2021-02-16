@@ -1,18 +1,14 @@
-package net.shyshkin.study.beerorderservice.services;
+package net.shyshkin.study.beertastingroomservice.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.shyshkin.study.beerdata.dto.BeerDto;
-import net.shyshkin.study.beerdata.dto.BeerOrderDto;
-import net.shyshkin.study.beerdata.dto.BeerOrderLineDto;
-import net.shyshkin.study.beerdata.dto.BeerPagedList;
-import net.shyshkin.study.beerorderservice.bootstrap.BeerOrderBootStrap;
-import net.shyshkin.study.beerorderservice.domain.Customer;
-import net.shyshkin.study.beerorderservice.repositories.CustomerRepository;
-import net.shyshkin.study.beerorderservice.services.beerservice.BeerService;
+import net.shyshkin.study.beerdata.dto.*;
+import net.shyshkin.study.beertastingroomservice.services.beerservice.BeerService;
+import net.shyshkin.study.beertastingroomservice.services.orderservice.OrderService;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -21,36 +17,31 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 
-//@Service
+@Service
 @Slf4j
-@Profile("!test")
 @RequiredArgsConstructor
 public class TastingRoomService {
 
-    private final CustomerRepository customerRepository;
-    private final BeerOrderService beerOrderService;
-    private final BeerService beerService;
+    public static final String TASTING_ROOM = "Tasting Room";
 
+    private final BeerService beerService;
+    private final OrderService orderService;
+
+    @Setter
     @Value("${net.shyshkin.tasting-room.max-quantity}")
     private Integer maxQuantity;
-
-    public void setMaxQuantity( Integer maxQuantity) {
-        this.maxQuantity = maxQuantity;
-    }
 
     @Transactional
     @Scheduled(fixedRateString = "${net.shyshkin.tasting-room.rate}")
     public void placeTastingRoomOrder() {
 
-        customerRepository
-                .findByCustomerName(BeerOrderBootStrap.TASTING_ROOM)
-                .ifPresentOrElse(
-                        this::doPlaceOrder,
-                        () -> log.error("Too many or too few tasting room customers found")
-                );
+        orderService.getAllCustomers()
+                .stream()
+                .filter(customerDto -> TASTING_ROOM.equals(customerDto.getName()))
+                .forEach(this::doPlaceOrder);
     }
 
-    private void doPlaceOrder(Customer customer) {
+    private void doPlaceOrder(CustomerDto customer) {
 
         getRandomBeer()
                 .map(beerId ->
@@ -65,9 +56,10 @@ public class TastingRoomService {
                                 .customerRef(UUID.randomUUID().toString())
                                 .beerOrderLines(beerOrderLineSet)
                                 .build())
+                .flatMap(beerOrderDto -> orderService.placeOrder(customer.getId(), beerOrderDto))
                 .ifPresentOrElse(
-                        beerOrderDto -> beerOrderService.placeOrder(customer.getId(), beerOrderDto),
-                        () -> log.info("Could not place order for Customer: {}", customer));
+                        beerOrderDto -> log.debug("Order successfully placed: {} ", beerOrderDto),
+                        () -> log.info("Could not place order for Customer: {} with id: {} ", customer, customer != null ? customer.getId() : null));
     }
 
     private Optional<UUID> getRandomBeer() {
