@@ -1,0 +1,25 @@
+logging.level.net.shyshkin: debug
+server.port: 8084
+
+net.shyshkin:
+  client:
+    beer-service-host: http://localhost:8080
+    order-service-host: http://localhost:8081
+
+  tasting-room:
+    rate: PT2s
+    max-quantity: 6
+
+spring.zipkin.enabled: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local-discovery
+net.shyshkin:
+  client:
+    beer-service-host: http://beer-service
+    order-service-host: http://order-service
+
+spring.zipkin.enabled: true
