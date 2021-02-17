@@ -6,10 +6,12 @@
         <groupId>net.shyshkin.study</groupId>
         <artifactId>art-sfg-mssc-beerworks-bom</artifactId>
         <version>0.0.4</version>
+        <relativePath/>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>beer-tasting-room-service</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
