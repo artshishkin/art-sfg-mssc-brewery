@@ -9,7 +9,6 @@ import net.shyshkin.study.beertastingroomservice.services.orderservice.OrderServ
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +30,6 @@ public class TastingRoomService {
     @Value("${net.shyshkin.tasting-room.max-quantity}")
     private Integer maxQuantity;
 
-    @Transactional
     @Scheduled(fixedRateString = "${net.shyshkin.tasting-room.rate}")
     public void placeTastingRoomOrder() {
 
