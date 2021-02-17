@@ -18,7 +18,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
@@ -42,7 +41,6 @@ import static org.awaitility.Awaitility.await;
         "net.shyshkin.client.beer-service-host=http://localhost:8083"
 })
 @ActiveProfiles({"test","base_log"})
-//@ComponentScan(excludeFilters = @ComponentScan.Filter(classes = {TastingRoomService.class},type = FilterType.ASSIGNABLE_TYPE))
 class BeerOrderManagerImplSFGIT {
 
     @Autowired
@@ -64,9 +62,6 @@ class BeerOrderManagerImplSFGIT {
     String beerUpc = "987654";
 
     Customer testCustomer;
-
-    @MockBean
-    TastingRoomService tastingRoomService;
 
     @TestConfiguration
     static class RestTemplateBuilderProvider {
