@@ -93,7 +93,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: 'local-discovery'
       SPRING_APPLICATION_JSON: '{"eureka":{"client":{"service-url":{"defaultZone":"http://EurekaUser:EurekaSuperSecretPass@10.114.16.6:8761/eureka"},"region":"default","register-with-eureka":false},"instance":{"prefer-ip-address":true}}}'
-      SPRING_ZIPKIN_BASEURL: http://10.114.16.10:9411
+      SPRING_ZIPKIN_BASEURL: http://10.114.16.9:9411
     depends_on:
       - inventory-service
       - beer-service
@@ -104,3 +104,19 @@ services:
     deploy:
       replicas: 2
 
+  tasting-room-service:
+    image: artarkatesoft/beer-tasting-room-service
+    restart: on-failure
+    environment:
+      SPRING_PROFILES_ACTIVE: 'digitalocean'
+      SPRING_APPLICATION_JSON: '{"eureka":{"client":{"service-url":{"defaultZone":"http://EurekaUser:EurekaSuperSecretPass@10.114.16.6:8761/eureka"},"region":"default","register-with-eureka":true},"instance":{"prefer-ip-address":false,"hostname":"tasting-room-service"}},"spring":{"cloud":{"config":{"enabled":true,"fail-fast":true,"username":"MyUserName","password":"MySecretPassword","discovery":{"enabled":true,"service-id":"mssc-brewery-config"}},"discovery":{"enabled":true}}}}'
+    depends_on:
+      - eureka
+      - config
+      - beer-service
+      - beer-order-service
+    labels:
+      collect_logs_with_filebeat: 'true'
+      decode_log_event_to_json_object: 'true'
+    deploy:
+      replicas: 3

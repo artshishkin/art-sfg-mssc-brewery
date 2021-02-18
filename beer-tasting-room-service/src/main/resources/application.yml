@@ -16,7 +16,9 @@ spring.zipkin.enabled: false
 spring:
   config:
     activate:
-      on-profile: local-discovery
+      on-profile:
+        - local-discovery
+        - digitalocean
 net.shyshkin:
   client:
     beer-service-host: http://beer-service

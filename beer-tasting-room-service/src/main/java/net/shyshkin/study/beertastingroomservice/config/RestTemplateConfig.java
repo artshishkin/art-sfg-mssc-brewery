@@ -12,13 +12,13 @@ public class RestTemplateConfig {
 
     @Bean
     @LoadBalanced
-    @Profile("local-discovery")
+    @Profile({"local-discovery","digitalocean"})
     public RestTemplate loadBalanced(RestTemplateBuilder builder){
         return builder.build();
     }
 
     @Bean
-    @Profile("!local-discovery")
+    @Profile("!local-discovery & !digitalocean")
     public RestTemplate restTemplate(RestTemplateBuilder builder){
         return builder.build();
     }

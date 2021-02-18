@@ -29,3 +29,27 @@ eureka:
   client:
     service-url:
       defaultZone: http://EurekaUser:EurekaSuperSecretPass@localhost:8761/eureka
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - digitalocean
+  cloud:
+    config:
+      enabled: true
+      fail-fast: true
+      username: MyUserName
+      password: MySecretPassword
+      discovery:
+        enabled: true
+        service-id: mssc-brewery-config
+    discovery:
+      enabled: true
+
+# Pass it through ENVIRONMENT variables or SPRING_APPLICATION_JSON
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://EurekaUser:EurekaSuperSecretPass@localhost:8761/eureka
