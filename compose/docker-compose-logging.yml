@@ -195,7 +195,26 @@ services:
       collect_logs_with_filebeat: 'true'
       decode_log_event_to_json_object: 'true'
 
-
+  tasting-room-service:
+    image: artarkatesoft/beer-tasting-room-service
+    restart: on-failure
+    env_file:
+      - common.env
+      - eureka_def.env
+    environment:
+      SPRING_PROFILES_ACTIVE: local-discovery
+    depends_on:
+      eureka:
+        condition: service_healthy
+      config:
+        condition: service_healthy
+      beer-service:
+        condition: service_healthy
+      beer-order-service:
+        condition: service_healthy
+    labels:
+      collect_logs_with_filebeat: 'true'
+      decode_log_event_to_json_object: 'true'
 
 
 

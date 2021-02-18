@@ -33,6 +33,8 @@ public class TastingRoomService {
     @Scheduled(fixedRateString = "${net.shyshkin.tasting-room.rate}")
     public void placeTastingRoomOrder() {
 
+        log.debug("Start placing order");
+
         orderService.getAllCustomers()
                 .stream()
                 .filter(customerDto -> TASTING_ROOM.equals(customerDto.getName()))
