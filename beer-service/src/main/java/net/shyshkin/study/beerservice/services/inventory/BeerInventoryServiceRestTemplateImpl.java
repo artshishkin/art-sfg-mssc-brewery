@@ -20,7 +20,7 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-@Profile("!local-discovery & !digitalocean")
+@Profile("!local-discovery & !digitalocean & !play-with-docker")
 @ConfigurationProperties(prefix = "net.shyshkin.client", ignoreUnknownFields = true)
 public class BeerInventoryServiceRestTemplateImpl implements BeerInventoryService {
 

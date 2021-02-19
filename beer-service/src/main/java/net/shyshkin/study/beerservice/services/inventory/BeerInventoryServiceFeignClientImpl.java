@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Service
 @Slf4j
-@Profile({"local-discovery","digitalocean"})
+@Profile({"local-discovery","digitalocean","play-with-docker"})
 @RequiredArgsConstructor
 public class BeerInventoryServiceFeignClientImpl implements BeerInventoryService {
 
