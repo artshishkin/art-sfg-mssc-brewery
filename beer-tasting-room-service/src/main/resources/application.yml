@@ -19,6 +19,7 @@ spring:
       on-profile:
         - local-discovery
         - digitalocean
+        - play-with-docker
 net.shyshkin:
   client:
     beer-service-host: http://beer-service
