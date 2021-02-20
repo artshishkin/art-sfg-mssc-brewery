@@ -71,7 +71,7 @@ services:
     ports: ["8081:8081"]
     restart: on-failure
     environment:
-      SPRING_PROFILES_ACTIVE: 'digitalocean,base_log,local-discovery'
+      SPRING_PROFILES_ACTIVE: 'digitalocean,local-discovery'
 #      NET_SHYSHKIN_CLIENT_BEER_SERVICE_HOST: 'http://beer-service'
       SPRING_APPLICATION_JSON: '{"eureka":{"client":{"service-url":{"defaultZone":"http://EurekaUser:EurekaSuperSecretPass@10.114.16.6:8761/eureka"},"region":"default","register-with-eureka":true},"instance":{"prefer-ip-address":false,"hostname":"beer-order-service"}},"spring":{"cloud":{"config":{"enabled":true,"fail-fast":true,"username":"MyUserName","password":"MySecretPassword","discovery":{"enabled":true,"service-id":"mssc-brewery-config"}},"discovery":{"enabled":true}}}}'
     depends_on:
