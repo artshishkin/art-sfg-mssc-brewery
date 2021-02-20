@@ -28,8 +28,6 @@ services:
     volumes:
       -  /var/lib/docker/containers:/var/lib/docker/containers:ro           # Docker logs
       -  /var/run/docker.sock:/var/run/docker.sock:ro                       # Additional information about containers
-    extra_hosts:
-      - "elasticsearch:178.128.192.116"
     deploy:
       mode: global
       restart_policy:
